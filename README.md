@@ -381,7 +381,48 @@ The source art pipeline is in `tools/art/`: `find_boxes.py` and `sample2.py` sam
 
 ---
 
-## 7. Building
+## 7. Atmosphere (how each moon makes the world look)
+
+Every moon also changes the night around it: sky and horizon colour, coloured moonlight on the landscape, distance haze, a moon halo, one sky animation, sparse ambient particles and a few quiet sounds. It is purely visual, rendered on each player's own client (**the same add-on jar on every client — nothing extra to install**; a vanilla client could not show any of this). Gameplay, scheduling and rewards are unchanged, and turning any of it off never changes a moon's mechanics.
+
+**Which moon is shown** always comes from Enhanced Celestials' synchronised current event (or the War Moon arena dimension, or an admin preview). Changes fade over 8 seconds both ways: starting, ending, cancelling, changing dimension, reconnecting or dying all fade back to the untouched night, so no colour is ever left behind. Super variants use their base moon's profile, slightly stronger.
+
+**What Enhanced Celestials already does** (and is kept): the moon texture/size/colour per event, a sky-light colour per event (its `skyLightColor` in the event JSON) and an optional soundtrack. The atmosphere module adds everything else on top. It does not replace the sky renderer: it adds layers inside the vanilla sky pass and modifies values (sky colour, fog colour, light map) after vanilla and Enhanced Celestials have computed them.
+
+| Moon | Sky / light | Signature behaviour |
+|---|---|---|
+| Blood | dark crimson sky, red haze, slightly darker terrain | faint slow red wisps low in the sky and near the ground |
+| Blue | rich cobalt sky, cool blue moonlight | brighter, blue-tinted stars; almost no particles |
+| Harvest | warm amber sky and moonlight | pollen motes over grass, leaves, crops and flowers |
+| Mist | desaturated slate sky, grey light | drifting ground wisps (the 30-block fog is the moon's existing mechanic) |
+| Frost | pale cyan-grey sky, silver light | slowly falling ice crystals, intermittent cold breath, shimmering frost halo |
+| Arcane | deep violet sky | irregular magical light ribbons overhead, runes that appear and dissolve, sparkles near enchanting tables and bookshelves |
+| Prospector's | dark copper/umber sky, metallic amber light | mineral dust, short glints on ore faces that are exposed and in your direct line of sight (never through walls — not an x-ray) |
+| Wisdom | clear midnight-indigo sky, silver light | many bright stars; constellation lines that slowly draw in, hold, fade and return at long intervals |
+| Quiet | muted sage sky, slightly desaturated | stillness: almost no particles; ambient and weather sounds gently lowered |
+| Drift | soft lavender sky | thin cloud streaks high up; luminous motes carried upwards and sideways that lift when you jump |
+| Revealing | ash-grey desaturated sky | the eye: idle blinks and a wandering pupil; during the warning the lids narrow, the iris brightens and an amber halo builds; at the real scan it opens fully, a pale-gold ring sweeps across the sky with a brief light pulse; then it slowly closes and reopens |
+| Thread | rose-grey sky | thin glowing strands across the sky; thin threads between bonded teammates (team only) |
+| War | dark iron-grey sky, cold light | smoke bands with distant orange flashes, rising embers; during the battle warning everything darkens and the flashes speed up, one pulse at the summon; stronger inside the arena (visibility for combat kept) |
+| Gluttony | burgundy sky, cream moonlight | warm golden motes, steam above lit furnaces/smokers/campfires, a honey-gold burst when someone eats a new food (stronger ring for a new heart) |
+
+**Indoors and underground:** the colour grading only affects sky light, so caves, interiors and torch-lit rooms keep their normal colour; haze is scaled by how much sky you can see; sky particles only spawn under open sky. Particles are depth-tested and never draw through blocks.
+
+**Performance:** client-side only (the server just sends small messages for real gameplay moments: War phases and Gluttony foods). Particles live in one fixed pool with a shared cap per player: LOW 8, MEDIUM 20, HIGH 35 (configurable). Block-based effects (pollen, ore glints, sparkles, steam) use a few random samples per tick near the player — never area scans. No entities, no shaders, no per-frame allocation in the particle system.
+
+**Settings.**
+- Server, `config/ecmoons-common.toml`, synced to every client: `[atmosphere]` master switch, `transitionSeconds` (8), `masterIntensity`, switches for sky tint, fog, light tint, particles, sky animations and sounds, `respectDimensions`, particle caps and range. One `[atmosphere_<moon>]` section per moon with `enabled`, colours (`skyColor`, `horizonColor`, `lightColor`, `glowColor`, `accentColor`), `intensity`, `tintStrength`, `fogStrength`, `brightness`, `desaturate`, `moonGlow`, `particleDensity`, `animationIntensity`, `soundVolume`, `particles`, `skyAnimation`, plus moon-specific switches (e.g. `frost.coldBreath`, `prospector.oreGlints`, `thread.teamLines`, `war.arenaBoost`, `gluttony.steam`, `quiet.ambientSoundReduction`).
+- Each player, `config/ecmoons-client.toml` `[atmosphere]`: `quality` = OFF / LOW / MEDIUM (default) / HIGH, and `soundVolume`. OFF removes all atmosphere rendering; the moon textures, warnings, reveal markers and the Thread HUD stay.
+
+**Previewing (admins):**
+- `/ecmoons atmosphere preview <moon> [players]` shows a moon's atmosphere (and its moon texture) to you or the named players only. Visual only: the real event, its gameplay and the forecast don't change. Use it at night (`/time set 18000`). `/ecmoons atmosphere preview off` ends it.
+- `/ecmoons atmosphere demo <reveal|war|feast> [players]` plays the Revealing scan sequence, the War build-up and summon pulse, or the Gluttony burst, without scanning, summoning or counting anything.
+
+**Limits.** Real desaturation of block textures would need a shader, so "desaturated" moons grey the light and sky instead. War drums are not included (vanilla has no drum sound; a distant low rumble is used). OptiFine shader packs replace the sky, fog and light-map pipeline, so with shaders on, expect the moon textures and particles to remain but sky/fog/light colours to depend on the shader pack; set `quality` LOW or OFF if a shader pack conflicts. Mods that completely replace the vanilla sky renderer will skip the sky layers (the hooks are optional and never crash).
+
+---
+
+## 8. Building
 
 Pushing to `main` builds the jar on GitHub Actions (Java 8, ForgeGradle 5, official mappings) and boots a dedicated test server with the self-test.
 
@@ -389,10 +430,10 @@ To build locally: `./gradlew build` produces `build/libs/ecmoons-<version>.jar`.
 
 ---
 
-## 8. Tests
+## 9. Tests
 
 Every push runs two automated suites:
-- a **dedicated server** self test: 271 checks;
-- a **real Minecraft client** test: 87 checks. It takes screenshots of all fourteen moons in the sky, the Revealing eye blinking and a reveal marker, the Thread HUD, Gluttony hearts and a solo War Moon match; it measures Mist fog, the Frost overlay, Drift movement and the Arcane tooltip, and runs the ore, XP, rare-drop, Gluttony and War Moon save/strip/restore rules with a real player.
+- a **dedicated server** self test: 273 checks;
+- a **real Minecraft client** test: 178 checks (including the atmosphere of all 14 moons). It takes screenshots of all fourteen moons in the sky, the Revealing eye blinking and a reveal marker, the Thread HUD, Gluttony hearts and a solo War Moon match; it measures Mist fog, the Frost overlay, Drift movement and the Arcane tooltip, and runs the ore, XP, rare-drop, Gluttony and War Moon save/strip/restore rules with a real player.
 
 See [TESTING.md](TESTING.md) for exactly what is verified and what still needs checking with the full modpack. The latest screenshots are on the `ci-client` branch.

@@ -25,7 +25,7 @@ import java.util.Random;
  * Built-in layout (floor size and wall height configurable): a square fighting floor with tall walls,
  * up to 16 separate 3x3 starting cells around the inside of the walls with iron-bar gates that open together,
  * symmetric pillars and low walls in the middle with several open crossing routes, and a sealed viewing
- * gallery above the arena with a glass floor. A structure template can replace the built-in layout.
+ * gallery above the arena with an invisible barrier floor. A structure template can replace the built-in layout.
  */
 public final class WarArena {
     public static final RegistryKey<World> DIMENSION =
@@ -138,11 +138,11 @@ public final class WarArena {
                 set(w, x, y + 1, z, Blocks.POLISHED_BLACKSTONE_BRICK_WALL.defaultBlockState());
             }
         }
-        // viewing gallery above the arena: glass floor, barrier walls and roof
+        // viewing gallery above the arena: invisible barrier floor, walls and roof (an unobstructed view down)
         int gy = y + wallHeight + 6, g = Math.max(6, h / 3);
         for (int x = -g; x <= g; x++) {
             for (int z = -g; z <= g; z++) {
-                set(w, x, gy, z, Blocks.GLASS.defaultBlockState());
+                set(w, x, gy, z, Blocks.BARRIER.defaultBlockState());
                 boolean edge = Math.abs(x) == g || Math.abs(z) == g;
                 for (int dy = 1; dy <= 4; dy++) if (edge) set(w, x, gy + dy, z, Blocks.BARRIER.defaultBlockState());
                 set(w, x, gy + 5, z, Blocks.BARRIER.defaultBlockState());

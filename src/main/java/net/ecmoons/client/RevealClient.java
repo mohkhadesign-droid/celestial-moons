@@ -254,8 +254,8 @@ public final class RevealClient {
 
             double hdx = m.x - mc.player.getX(), hdz = m.z - mc.player.getZ();
             String label = distance(Math.sqrt(hdx * hdx + hdz * hdz)) + " " + direction(hdx, hdz);
-            float textScale = 1f / 40f;
-            ms.translate(0, 0.62, 0);
+            float textScale = 1f / 24f;
+            ms.translate(0, 0.6, 0);
             ms.scale(textScale, textScale, textScale);
             int a = Math.max(4, Math.min(255, (int) (alpha * 255)));
             font.drawInBatch(label, -font.width(label) / 2f, 0, (a << 24) | 0xFFD27A, false, ms.last().pose(), buffers, true,

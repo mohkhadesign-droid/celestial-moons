@@ -39,7 +39,7 @@ Steps:
 3. Start the server once. It creates `config/ecmoons-common.toml` and `config/ecmoons/blue_moon_bonus_loot.json`. It also adds the eleven new event files to every world's Enhanced Celestials folder (see §3).
 4. Optionally restart after editing the config.
 
-The War Moon arena is a separate dimension, `ecmoons:war_arena`, defined in the add-on's built-in data pack (`data/ecmoons/dimension*/war_arena.json`). Nothing in your normal worlds is touched. The War Moon also checks **Flan Warfare** (if installed) so it never starts during an active flag capture.
+The War Moon arena is a separate dimension, `ecmoons:war_arena`, defined in the add-on's built-in data pack (`data/ecmoons/dimension*/war_arena.json`). Nothing in your normal worlds is touched. Because of this dimension, opening a **singleplayer** world shows Mojang's "Worlds using Experimental Settings are not supported" prompt (click Proceed); dedicated servers and players joining them never see it. The War Moon also checks **Flan Warfare** (if installed) so it never starts during an active flag capture.
 
 Optional mods it integrates with: **Lootr** (per-player chest loot gets Blue Moon bonus rolls) and **IDAS** (`idas:chests/pillager_fortress/pillager_basic` is a pre-configured Blue Moon table). Neither is required.
 
@@ -392,7 +392,7 @@ To build locally: `./gradlew build` produces `build/libs/ecmoons-<version>.jar`.
 ## 8. Tests
 
 Every push runs two automated suites:
-- a **dedicated server** self test: 162 checks;
-- a **real Minecraft client** test: 43 checks. It takes screenshots of all ten moons in the sky, measures Mist fog, the Frost overlay, Drift movement and the Arcane tooltip, and runs the ore, XP and rare-drop rules with a real player.
+- a **dedicated server** self test: 271 checks;
+- a **real Minecraft client** test: 87 checks. It takes screenshots of all fourteen moons in the sky, the Revealing eye blinking and a reveal marker, the Thread HUD, Gluttony hearts and a solo War Moon match; it measures Mist fog, the Frost overlay, Drift movement and the Arcane tooltip, and runs the ore, XP, rare-drop, Gluttony and War Moon save/strip/restore rules with a real player.
 
 See [TESTING.md](TESTING.md) for exactly what is verified and what still needs checking with the full modpack. The latest screenshots are on the `ci-client` branch.

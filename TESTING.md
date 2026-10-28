@@ -8,8 +8,8 @@ Two automated suites run on every push (GitHub Actions, Forge 36.2.39, Enhanced 
 
 **Dedicated server self test** (`-Decmoons.selftest=true`, `selftest/SelfTest.java`) - real dedicated server, no client:
 - Server starts with all add-on mixins applied (no client classes loaded on the dedicated server).
-- All ten moons are present in Enhanced Celestials' lunar context; the three Super variants are preserved; exactly one base Blood Moon (no duplicates); missing event files are written into an existing world's events folder.
-- `/ecmoons start <key>` for each of the ten moons: Enhanced Celestials reports the moon and the add-on effects switch to it; `/ecmoons active` works during each.
+- All fourteen moons are present in Enhanced Celestials' lunar context; the three Super variants are preserved; exactly one base Blood Moon (no duplicates); missing event files are written into an existing world's events folder.
+- `/ecmoons start <key>` for each of the fourteen moons: Enhanced Celestials reports the moon and the add-on effects switch to it; `/ecmoons active` works during each.
 - Super Blood Moon inherits Blood Moon features (same strength).
 - `/ecmoons end` returns to the ordinary moon; `/ecmoons list`, `settings`, `inspect loot`, `inspect block`, `inspect entity`, `reload` succeed.
 - Arcane rounding table (0->0, 1->1, 2->2, 3->2, 4->3, 10->8, 39->29) and repair-per-material value.
@@ -20,8 +20,16 @@ Two automated suites run on every push (GitHub Actions, Forge 36.2.39, Enhanced 
 - Spawn origins: a spawn-egg zombie is recorded as SPAWN_EGG and is not Wisdom-eligible; a natural zombie is eligible.
 - Per moon (all ten): Quiet monster-cap multiplier 0.35; Blood keeps Enhanced Celestials' x3; footstep broadcast radius halves only during Mist while explosions stay 16; exhaustion x0.75 only during Harvest; exactly one extra crop random tick during Harvest and none for non-crops or other moons; enchanting the third slot costs 2 levels during Arcane and 3 otherwise (real `onEnchantmentPerformed`); anvil with 2 iron ingots on a 240-damage iron pickaxe repairs 154 during Arcane vs. 124 vanilla, cost 2.
 
+- **Four new moons (server):**
+  - Feast → Gluttony migration: an `ecmoons-feast_moon.json` becomes `ecmoons-gluttony_moon.json` with its chance kept; the old file is renamed `.migrated`.
+  - Moon teams: same-team check, reassigning moves a player (one team each), assigning to a missing team fails, NBT save/load round trip, deleting a team removes its members. `/moonteams create` (and duplicate refused), `list`, `info`, `delete`.
+  - Thread: two teammates 6 blocks apart bond and a third 30 blocks away does not; a stone wall between them breaks the bond (and does not when `requireLineOfSight=false`); 1 teammate = 5%, 3 = 15%, 5 = capped 15%; 10 damage with 15% = 8.5; starvation, drowning and void damage are never reduced.
+  - Revealing: an underground player is marked at the surface with the same x/z; a player above the surface is marked where they are; the exempt tag and spectator mode hide a player.
+  - Gluttony (during each of the 14 moons): beef + cooked beef = 1 heart, no instant heal, capped at 4, death resets and clamps health, progress builds again; no bonus during other moons; the bonus is removed and health clamped when the moon is not up. Categories: raw/cooked share one, rotten flesh never counts, unlisted items are their own category.
+  - War arena: the `ecmoons:war_arena` dimension is loaded from the data pack in a new world and has no Enhanced Celestials lunar context; the built-in arena has 16 distinct cells, each with a floor and two free blocks; gates are iron bars and open; the gallery has a floor; the arena is fully removed afterwards. `/ecmoons war status`, `records`, `arena build`, `arena clear`, `/ecmoons reveal status`, `reveal scan`; `/ecmoons war start now` with nobody online is cancelled safely.
+
 **Client test** (`-Decmoons.clienttest=true`, `client/ClientSelfTest.java`) - a real Minecraft 1.16.5 client under a virtual display with software OpenGL, singleplayer world:
-- Each of the ten moons (and Super Blood) is synced to the client and drawn with its design; screenshots `moon_00`..`moon_11` are published.
+- Each of the fourteen moons (and Super Blood) is synced to the client and drawn with its design; screenshots `moon_00`..`moon_14` and `moon_99_super_blood` are published.
 - Mist: fog fades in (partial after 3 s, full after 10 s); disappears in the Nether; returns after coming back to the overworld; fades out after the moon ends. Screenshots `mist_0_clear_night`, `mist_1_fog_night`.
 - Frost: after ~20 s exposed the client receives the chilled state and the server's speed modifier is synced to the client; both are removed when the moon ends. Screenshot `frost_overlay_chilled`.
 - Arcane: the real enchanting screen tooltip shows 3 levels without the lock and 2 with the server's Arcane lock.
@@ -31,7 +39,12 @@ Two automated suites run on every push (GitHub Actions, Forge 36.2.39, Enhanced 
   - Wisdom Moon: a natural zombie's XP is doubled (5 → 10). Spawner, spawn-egg and fake-player kills are not doubled. Natural coal ore XP is doubled (3 → 6); placed coal ore is not, and ore XP is not doubled outside Wisdom.
   - Blood Moon: zombie rare drops (iron ingot, carrot, potato) over 60,000 simulated player kills each: 2.61% baseline, 3.11% during Blood Moon (target 3.125%), 2.61% for spawner zombies.
 
-Bugs these suites found and that are fixed: a client-only `BlockPos` method used by `/ecmoons inspect block` (would have crashed a dedicated server), an enchanting-screen mixin that failed to apply (would have crashed the client when opening an enchanting table), and Drift's landing grace not recognising airborne players on the server.
+- **Revealing Moon (real client):** a preview blink passes a half-closed frame, reaches the closed frame and reopens (screenshots `reveal_0_open`, `reveal_1_half`, `reveal_2_closed`); a server-timed search (`/ecmoons reveal warn`) shuts the eye at the end of the countdown and reopens it after the scan; a scan delivers the marker, the marker is drawn in the world through a hill with its distance/direction label (`reveal_3_marker`), and disappears after 8 s.
+- **Thread Moon:** the HUD indicator renders (`thread_hud`, with a locally set value: one test player cannot bond).
+- **Gluttony Moon (real player, real eating event):** bread, bread, porkchop = 2 bonus hearts (max health 24 on the client too); the hearts are gone when the moon ends (`gluttony_hearts`).
+- **War Moon (real player, solo test match):** the player is moved to the arena dimension; the recovery record is written before stripping; diamonds, torches, golden helmet and totem are removed; the equal kit is given; adventure mode, no flight; no attacking during the 10 s preparation; FIGHT after the countdown; tossing an item keeps it in the inventory and creates no item entity; arena blocks can't be broken; lethal damage is a knockout, not a death, with no drops, kit emptied, moved to the gallery, and no damage taken there; the match ends with no winner; everyone is back in the overworld at the same spot with exactly 7 diamonds, 33 torches, the golden helmet and totem, XP level 5 and survival mode; the record is deleted, the arena removed, and a second restore changes nothing. War Champion: Haste I is applied, and winning again refreshes instead of stacking. Screenshots `war_0_cell`, `war_1_fight`, `war_2_gallery`.
+
+Bugs these suites found and that are fixed: a client-only `BlockPos` method used by `/ecmoons inspect block` (would have crashed a dedicated server), an enchanting-screen mixin that failed to apply (would have crashed the client when opening an enchanting table), Drift's landing grace not recognising airborne players on the server, and (in this update) a War Moon return that would have sent a player saved mid-air to world spawn instead of the ground below.
 
 ## Verified by source review (not executed)
 
@@ -39,6 +52,22 @@ Bugs these suites found and that are fixed: a client-only `BlockPos` method used
 - Every vanilla/Forge hook point (sky renderer moon section, enchanting tooltip, anvil `createResult`, fishing timers, jump exhaustion, footstep broadcast, random tick, `finalizeSpawn`, loot table loading, fog setup, name-plate gating) was checked against the decompiled Forge 36.2.39 / official-mappings 1.16.5 code before writing the mixins.
 
 ## Remaining in-game checks (need your modpack and real players)
+
+### Four new moons
+
+These parts could not be run with a single automated player and the bare test setup:
+
+A. **Existing world gets the arena dimension.** The tests create a new world. Data-pack dimensions are normally added to existing 1.16.5 worlds as well, but confirm it on a copy of your world: `/ecmoons war status` must say "Arena dimension: loaded". Singleplayer worlds show Mojang's "Worlds using Experimental Settings are not supported" prompt because of this dimension (click Proceed); dedicated servers don't show it.
+B. **A real multi-player War Moon match** (2+ players): PvP between fighters after the gates open, sudden death ring damage, winner announcement with moon team, champion aura visible to others, `/warmoon spectate` gallery viewers.
+C. **Disconnect and restart recovery with real players:** log out mid-match, log back in (restored, forfeit); stop the server mid-match, restart, log in (restored); `/ecmoons war records` before and after.
+D. **Curios and other equipment mods:** with Curios accessories equipped, enrol and return (accessories back exactly). If a player has items in any other item-holding capability, they are refused with a message naming it (expected); add it to `accessoryCapabilities` or `ignoredCapabilities` as appropriate.
+E. **Flan Warfare deferral:** start a flag capture, then `/ecmoons war start`: the battle must be postponed ("A claim raid is in progress…"). The integration is by reflection on `net.flanwarfare.core.WarCore.get().capture().activeCount()`, checked against your repository's source but not run.
+F. **Grave/corpse mods and Lootr** in the arena: a knockout never fires a death, so graves shouldn't trigger; confirm no grave appears.
+G. **Thread Moon with two or more real teammates:** the bond percentage on the HUD, the rose threads (visible to the team only, not to other players), the 3 s fade, and actual damage taken.
+H. **Revealing Moon with other players:** markers for other players within 256 blocks, never your own; nothing for spectators, exempt-tagged players, protected areas or arena players; no coordinates in chat.
+I. **Gluttony with modded foods** from the pack (each counts as its own category unless grouped in `foodCategories`) and relogging mid-night (hearts kept).
+
+### Original ten moons
 
 The automated runs use only Forge + Enhanced Celestials + this add-on, one player, software rendering. These still need checking on the Crazy Craft Updated server:
 

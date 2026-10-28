@@ -293,4 +293,8 @@ To build locally: `./gradlew build` produces `build/libs/ecmoons-<version>.jar`.
 
 ## 8. Tests
 
-See [TESTING.md](TESTING.md) for what has been verified automatically and what still needs an in-game check.
+Every push runs two automated suites:
+- a **dedicated server** self test: 162 checks;
+- a **real Minecraft client** test: 43 checks. It takes screenshots of all ten moons in the sky, measures Mist fog, the Frost overlay, Drift movement and the Arcane tooltip, and runs the ore, XP and rare-drop rules with a real player.
+
+See [TESTING.md](TESTING.md) for exactly what is verified and what still needs checking with the full modpack. The latest screenshots are on the `ci-client` branch.

@@ -74,20 +74,24 @@ final class NewMoonChecks {
         check.accept("moon teams: deleting a team removes its members", teams.teamOf(a) == null);
 
         // Thread: bond counting, line of sight, cap, excluded damage
-        int y = w.getHeight(Heightmap.Type.MOTION_BLOCKING, 200, 200) + 30;
+        BlockPos spawn = w.getSharedSpawnPos(); // spawn chunks are loaded
+        int bx = spawn.getX(), bz = spawn.getZ();
+        int y = w.getHeight(Heightmap.Type.MOTION_BLOCKING, bx, bz) + 40;
         FakePlayer p1 = FakePlayerFactory.get(w, new GameProfile(UUID.randomUUID(), "ecm_thread1"));
         FakePlayer p2 = FakePlayerFactory.get(w, new GameProfile(UUID.randomUUID(), "ecm_thread2"));
         FakePlayer p3 = FakePlayerFactory.get(w, new GameProfile(UUID.randomUUID(), "ecm_thread3"));
-        p1.moveTo(200.5, y, 200.5, 0, 0);
-        p2.moveTo(206.5, y, 200.5, 0, 0);
-        p3.moveTo(230.5, y, 200.5, 0, 0);
+        p1.moveTo(bx + 0.5, y, bz + 0.5, 0, 0);
+        p2.moveTo(bx + 6.5, y, bz + 0.5, 0, 0);
+        p3.moveTo(bx + 30.5, y, bz + 0.5, 0, 0);
         Map<UUID, Integer> counts = new HashMap<>();
         List<Integer> links = new ArrayList<>();
         ThreadFeatures.bond(w, Arrays.asList(p1, p2, p3), 12, true, counts, links);
+        EcMoons.LOGGER.info("[ECMOONS-SELFTEST] thread positions " + p1.position() + " " + p2.position() + " " + p3.position()
+                + " d12=" + p1.distanceTo(p2) + " los=" + ThreadFeatures.lineOfSightForTest(w, p1, p2));
         check.accept("thread: two teammates 6 blocks apart bond, one 24+ away does not (" + counts + ")",
                 counts.getOrDefault(p1.getUUID(), 0) == 1 && counts.getOrDefault(p2.getUUID(), 0) == 1 && !counts.containsKey(p3.getUUID())
                         && links.size() == 2);
-        for (int dy = -1; dy <= 3; dy++) for (int dz = -2; dz <= 2; dz++) w.setBlock(new BlockPos(203, y + dy, 200 + dz), Blocks.STONE.defaultBlockState(), 2);
+        for (int dy = -1; dy <= 3; dy++) for (int dz = -2; dz <= 2; dz++) w.setBlock(new BlockPos(bx + 3, y + dy, bz + dz), Blocks.STONE.defaultBlockState(), 2);
         counts.clear();
         links.clear();
         ThreadFeatures.bond(w, Arrays.asList(p1, p2), 12, true, counts, links);
@@ -95,7 +99,7 @@ final class NewMoonChecks {
         counts.clear();
         ThreadFeatures.bond(w, Arrays.asList(p1, p2), 12, false, counts, links);
         check.accept("thread: without requireLineOfSight the wall does not matter", counts.size() == 2);
-        for (int dy = -1; dy <= 3; dy++) for (int dz = -2; dz <= 2; dz++) w.setBlock(new BlockPos(203, y + dy, 200 + dz), Blocks.AIR.defaultBlockState(), 2);
+        for (int dy = -1; dy <= 3; dy++) for (int dz = -2; dz <= 2; dz++) w.setBlock(new BlockPos(bx + 3, y + dy, bz + dz), Blocks.AIR.defaultBlockState(), 2);
         check.accept("thread: 1 teammate = 5%, 3 = 15%, 5 = capped 15%", Math.abs(ThreadFeatures.target(1) - 0.05f) < 1e-6
                 && Math.abs(ThreadFeatures.target(3) - 0.15f) < 1e-6 && Math.abs(ThreadFeatures.target(5) - 0.15f) < 1e-6);
         check.accept("thread: 10 damage with 15% bond = 8.5", Math.abs(ThreadFeatures.reduce(10f, 0.15f, DamageSource.GENERIC) - 8.5f) < 1e-5);
@@ -103,13 +107,15 @@ final class NewMoonChecks {
                 && ThreadFeatures.reduce(10f, 0.15f, DamageSource.DROWN) == 10f && ThreadFeatures.reduce(10f, 0.15f, DamageSource.OUT_OF_WORLD) == 10f);
 
         // Revealing: underground players are marked at the surface; creative/exempt hidden
-        int surface = w.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, 300, 300);
+        int mx = bx + 9, mz = bz + 9;
+        w.getChunk(mx >> 4, mz >> 4); // make sure the heightmap is loaded
+        int surface = w.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, mx, mz);
         FakePlayer mole = FakePlayerFactory.get(w, new GameProfile(UUID.randomUUID(), "ecm_mole"));
-        mole.moveTo(300.5, Math.max(5, surface - 20), 300.5, 0, 0);
+        mole.moveTo(mx + 0.5, Math.max(5, surface - 20), mz + 0.5, 0, 0);
         Vector3d m = RevealingFeatures.markerPos(mole);
         check.accept("revealing: underground player marked at the surface (y " + m.y + " vs surface " + surface + "), same x/z",
                 m.y == surface && m.x == mole.getX() && m.z == mole.getZ());
-        mole.moveTo(300.5, surface + 10, 300.5, 0, 0);
+        mole.moveTo(mx + 0.5, surface + 10, mz + 0.5, 0, 0);
         check.accept("revealing: a player above the surface is marked where they are", RevealingFeatures.markerPos(mole).y == surface + 10);
         check.accept("revealing: survival player is revealable", !RevealingFeatures.hidden(mole));
         mole.addTag(RevealingFeatures.EXEMPT_TAG);

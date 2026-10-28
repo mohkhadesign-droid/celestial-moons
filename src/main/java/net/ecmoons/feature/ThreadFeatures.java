@@ -54,6 +54,10 @@ public final class ThreadFeatures {
         return hit.getType() == RayTraceResult.Type.MISS;
     }
 
+    public static boolean lineOfSightForTest(ServerWorld w, ServerPlayerEntity a, ServerPlayerEntity b) {
+        return lineOfSight(w, a, b);
+    }
+
     /** Every 10 ticks per world. */
     public static void tick(ServerWorld world, MoonType active) {
         if (active != MoonType.THREAD && CURRENT.isEmpty() && SENT.isEmpty()) return;

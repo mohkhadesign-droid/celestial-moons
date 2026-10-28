@@ -379,6 +379,10 @@ public final class ClientSelfTest {
         waitFor(200, () -> Moons.is(Minecraft.getInstance().level, MoonType.REVEALING));
         then(40, () -> {
             player().abilities.flying = true;
+            player().onUpdateAbilities();
+            lookUp();
+        });
+        then(20, () -> {
             lookUp();
             shot("reveal_0_open");
             cmd("execute as @p run ecmoons reveal blink");
@@ -427,6 +431,7 @@ public final class ClientSelfTest {
             p.yRotO = -90F;
             p.xRot = 5F;
             p.xRotO = 5F;
+            check("revealing: marker drawn in the world (" + RevealClient.lastDrawn + ")", RevealClient.lastDrawn > 0);
             shot("reveal_3_marker");
         });
         waitFor(200, () -> RevealClient.markerCount() == 0);

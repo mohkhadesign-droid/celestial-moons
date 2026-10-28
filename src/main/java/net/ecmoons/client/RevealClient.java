@@ -47,6 +47,9 @@ public final class RevealClient {
 
     private static final List<Vector3d> markers = new ArrayList<>();
     private static float markersUntil, markersFrom;
+    /** Markers drawn in the last rendered frame (diagnostics / client test). */
+    public static volatile int lastDrawn;
+    private static final boolean DEBUG = Boolean.getBoolean("ecmoons.clienttest");
 
     private RevealClient() {}
 
@@ -197,6 +200,7 @@ public final class RevealClient {
 
     @SubscribeEvent
     public static void onRenderWorld(RenderWorldLastEvent event) {
+        lastDrawn = 0;
         if (markers.isEmpty()) return;
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
@@ -208,6 +212,8 @@ public final class RevealClient {
         float fadeIn = Math.min(1f, (now - markersFrom) / 6f);
         float fadeOut = Math.min(1f, (markersUntil - now) / 20f);
         float alpha = Math.max(0f, Math.min(fadeIn, fadeOut)) * (0.8f + 0.2f * (float) Math.sin(now * 0.3));
+        if (DEBUG && clientTicks % 20 == 0) EcMoons.LOGGER.info("[ECMOONS-CLIENTTEST] reveal render: " + markers.size() + " markers, alpha " + alpha
+                + ", now " + now + ", until " + markersUntil + ", cam " + mc.gameRenderer.getMainCamera().getPosition() + ", first " + markers.get(0));
         if (alpha <= 0.02f) return;
 
         RenderSystem.pushMatrix();
@@ -254,6 +260,7 @@ public final class RevealClient {
                     (int) (alpha * 0.4f * 255) << 24, 0xF000F0);
             buffers.endBatch();
             ms.popPose();
+            lastDrawn++;
         }
         RenderSystem.enableFog();
         RenderSystem.enableCull();

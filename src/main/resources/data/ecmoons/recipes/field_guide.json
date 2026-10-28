@@ -2,10 +2,13 @@
   "conditions": [
     { "type": "forge:mod_loaded", "modid": "patchouli" }
   ],
-  "type": "patchouli:shapeless_book_recipe",
+  "type": "minecraft:crafting_shapeless",
   "ingredients": [
     { "item": "minecraft:book" },
     { "item": "minecraft:clock" }
   ],
-  "book": "ecmoons:field_guide"
+  "result": {
+    "item": "patchouli:guide_book",
+    "nbt": "{\"patchouli:book\":\"ecmoons:field_guide\"}"
+  }
 }

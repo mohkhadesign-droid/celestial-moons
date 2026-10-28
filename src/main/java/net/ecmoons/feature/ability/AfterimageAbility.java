@@ -213,7 +213,9 @@ public final class AfterimageAbility {
             done = done.add(sub);
         }
         if (done.lengthSqr() > 1e-6) {
-            p.connection.teleport(p.getX() + done.x, p.getY() + done.y, p.getZ() + done.z, 0f, 0f,
+            // Rotation is sent relative (the client keeps where it looks), but the server applies the given values
+            // directly, so pass the current ones: passing 0 would turn the server-side look south.
+            p.connection.teleport(p.getX() + done.x, p.getY() + done.y, p.getZ() + done.z, p.yRot, p.xRot,
                     EnumSet.of(SPlayerPositionLookPacket.Flags.X_ROT, SPlayerPositionLookPacket.Flags.Y_ROT));
         }
         return !blocked;

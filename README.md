@@ -491,4 +491,4 @@ With **Patchouli** installed (it is part of Crazy Craft Updated), the add-on shi
 
 - Craft it: **book + clock** (shapeless).
 - Or give it: `/give @p patchouli:guide_book{"patchouli:book":"ecmoons:field_guide"}`
-- The text uses the default config values. If you change them, edit `tools/book/build_book.py` and rebuild, or override the entries with a resource pack (`assets/ecmoons/patchouli_books/field_guide/en_us/`).
+- The text uses the default config values. If you change them, edit `tools/book/build_book.py` and rebuild the jar (Patchouli for 1.16 reads book pages from the mod jar itself, so a resource pack can't override them).

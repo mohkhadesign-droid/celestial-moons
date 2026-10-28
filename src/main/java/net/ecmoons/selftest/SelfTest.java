@@ -105,6 +105,12 @@ public final class SelfTest {
             boolean patchouli = net.minecraftforge.fml.ModList.get().isLoaded("patchouli");
             boolean recipe = w.getServer().getRecipeManager().byKey(new net.minecraft.util.ResourceLocation("ecmoons", "field_guide")).isPresent();
             check("field guide: crafting recipe loaded only when Patchouli is installed (patchouli " + patchouli + ", recipe " + recipe + ")", patchouli == recipe);
+            if (recipe) {
+                net.minecraft.item.ItemStack out = w.getServer().getRecipeManager().byKey(new net.minecraft.util.ResourceLocation("ecmoons", "field_guide"))
+                        .get().getResultItem();
+                check("field guide: the recipe makes the Lunar Field Guide (" + out + " " + out.getTag() + ")",
+                        out.getTag() != null && "ecmoons:field_guide".equals(out.getTag().getString("patchouli:book")));
+            }
         });
         step("shell projectiles", 1, w -> ShellChecks.setup(w, SelfTest::check));
         step("shell verify", 25, w -> ShellChecks.verify(w, SelfTest::check));

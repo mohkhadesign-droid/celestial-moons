@@ -833,12 +833,14 @@ public final class ClientSelfTest {
         then(0, () -> {
             check("afterimage: step 2 done inside the window", net.ecmoons.client.ability.AbilityClient.afterimageStage() == 2);
             tap();
+            Minecraft.getInstance().gui.getChat().clearMessages(false);
             shot("afterimage_0_steps");
         });
         waitFor(20, () -> net.ecmoons.client.ability.AbilityClient.afterimagePhase() == 3);
         then(0, () -> {
             check("afterimage: third step done, final attack window on the HUD", net.ecmoons.client.ability.AbilityClient.afterimagePhase() == 3);
             check("afterimage: afterimages drawn (" + net.ecmoons.client.ability.AbilityFx.lastGhostsDrawn + ")", net.ecmoons.client.ability.AbilityFx.lastGhostsDrawn > 0);
+            Minecraft.getInstance().gui.getChat().clearMessages(false);
             shot("afterimage_1_final_window");
             ClientPlayerEntity p = player();
             java.util.List<net.minecraft.entity.monster.ZombieEntity> z = Minecraft.getInstance().level.getEntitiesOfClass(
@@ -935,7 +937,7 @@ public final class ClientSelfTest {
             // a wall right behind the player so the explosion's push can't throw them off the platform
             cmd("fill " + (ax + 9) + " " + ay + " " + (az - 3) + " " + (ax + 9) + " " + (ay + 4) + " " + (az + 3) + " obsidian");
             cmd("ecmoons start ecmoons-shell_moon");
-            Minecraft.getInstance().options.setCameraType(net.minecraft.client.settings.PointOfView.THIRD_PERSON_BACK);
+            Minecraft.getInstance().options.setCameraType(net.minecraft.client.settings.PointOfView.THIRD_PERSON_FRONT);
         });
         waitFor(200, () -> Moons.is(Minecraft.getInstance().level, MoonType.SHELL));
         waitFor(100, () -> player().isOnGround());
@@ -961,6 +963,7 @@ public final class ClientSelfTest {
         waitFor(10, () -> net.ecmoons.client.ability.AbilityClient.shellState() == 1);
         then(0, () -> {
             check("shell: crouch + hold starts charging (HUD)", net.ecmoons.client.ability.AbilityClient.shellState() == 1);
+            Minecraft.getInstance().gui.getChat().clearMessages(false);
             shot("shell_0_charging");
         });
         waitFor(80, () -> net.ecmoons.client.ability.AbilityClient.shellState() == 2);
@@ -968,6 +971,7 @@ public final class ClientSelfTest {
             check("shell: deployed after the charge", net.ecmoons.client.ability.AbilityClient.shellState() == 2);
             check("shell: shell drawn (" + net.ecmoons.client.ability.AbilityFx.lastShellsDrawn + ")", net.ecmoons.client.ability.AbilityFx.lastShellsDrawn > 0);
             onServer(net.ecmoons.selftest.AbilityPlayerChecks::snapshot);
+            Minecraft.getInstance().gui.getChat().clearMessages(false);
             shot("shell_1_up");
         });
         then(2, () -> {

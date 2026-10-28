@@ -2,7 +2,6 @@
   "name": "Lunar Field Guide",
   "landing_text": "Every few nights the moon rises changed. This guide lists each moon: how to recognise it, what it does, how long it lasts and how to play around it.$(br2)Numbers are the add-on's defaults; a server can change them in $(o)ecmoons-common.toml$().",
   "version": 1,
-  "use_resource_pack": true,
   "book_texture": "patchouli:textures/gui/book_purple.png",
   "model": "patchouli:book_purple",
   "creative_tab": "misc",

@@ -3,7 +3,8 @@ import json, os, sys
 
 ROOT = sys.argv[1] if len(sys.argv) > 1 else "src/main/resources"
 DATA = os.path.join(ROOT, "data/ecmoons/patchouli_books/field_guide")
-ASSETS = os.path.join(ROOT, "assets/ecmoons/patchouli_books/field_guide/en_us")
+# Patchouli 1.16 reads book contents from the mod's data folder (assets/ only works from 1.17 on)
+ASSETS = os.path.join(ROOT, "data/ecmoons/patchouli_books/field_guide/en_us")
 os.makedirs(DATA, exist_ok=True)
 
 def write(path, obj):
@@ -16,7 +17,6 @@ write(os.path.join(DATA, "book.json"), {
     "name": "Lunar Field Guide",
     "landing_text": "Every few nights the moon rises changed. This guide lists each moon: how to recognise it, what it does, how long it lasts and how to play around it.$(br2)Numbers are the add-on's defaults; a server can change them in $(o)ecmoons-common.toml$().",
     "version": 1,
-    "use_resource_pack": True,
     "book_texture": "patchouli:textures/gui/book_purple.png",
     "model": "patchouli:book_purple",
     "creative_tab": "misc",

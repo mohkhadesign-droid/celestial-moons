@@ -1,0 +1,81 @@
+buildscript {
+    repositories {
+        maven { url = 'https://maven.minecraftforge.net' }
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.spongepowered.mixin'
+
+// Each GitHub Actions build gets its own number (e.g. 1.0.0-b7) so it is always clear which build is installed.
+version = System.getenv('GITHUB_RUN_NUMBER') ? "${mod_version}-b${System.getenv('GITHUB_RUN_NUMBER')}" : mod_version
+group = 'net.ecmoons'
+archivesBaseName = 'ecmoons'
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+
+minecraft {
+    // Official mappings, the same naming Enhanced Celestials 2.0.9 was developed against.
+    mappings channel: 'official', version: '1.16.5'
+
+    runs {
+        server {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'info'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            // The in-game self test only runs when this property is set (CI sets it).
+            property 'ecmoons.selftest', System.getenv('ECMOONS_SELFTEST') ?: 'false'
+            arg '--nogui'
+            mods {
+                ecmoons {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+mixin {
+    add sourceSets.main, 'ecmoons.refmap.json'
+    config 'ecmoons.mixins.json'
+}
+
+repositories {
+    // libs/enhancedcelestials-2.0.9-1.16.5.jar: the unmodified Enhanced Celestials release (LGPLv3).
+    flatDir { dirs 'libs' }
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    implementation fg.deobf('local:enhancedcelestials:2.0.9-1.16.5')
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+jar {
+    manifest {
+        attributes([
+            'Specification-Title'     : 'ecmoons',
+            'Specification-Vendor'    : 'ecmoons',
+            'Specification-Version'   : '1',
+            'Implementation-Title'    : project.name,
+            'Implementation-Version'  : project.version,
+            'Implementation-Vendor'   : 'ecmoons',
+            'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            'MixinConfigs'            : 'ecmoons.mixins.json'
+        ])
+    }
+}
+
+jar.finalizedBy('reobfJar')

@@ -1,0 +1,11 @@
+.gradle/
+build/
+out/
+run/
+*.iml
+.idea/
+.vscode/
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+# The unmodified Enhanced Celestials 2.0.9 jar (LGPLv3) is the compile-time dependency.
+!libs/enhancedcelestials-2.0.9-1.16.5.jar

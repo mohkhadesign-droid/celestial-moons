@@ -1,0 +1,32 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+license="LGPL-3.0-or-later"
+
+[[mods]]
+modId="ecmoons"
+version="${file.jarVersion}"
+displayName="Enhanced Celestials: Ten Moons"
+logoFile="logo.png"
+authors="mohkhadesign"
+description='''
+Ten-moon lineup add-on for Enhanced Celestials 2.0.9.
+'''
+
+[[dependencies.ecmoons]]
+    modId="forge"
+    mandatory=true
+    versionRange="[36.2.0,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.ecmoons]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.5]"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.ecmoons]]
+    modId="enhancedcelestials"
+    mandatory=true
+    versionRange="[2.0.9,)"
+    ordering="AFTER"
+    side="BOTH"

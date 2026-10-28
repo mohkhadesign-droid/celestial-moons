@@ -20,13 +20,15 @@ jobs:
           java-version: '8'
 
       - name: Compile and package
+        timeout-minutes: 15
         run: |
           chmod +x gradlew
           set -o pipefail
-          ./gradlew build --no-daemon --stacktrace 2>&1 | tee build.log
+          timeout 840 ./gradlew build --no-daemon --stacktrace 2>&1 | tee build.log
 
       - name: Dedicated server self test
         id: selftest
+        timeout-minutes: 25
         run: |
           mkdir -p run && echo "eula=true" > run/eula.txt
           printf "online-mode=false\nspawn-protection=0\nlevel-seed=ecmoons\n" > run/server.properties

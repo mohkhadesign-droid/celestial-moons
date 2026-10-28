@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,15 +39,26 @@ public class AddonMoonEvent extends LunarEvent {
     }
 
     public static synchronized Codec<AddonMoonEvent> codecFor(MoonType type) {
-        return CODECS.computeIfAbsent(type, t -> RecordCodecBuilder.create(builder -> builder.group(
-                LunarEventClientSettings.CODEC.fieldOf("clientSettings").forGetter(LunarEvent::getClientSettings),
-                Codec.INT.fieldOf("minNumberOfNightsBetween").forGetter(LunarEvent::getMinNumberOfNightsBetween),
-                Codec.DOUBLE.fieldOf("chance").forGetter(LunarEvent::getChance),
-                Codec.list(Codec.INT).fieldOf("validMoonPhases").forGetter(e -> new ArrayList<>(e.getValidMoonPhases())),
-                LunarTextComponents.CODEC.fieldOf("textComponents").forGetter(LunarEvent::getTextComponents),
-                Codec.BOOL.fieldOf("blockSleeping").forGetter(LunarEvent::blockSleeping)
-        ).apply(builder, (clientSettings, minNights, chance, phases, text, blockSleeping) ->
-                new AddonMoonEvent(t, clientSettings, minNights, chance, phases, text, blockSleeping))));
+        Codec<AddonMoonEvent> codec = CODECS.get(type);
+        if (codec == null) {
+            codec = build(type);
+            CODECS.put(type, codec);
+        }
+        return codec;
+    }
+
+    // Explicitly typed lambdas: javac 8's inference is extremely slow on untyped nested codec builders.
+    private static Codec<AddonMoonEvent> build(final MoonType type) {
+        return RecordCodecBuilder.create((RecordCodecBuilder.Instance<AddonMoonEvent> builder) -> builder.group(
+                LunarEventClientSettings.CODEC.fieldOf("clientSettings").forGetter((AddonMoonEvent e) -> e.getClientSettings()),
+                Codec.INT.fieldOf("minNumberOfNightsBetween").forGetter((AddonMoonEvent e) -> e.getMinNumberOfNightsBetween()),
+                Codec.DOUBLE.fieldOf("chance").forGetter((AddonMoonEvent e) -> e.getChance()),
+                Codec.list(Codec.INT).fieldOf("validMoonPhases").forGetter((AddonMoonEvent e) -> new ArrayList<Integer>(e.getValidMoonPhases())),
+                LunarTextComponents.CODEC.fieldOf("textComponents").forGetter((AddonMoonEvent e) -> e.getTextComponents()),
+                Codec.BOOL.fieldOf("blockSleeping").forGetter((AddonMoonEvent e) -> e.blockSleeping())
+        ).apply(builder, (LunarEventClientSettings clientSettings, Integer minNights, Double chance, List<Integer> phases,
+                          LunarTextComponents text, Boolean blockSleeping) ->
+                new AddonMoonEvent(type, clientSettings, minNights, chance, phases, text, blockSleeping)));
     }
 
     @Override

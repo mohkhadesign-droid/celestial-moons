@@ -216,7 +216,7 @@ public final class WispAbility {
 
     @Nullable
     private static ServerPlayerEntity player(MinecraftServer server, UUID id) {
-        ServerPlayerEntity p = player(server, id);
+        ServerPlayerEntity p = server.getPlayerList().getPlayer(id);
         return p != null ? p : TEST_PLAYERS.get(id);
     }
 

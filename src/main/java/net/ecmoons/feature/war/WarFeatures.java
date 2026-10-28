@@ -151,6 +151,7 @@ public final class WarFeatures {
         st.setDirty();
         phaseEnd = ticks + seconds * 20L;
         lastAnnounced = -1;
+        if (seconds < 5) return; // forced start without a warning
         broadcast(server, new StringTextComponent("WAR MOON APPROACHES \u2014 Arena battle begins in " + clock(seconds)
                 + ". Your equipment will be stored safely. Everyone fights with the same loadout.").withStyle(TextFormatting.DARK_RED, TextFormatting.BOLD));
         for (ServerPlayerEntity p : server.getPlayerList().getPlayers()) title(p, "WAR MOON APPROACHES", "Arena battle in " + clock(seconds), TextFormatting.DARK_RED);
@@ -317,7 +318,10 @@ public final class WarFeatures {
     private static void move(ServerPlayerEntity p, ServerWorld world, BlockPos pos) {
         WarState.allowTeleport = true;
         try {
-            p.teleportTo(world, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, p.yRot, 0f);
+            // face the arena centre (cells look through their gate)
+            float yaw = (pos.getX() == 0 && pos.getZ() == 0) ? p.yRot
+                    : (float) Math.toDegrees(Math.atan2(pos.getX() + 0.5, -(pos.getZ() + 0.5)));
+            p.teleportTo(world, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, yaw, 0f);
         } finally {
             WarState.allowTeleport = false;
         }

@@ -86,8 +86,9 @@ final class NewMoonChecks {
         Map<UUID, Integer> counts = new HashMap<>();
         List<Integer> links = new ArrayList<>();
         ThreadFeatures.bond(w, Arrays.asList(p1, p2, p3), 12, true, counts, links);
-        EcMoons.LOGGER.info("[ECMOONS-SELFTEST] thread positions " + p1.position() + " " + p2.position() + " " + p3.position()
-                + " d12=" + p1.distanceTo(p2) + " los=" + ThreadFeatures.lineOfSightForTest(w, p1, p2));
+        EcMoons.LOGGER.info("[ECMOONS-SELFTEST] thread diag: p1 " + p1.getX() + "," + p1.getY() + "," + p1.getZ() + " p2 " + p2.getX() + "," + p2.getY()
+                + "," + p2.getZ() + " dsq12=" + p1.distanceToSqr(p2) + " dsq13=" + p1.distanceToSqr(p3) + " los12=" + ThreadFeatures.lineOfSightForTest(w, p1, p2)
+                + " ids " + p1.getId() + "/" + p2.getId() + " uuids " + p1.getUUID() + "/" + p2.getUUID() + " links " + links);
         check.accept("thread: two teammates 6 blocks apart bond, one 24+ away does not (" + counts + ")",
                 counts.getOrDefault(p1.getUUID(), 0) == 1 && counts.getOrDefault(p2.getUUID(), 0) == 1 && !counts.containsKey(p3.getUUID())
                         && links.size() == 2);

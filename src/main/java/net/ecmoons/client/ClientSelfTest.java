@@ -381,7 +381,7 @@ public final class ClientSelfTest {
             player().abilities.flying = true;
             lookUp();
             shot("reveal_0_open");
-            cmd("ecmoons reveal blink");
+            cmd("execute as @p run ecmoons reveal blink");
         });
         waitFor(40, () -> RevealClient.frame(0) == 1 || RevealClient.frame(0) == 2);
         then(0, () -> {
@@ -415,7 +415,7 @@ public final class ClientSelfTest {
             cmd("tp @a " + px + ".5 " + y + " " + pz + ".5 -90 0");
             Minecraft.getInstance().options.hideGui = false;
         });
-        then(30, () -> cmd("ecmoons reveal scan self"));
+        then(30, () -> cmd("execute as @p run ecmoons reveal scan self"));
         then(10, () -> {
             check("revealing: scan marker received (" + RevealClient.markerCount() + ")", RevealClient.markerCount() == 1);
             int y = Minecraft.getInstance().level.getHeight(Heightmap.Type.MOTION_BLOCKING, px - 14, pz);
@@ -480,7 +480,7 @@ public final class ClientSelfTest {
         });
         waitFor(600, () -> Minecraft.getInstance().level.dimension().equals(net.minecraft.world.World.OVERWORLD));
         then(40, () -> onServer(WarPlayerChecks::warRestored));
-        then(5, () -> cmd("ecmoons war champion @a"));
+        then(5, () -> cmd("ecmoons war champion @p"));
         then(40, () -> onServer(WarPlayerChecks::champion));
         then(5, () -> cmd("gamemode creative @a"));
     }

@@ -292,6 +292,18 @@ public final class WarFeatures {
             cellOf.put(p.getUUID(), c);
             fighters.add(p.getUUID());
             move(p, arena, c);
+            if (!inArena(p.level)) {
+                // another mod (e.g. a world/dimension protection mod) refused the move: give everything back at once
+                fighters.remove(p.getUUID());
+                cellOf.remove(p.getUUID());
+                WarRecords.restore(p);
+                st.involved.remove(p.getUUID());
+                st.setDirty();
+                p.sendMessage(new StringTextComponent("You could not be moved to the War Moon arena (another mod blocked the dimension change)."
+                        + " Your gear was returned.").withStyle(TextFormatting.RED), net.minecraft.util.Util.NIL_UUID);
+                EcMoons.LOGGER.error("War Moon: teleporting {} to ecmoons:war_arena failed - something blocked the dimension change"
+                        + " (check protection mods' dimension/teleport rules for ecmoons:war_arena)", p.getScoreboardName());
+            }
         }
         for (ServerPlayerEntity p : spectators) addWatcher(server, st, p);
         if (fighters.size() < min) {
@@ -601,6 +613,19 @@ public final class WarFeatures {
     @SubscribeEvent
     public static void onPearl(EnderTeleportEvent event) {
         if (event.getEntityLiving() instanceof PlayerEntity && isInvolved((PlayerEntity) event.getEntityLiving())) event.setCanceled(true);
+    }
+
+    /**
+     * The add-on's own arena moves (in and out) must not be stopped by other mods' dimension rules, or players would
+     * be left with the kit outside the arena (or stuck inside it). Runs last and only re-allows our own teleports.
+     */
+    @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
+    public static void onTravelAllowOwn(EntityTravelToDimensionEvent event) {
+        if (!event.isCanceled() || !WarState.allowTeleport || !(event.getEntity() instanceof PlayerEntity)) return;
+        if (!isInvolved((PlayerEntity) event.getEntity()) && !WarRecords.exists(event.getEntity().getServer(), event.getEntity().getUUID())) return;
+        EcMoons.LOGGER.warn("War Moon: another mod tried to block {}'s move to {}; allowing the add-on's own arena teleport",
+                event.getEntity().getScoreboardName(), event.getDimension().location());
+        event.setCanceled(false);
     }
 
     @SubscribeEvent

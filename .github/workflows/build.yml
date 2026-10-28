@@ -25,11 +25,23 @@ jobs:
           set -o pipefail
           ./gradlew build --no-daemon --stacktrace 2>&1 | tee build.log
 
+      - name: Dedicated server self test
+        id: selftest
+        run: |
+          mkdir -p run && echo "eula=true" > run/eula.txt
+          printf "online-mode=false\nspawn-protection=0\nlevel-seed=ecmoons\n" > run/server.properties
+          set -o pipefail
+          ECMOONS_SELFTEST=true timeout 1200 ./gradlew runServer --no-daemon 2>&1 | tee selftest-full.log || true
+          grep -E "ECMOONS-SELFTEST|Mixin|mixin|ERROR|Exception|Caused by" selftest-full.log | grep -v "DEBUG" | head -n 600 > selftest.log || true
+          tail -n 60 selftest-full.log >> selftest.log
+          grep -q "SELFTEST COMPLETE passed=[0-9]* failed=0" selftest-full.log
+
       - name: Report compile errors as annotations
         if: failure()
         run: |
           grep -E "error:|warning: \[mixin\]|Mixin|FAILED" -A3 build.log | grep -vE "^\s*\^\s*$" | head -n 120 | cut -c1-400 > errors.txt || true
           grep -E "What went wrong" -A4 build.log | head -n 10 >> errors.txt || true
+          grep -E "SELFTEST\] FAIL|SELFTEST COMPLETE" selftest-full.log 2>/dev/null | head -n 40 >> errors.txt || true
           split -l 8 errors.txt chunk_ || true
           for f in chunk_*; do
             [ -f "$f" ] || continue
@@ -61,14 +73,17 @@ jobs:
           mkdir -p ci-out && cp build.log ci-out/ 2>/dev/null || true
           cp -r decomp ci-out/ 2>/dev/null || true
           cp run/logs/latest.log ci-out/server-latest.log 2>/dev/null || true
-          cp selftest.log ci-out/ 2>/dev/null || true
+          cp selftest.log selftest-full.log ci-out/ 2>/dev/null || true
+          mkdir -p ci-out/jar && cp build/libs/*.jar ci-out/jar/ 2>/dev/null || true
+          find run/config -type f \( -name '*.toml' -o -name '*.json' \) -exec cp --parents {} ci-out/ \; 2>/dev/null || true
           cd ci-out && git init -q && git checkout -q -b ci-logs
           git add -A && git -c user.name=ci -c user.email=ci@users.noreply.github.com commit -qm "CI output for run ${GITHUB_RUN_NUMBER} (${GITHUB_SHA})" || true
           git push -q -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" ci-logs || true
 
       - name: Upload mod jar
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ecmoons-jar
           path: build/libs/*.jar
-          if-no-files-found: error
+          if-no-files-found: warn

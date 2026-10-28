@@ -1,0 +1,23 @@
+{
+  "ecmoons.name.mist_moon": "Mist Moon",
+  "ecmoons.notification.mist_moon.rise": "The \"Mist Moon\" rises... A thick mist rolls in. Distant shapes fade from sight.",
+  "ecmoons.notification.mist_moon.set": "The \"Mist Moon\" sets... The mist lifts.",
+  "ecmoons.name.frost_moon": "Frost Moon",
+  "ecmoons.notification.frost_moon.rise": "The \"Frost Moon\" rises... Bitter cold under the open sky. Seek shelter, fire or a warm meal.",
+  "ecmoons.notification.frost_moon.set": "The \"Frost Moon\" sets... The cold loosens its grip.",
+  "ecmoons.name.arcane_moon": "Arcane Moon",
+  "ecmoons.notification.arcane_moon.rise": "The \"Arcane Moon\" rises... Enchanting and repairs come easier tonight.",
+  "ecmoons.notification.arcane_moon.set": "The \"Arcane Moon\" sets... The arcane glow fades.",
+  "ecmoons.name.prospector_moon": "Prospector's Moon",
+  "ecmoons.notification.prospector_moon.rise": "The \"Prospector's Moon\" rises... The stone gives up its riches more readily.",
+  "ecmoons.notification.prospector_moon.set": "The \"Prospector's Moon\" sets...",
+  "ecmoons.name.wisdom_moon": "Wisdom Moon",
+  "ecmoons.notification.wisdom_moon.rise": "The \"Wisdom Moon\" rises... Every lesson tonight is worth twice as much.",
+  "ecmoons.notification.wisdom_moon.set": "The \"Wisdom Moon\" sets...",
+  "ecmoons.name.quiet_moon": "Quiet Moon",
+  "ecmoons.notification.quiet_moon.rise": "The \"Quiet Moon\" rises... The night is calm. Rest and recover.",
+  "ecmoons.notification.quiet_moon.set": "The \"Quiet Moon\" sets... The night stirs again.",
+  "ecmoons.name.drift_moon": "Drift Moon",
+  "ecmoons.notification.drift_moon.rise": "The \"Drift Moon\" rises... You feel lighter on your feet.",
+  "ecmoons.notification.drift_moon.set": "The \"Drift Moon\" sets... Your weight returns. Mind the drop."
+}

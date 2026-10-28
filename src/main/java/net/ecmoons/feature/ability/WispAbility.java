@@ -237,7 +237,7 @@ public final class WispAbility {
     private static boolean loadedNear(ServerPlayerEntity p, Vector3d at) {
         ServerWorld w = p.getLevel();
         BlockPos pos = new BlockPos(at);
-        if (!w.hasChunkAt(pos) || !w.isPositionEntityTicking(pos)) return false;
+        if (!w.hasChunkAt(pos) || !w.getChunkSource().isEntityTickingChunk(new net.minecraft.util.math.ChunkPos(pos))) return false;
         int view = Math.max(2, w.getServer().getPlayerList().getViewDistance()) - 1;
         int cx = MathHelper.floor(at.x) >> 4, cz = MathHelper.floor(at.z) >> 4;
         int px = MathHelper.floor(p.getX()) >> 4, pz = MathHelper.floor(p.getZ()) >> 4;

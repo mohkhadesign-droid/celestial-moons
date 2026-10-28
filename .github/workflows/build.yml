@@ -2,7 +2,11 @@ name: Build
 
 on:
   push:
+    branches: [main]
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -44,14 +48,21 @@ jobs:
             java -jar cfr.jar "$MC" --jarfilter "^${cls}\$" --outputdir decomp >/dev/null 2>&1 || true
           done < tools/probe-classes.txt
           find decomp -name '*.java' | head -100
-          find ~/.gradle/caches -name '*enhancedcelestials*' | head
+          EXTRA=$(find ~/.gradle/caches -name 'client-*-extra*.jar' | head -1)
+          echo "extra: $EXTRA"
+          mkdir -p decomp/data && (cd decomp/data && unzip -q -o "$EXTRA" 'data/minecraft/loot_tables/entities/*' 'data/minecraft/loot_tables/chests/*' 'data/forge/tags/*' 'data/minecraft/tags/blocks/*' || true)
+          (cd decomp/data && unzip -q -o $(find ~/.gradle/caches -name 'forge-1.16.5-36.2.39_mapped_official_1.16.5*.jar' | grep -v sources | head -1) 'data/forge/tags/*' || true)
 
-      - name: Upload decompiled classes
-        if: contains(github.event.head_commit.message, '[probe]')
-        uses: actions/upload-artifact@v4
-        with:
-          name: decomp
-          path: decomp
+      - name: Publish logs and probe output to the ci-logs branch
+        if: always()
+        run: |
+          mkdir -p ci-out && cp build.log ci-out/ 2>/dev/null || true
+          cp -r decomp ci-out/ 2>/dev/null || true
+          cp run/logs/latest.log ci-out/server-latest.log 2>/dev/null || true
+          cp selftest.log ci-out/ 2>/dev/null || true
+          cd ci-out && git init -q && git checkout -q -b ci-logs
+          git add -A && git -c user.name=ci -c user.email=ci@users.noreply.github.com commit -qm "CI output for run ${GITHUB_RUN_NUMBER} (${GITHUB_SHA})" || true
+          git push -q -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" ci-logs || true
 
       - name: Upload mod jar
         uses: actions/upload-artifact@v4

@@ -180,6 +180,7 @@ public final class AtmoParticles {
         if (cap <= 0) return;
         float total = 0f;
         for (MoonType t : MoonType.MOONS) total += Atmosphere.weight(t);
+        effectsPerTick(mc, level); // block-feature effects keep sampling even when the pool is full
         if (count >= cap * Math.min(1f, total)) return; // particles are introduced gradually during the fade-in
         float qf = Atmosphere.quality() == ClientConfig.Quality.HIGH ? 1.2f : Atmosphere.quality() == ClientConfig.Quality.LOW ? 0.6f : 1f;
         for (MoonType t : MoonType.MOONS) {
@@ -195,7 +196,6 @@ public final class AtmoParticles {
             }
             if (spawnDebt[t.ordinal()] > 3f) spawnDebt[t.ordinal()] = 3f;
         }
-        effectsPerTick(mc, level);
     }
 
     /** Expected spawns per tick at full strength. */
@@ -397,7 +397,7 @@ public final class AtmoParticles {
                         double gx = bp.getX() + 0.5 + f.getStepX() * 0.52 + (f.getStepX() == 0 ? rnd(0.35) : 0);
                         double gy = bp.getY() + 0.5 + f.getStepY() * 0.52 + (f.getStepY() == 0 ? rnd(0.35) : 0);
                         double gz = bp.getZ() + 0.5 + f.getStepZ() * 0.52 + (f.getStepZ() == 0 ? rnd(0.35) : 0);
-                        add(gx, gy, gz, SPARK, B_STATIC, 14, 0.22f, pp.accent, 1f, true, false);
+                        add(gx, gy, gz, SPARK, B_STATIC, 14, 0.22f, pp.accent, 1f, true, true); // short; may replace drifting dust
                     } else {
                         glintExpire[slot] = 0;
                     }

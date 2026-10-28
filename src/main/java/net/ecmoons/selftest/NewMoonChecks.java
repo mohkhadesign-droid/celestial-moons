@@ -156,6 +156,21 @@ final class NewMoonChecks {
             check.accept("war: arena removed afterwards", arena.getBlockState(l.cells.get(0).below()).isAir()
                     && arena.getBlockState(new BlockPos(0, WarArena.FLOOR_Y, 0)).isAir());
         }
+        // atmosphere: every moon has a profile in the synced settings; the visual packet round-trips
+        boolean profiles = true;
+        for (MoonType t : MoonType.MOONS) {
+            try {
+                Settings.server().s("atmosphere_" + t.id() + ".skyColor");
+                profiles &= Settings.server().b("atmosphere_" + t.id() + ".enabled");
+            } catch (RuntimeException e) {
+                profiles = false;
+            }
+        }
+        check.accept("atmosphere: a profile for each of the 14 moons in the synced settings", profiles);
+        net.minecraft.network.PacketBuffer buf = new net.minecraft.network.PacketBuffer(io.netty.buffer.Unpooled.buffer());
+        net.ecmoons.net.AtmoPacket.encode(new net.ecmoons.net.AtmoPacket(net.ecmoons.net.AtmoPacket.WAR, 1, 2400, 2400), buf);
+        net.ecmoons.net.AtmoPacket back = net.ecmoons.net.AtmoPacket.decode(buf);
+        check.accept("atmosphere: packet encodes and decodes", back.kind == net.ecmoons.net.AtmoPacket.WAR && back.a == 1 && back.b == 2400 && back.c == 2400);
         EcMoons.LOGGER.info("[ECMOONS-SELFTEST] new-moon static checks done; settings war.kit=" + Settings.server().list("war.kit"));
     }
 

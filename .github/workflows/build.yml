@@ -37,21 +37,23 @@ jobs:
           done
 
       - name: Decompile reference classes
-        if: contains(github.event.head_commit.message, '[probe]')
+        if: always() && contains(github.event.head_commit.message, '[probe]')
         run: |
-          curl -sSL -o cfr.jar https://github.com/leibnitz27/cfr/releases/download/0.152/cfr-0.152.jar
-          MC=$(find ~/.gradle/caches/forge_gradle -name 'forge-1.16.5-36.2.39_mapped_official_1.16.5*.jar' | grep -v sources | head -1)
-          echo "MC jar: $MC"
           mkdir -p decomp
+          find ~/.gradle/caches -name '*.jar' | grep -iE 'forge-1.16.5|client|mapped|enhancedcelestials' > decomp/jars.txt || true
+          curl -sSL -o cfr.jar https://github.com/leibnitz27/cfr/releases/download/0.152/cfr-0.152.jar
+          MC=$(grep -E 'forge-1.16.5-36.2.39_mapped_official_1.16.5(-recomp)?\.jar$' decomp/jars.txt | head -1)
+          echo "MC jar: $MC" >> decomp/jars.txt
           while read -r cls; do
             [ -z "$cls" ] && continue
             java -jar cfr.jar "$MC" --jarfilter "^${cls}\$" --outputdir decomp >/dev/null 2>&1 || true
           done < tools/probe-classes.txt
-          find decomp -name '*.java' | head -100
-          EXTRA=$(find ~/.gradle/caches -name 'client-*-extra*.jar' | head -1)
-          echo "extra: $EXTRA"
-          mkdir -p decomp/data && (cd decomp/data && unzip -q -o "$EXTRA" 'data/minecraft/loot_tables/entities/*' 'data/minecraft/loot_tables/chests/*' 'data/forge/tags/*' 'data/minecraft/tags/blocks/*' || true)
-          (cd decomp/data && unzip -q -o $(find ~/.gradle/caches -name 'forge-1.16.5-36.2.39_mapped_official_1.16.5*.jar' | grep -v sources | head -1) 'data/forge/tags/*' || true)
+          EC=$(grep -i enhancedcelestials decomp/jars.txt | grep -v sources | head -1)
+          [ -n "$EC" ] && java -jar cfr.jar "$EC" --outputdir decomp/ec >/dev/null 2>&1 || true
+          EXTRA=$(grep -E 'client.*extra.*\.jar$' decomp/jars.txt | head -1)
+          echo "extra: $EXTRA" >> decomp/jars.txt
+          mkdir -p decomp/data && (cd decomp/data && unzip -q -o "$EXTRA" 'data/minecraft/loot_tables/entities/*' 'data/minecraft/loot_tables/chests/*' 'data/minecraft/tags/blocks/*' 'data/minecraft/tags/items/*' || true)
+          (cd decomp/data && unzip -q -o "$MC" 'data/forge/tags/*' || true)
 
       - name: Publish logs and probe output to the ci-logs branch
         if: always()

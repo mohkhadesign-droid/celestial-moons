@@ -128,6 +128,37 @@ public final class NewMoonCommands {
                                         .then(Commands.argument("targets", EntityArgument.players())
                                                 .executes(c -> demo(c, EntityArgument.getPlayers(c, "targets"))))))));
 
+        d.register(Commands.literal("ecmoons").requires(s -> s.hasPermission(2))
+                .then(Commands.literal("ability")
+                        .then(Commands.literal("reset").then(Commands.argument("player", EntityArgument.players()).executes(c -> {
+                            Collection<ServerPlayerEntity> ps = EntityArgument.getPlayers(c, "player");
+                            for (ServerPlayerEntity p : ps) {
+                                net.ecmoons.feature.ability.MoonAbilities.reset(p);
+                                ok(c.getSource(), "Moon ability cooldowns and running abilities reset for " + p.getScoreboardName());
+                            }
+                            return ps.size();
+                        })))
+                        .then(Commands.literal("status").then(Commands.argument("player", EntityArgument.player()).executes(c -> {
+                            ServerPlayerEntity p = EntityArgument.getPlayer(c, "player");
+                            info(c.getSource(), "Frame Step: " + net.ecmoons.feature.ability.AfterimageAbility.describe(p));
+                            info(c.getSource(), "Shell: " + (net.ecmoons.feature.ability.ShellAbility.hasShell(p) ? "active"
+                                    : net.ecmoons.feature.ability.ShellAbility.charging(p) ? "charging" : "none") + ", cooldown "
+                                    + (net.ecmoons.feature.ability.MoonAbilities.cooldownLeft(p, net.ecmoons.MoonType.SHELL) + 19) / 20 + "s");
+                            return 1;
+                        }))))
+                .then(Commands.literal("shell")
+                        .then(Commands.literal("list").executes(c -> {
+                            java.util.List<String> l = net.ecmoons.feature.ability.ShellAbility.describe(c.getSource().getServer());
+                            if (l.isEmpty()) info(c.getSource(), "No active shells.");
+                            for (String line : l) info(c.getSource(), line);
+                            return l.size();
+                        }))
+                        .then(Commands.literal("clear").executes(c -> {
+                            int n = net.ecmoons.feature.ability.ShellAbility.clearAll();
+                            ok(c.getSource(), "Removed " + n + " shell(s).");
+                            return n;
+                        }))));
+
         d.register(Commands.literal("moonteams").requires(s -> s.hasPermission(2))
                 .then(Commands.literal("create").then(Commands.argument("teamId", StringArgumentType.word())
                         .then(Commands.argument("displayName", StringArgumentType.greedyString()).executes(c -> {

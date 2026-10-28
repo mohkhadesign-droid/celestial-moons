@@ -11,7 +11,7 @@ import net.ecmoons.net.AbilityStatePacket;
 import net.ecmoons.net.Network;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.item.FireworkRocketEntity;
+import net.minecraft.entity.projectile.FireworkRocketEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;

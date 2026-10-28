@@ -101,6 +101,10 @@ public final class SelfTest {
         EcMoons.LOGGER.info(P + "starting");
         step("static checks", 1, SelfTest::staticChecks);
         step("new moon static checks", 1, w -> NewMoonChecks.staticChecks(w, SelfTest::check));
+        step("shell projectiles", 1, w -> ShellChecks.setup(w, SelfTest::check));
+        step("shell verify", 25, w -> ShellChecks.verify(w, SelfTest::check));
+        step("shell exhaust", 25, w -> ShellChecks.verifyExhaust(w, SelfTest::check));
+        step("shell after collapse", 25, w -> ShellChecks.verifyAfterCollapse(w, SelfTest::check));
         for (MoonType type : MoonType.MOONS) {
             step("start " + type.id(), 2, w -> check("/ecmoons start " + type.defaultKey, cmd("ecmoons start " + type.defaultKey) == 1));
             step("verify " + type.id(), 5, w -> {

@@ -250,8 +250,19 @@ public final class WarRecords {
         player.onUpdateAbilities();
         player.setHealth(player.getMaxHealth());
         player.getFoodData().setFoodLevel(20);
-        player.getFoodData().setSaturation(5f);
+        setSaturation(player, 5f);
         player.inventoryMenu.broadcastChanges();
+    }
+
+    /**
+     * FoodStats.setSaturation exists only on the client (it is stripped from dedicated servers), so saturation is
+     * set through the food data's own save format, which exists on both sides.
+     */
+    static void setSaturation(ServerPlayerEntity player, float value) {
+        CompoundNBT t = new CompoundNBT();
+        player.getFoodData().addAdditionalSaveData(t);
+        t.putFloat("foodSaturationLevel", value);
+        player.getFoodData().readAdditionalSaveData(t);
     }
 
     /** Recursively remove item stacks (compounds with "id" and "Count") from accessory-mod NBT. */
@@ -309,7 +320,7 @@ public final class WarRecords {
             player.setExperiencePoints(Math.round(tag.getFloat("xpProgress") * player.getXpNeededForNextLevel()));
             player.totalExperience = tag.getInt("xpTotal");
             player.getFoodData().setFoodLevel(tag.getInt("food"));
-            player.getFoodData().setSaturation(tag.getFloat("saturation"));
+            setSaturation(player, tag.getFloat("saturation"));
             player.setAirSupply(tag.getInt("air"));
             player.inventoryMenu.broadcastChanges();
             teleportHome(player, tag);

@@ -156,6 +156,30 @@ final class NewMoonChecks {
             check.accept("war: arena removed afterwards", arena.getBlockState(l.cells.get(0).below()).isAir()
                     && arena.getBlockState(new BlockPos(0, WarArena.FLOOR_Y, 0)).isAir());
         }
+        // War Moon save -> strip -> restore on the DEDICATED server (catches client-only Minecraft methods, which
+        // only exist in single player): a fake player with a detached connection, staying in this world
+        try {
+            FakePlayer wp = FakePlayerFactory.get(w, new GameProfile(UUID.randomUUID(), "ecm_warrior"));
+            new net.minecraft.network.play.ServerPlayNetHandler(server,
+                    new net.minecraft.network.NetworkManager(net.minecraft.network.PacketDirection.SERVERBOUND), wp);
+            BlockPos sp = w.getSharedSpawnPos();
+            wp.moveTo(sp.getX() + 0.5, w.getHeight(Heightmap.Type.MOTION_BLOCKING, sp.getX(), sp.getZ()), sp.getZ() + 0.5, 0, 0);
+            wp.inventory.clearContent();
+            wp.inventory.add(new ItemStack(Items.DIAMOND, 5));
+            wp.getFoodData().setFoodLevel(14);
+            net.ecmoons.feature.war.WarRecords.delete(server, wp.getUUID());
+            String problem = net.ecmoons.feature.war.WarRecords.save(wp, "fighter");
+            check.accept("war (dedicated server): record saved (" + problem + ")", problem == null);
+            net.ecmoons.feature.war.WarRecords.strip(wp);
+            check.accept("war (dedicated server): strip runs and empties the inventory", wp.inventory.countItem(Items.DIAMOND) == 0);
+            boolean restored = net.ecmoons.feature.war.WarRecords.restore(wp);
+            check.accept("war (dedicated server): restore runs and returns the items exactly", restored && wp.inventory.countItem(Items.DIAMOND) == 5
+                    && wp.getFoodData().getFoodLevel() == 14 && !net.ecmoons.feature.war.WarRecords.exists(server, wp.getUUID()));
+        } catch (Throwable t) {
+            EcMoons.LOGGER.error("[ECMOONS-SELFTEST] war dedicated-server path failed", t);
+            check.accept("war (dedicated server): save/strip/restore without errors (" + t + ")", false);
+        }
+
         // atmosphere: every moon has a profile in the synced settings; the visual packet round-trips
         boolean profiles = true;
         for (MoonType t : MoonType.MOONS) {

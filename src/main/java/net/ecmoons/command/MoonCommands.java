@@ -239,7 +239,7 @@ public final class MoonCommands {
         CommandSource src = c.getSource();
         BlockPos pos = BlockPosArgument.getLoadedBlockPos(c, "pos");
         ServerWorld world = src.getLevel();
-        line(src, t("Block " + world.getBlockState(pos).getBlock().getRegistryName() + " at " + pos.toShortString(), TextFormatting.GOLD));
+        line(src, t("Block " + world.getBlockState(pos).getBlock().getRegistryName() + " at " + pos.getX() + " " + pos.getY() + " " + pos.getZ(), TextFormatting.GOLD));
         for (Map.Entry<String, String> e : ProspectorFeatures.describe(world, pos).entrySet()) {
             line(src, t(" " + e.getKey() + ": ", TextFormatting.AQUA).append(t(e.getValue(), TextFormatting.WHITE)));
         }

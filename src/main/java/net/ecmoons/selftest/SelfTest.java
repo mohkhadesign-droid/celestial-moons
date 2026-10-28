@@ -120,6 +120,12 @@ public final class SelfTest {
             check("/ecmoons inspect loot", cmd("ecmoons inspect loot") > 0);
             BlockPos spawn = w.getSharedSpawnPos();
             check("/ecmoons inspect block", cmd("ecmoons inspect block " + spawn.getX() + " " + spawn.getY() + " " + spawn.getZ()) == 1);
+            ZombieEntity z = EntityType.ZOMBIE.create(w);
+            z.moveTo(spawn.getX() + 0.5, spawn.getY() + 1, spawn.getZ() + 0.5, 0, 0);
+            z.setPersistenceRequired();
+            w.addFreshEntity(z);
+            check("/ecmoons inspect entity", cmd("ecmoons inspect entity " + z.getStringUUID()) == 1);
+            z.remove();
             check("/ecmoons reload", cmd("ecmoons reload") == 1);
         });
         step("finish", 1, w -> {

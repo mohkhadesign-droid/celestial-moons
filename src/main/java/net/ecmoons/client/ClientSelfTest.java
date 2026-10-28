@@ -1,0 +1,317 @@
+package net.ecmoons.client;
+
+import net.ecmoons.EcMoons;
+import net.ecmoons.MoonType;
+import net.ecmoons.Moons;
+import net.ecmoons.feature.FrostFeatures;
+import net.ecmoons.net.FrostStatePacket;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.client.gui.screen.MainMenuScreen;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ScreenShotHelper;
+import net.minecraft.util.registry.DynamicRegistries;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.GameRules;
+import net.minecraft.world.GameType;
+import net.minecraft.world.WorldSettings;
+import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.gen.settings.DimensionGeneratorSettings;
+import net.minecraft.util.datafix.codec.DatapackCodec;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.function.BooleanSupplier;
+
+/**
+ * Automated client test (CI runs it under a virtual X display with -Decmoons.clienttest=true).
+ * Creates a singleplayer world, then drives the integrated server with commands and checks what only a real
+ * client can show: the moon designs in the sky (screenshots), Mist fog fade and dimension-change cleanup,
+ * the Frost slowdown and overlay, and Drift jump height and fall damage. Results are logged as
+ * "[ECMOONS-CLIENTTEST] PASS/FAIL ..." and screenshots are written to run-client/screenshots.
+ */
+public final class ClientSelfTest {
+    private static final String P = "[ECMOONS-CLIENTTEST] ";
+    private static final Deque<Runnable> STEPS = new ArrayDeque<>();
+    private static int wait;
+    private static BooleanSupplier waitUntil;
+    private static int waitUntilTimeout;
+    private static boolean worldRequested;
+    private static int passed, failed;
+
+    // measurements
+    private static double jumpStartY, jumpMaxY, vanillaJump, driftJump;
+    private static float healthBefore, vanillaFallDamage, driftFallDamage;
+    private static int px, pz, platformY;
+
+    private ClientSelfTest() {}
+
+    private static void check(String what, boolean ok) {
+        if (ok) {
+            passed++;
+            EcMoons.LOGGER.info(P + "PASS: " + what);
+        } else {
+            failed++;
+            EcMoons.LOGGER.error(P + "FAIL: " + what);
+        }
+    }
+
+    private static void cmd(String command) {
+        MinecraftServer server = Minecraft.getInstance().getSingleplayerServer();
+        if (server == null) return;
+        server.execute(() -> {
+            int r = server.getCommands().performCommand(server.createCommandSourceStack(), command);
+            EcMoons.LOGGER.info(P + "/" + command + " -> " + r);
+        });
+    }
+
+    private static void then(int delayTicks, Runnable r) {
+        STEPS.add(() -> {
+            wait = delayTicks;
+            r.run();
+        });
+    }
+
+    private static void waitFor(int timeoutTicks, BooleanSupplier condition) {
+        STEPS.add(() -> {
+            waitUntil = condition;
+            waitUntilTimeout = timeoutTicks;
+        });
+    }
+
+    private static void shot(String name) {
+        Minecraft mc = Minecraft.getInstance();
+        ScreenShotHelper.grab(mc.gameDirectory, name + ".png", mc.getWindow().getWidth(), mc.getWindow().getHeight(),
+                mc.getMainRenderTarget(), msg -> EcMoons.LOGGER.info(P + "screenshot " + name + ": " + msg.getString()));
+    }
+
+    private static ClientPlayerEntity player() {
+        return Minecraft.getInstance().player;
+    }
+
+    private static void lookUp() {
+        ClientPlayerEntity p = player();
+        p.xRot = -90F;
+        p.xRotO = -90F;
+        p.yRot = 0F;
+        p.yRotO = 0F;
+    }
+
+    private static void lookAhead() {
+        ClientPlayerEntity p = player();
+        p.xRot = 5F;
+        p.xRotO = 5F;
+    }
+
+    @SubscribeEvent
+    public static void onTick(TickEvent.ClientTickEvent event) {
+        if (event.phase != TickEvent.Phase.END) return;
+        Minecraft mc = Minecraft.getInstance();
+        if (!worldRequested) {
+            if (mc.screen instanceof MainMenuScreen) {
+                worldRequested = true;
+                EcMoons.LOGGER.info(P + "creating test world");
+                DynamicRegistries.Impl registries = DynamicRegistries.builtin();
+                GameRules rules = new GameRules();
+                WorldSettings settings = new WorldSettings("ecmoons-clienttest", GameType.CREATIVE, false, Difficulty.EASY,
+                        true, rules, DatapackCodec.DEFAULT);
+                mc.createLevel("ecmoons-clienttest", settings, registries, DimensionGeneratorSettings.demoSettings(registries));
+                plan();
+            }
+            return;
+        }
+        if (mc.player == null || mc.level == null || mc.getSingleplayerServer() == null) return;
+        if (waitUntil != null) {
+            if (waitUntil.getAsBoolean() || --waitUntilTimeout <= 0) waitUntil = null;
+            else return;
+        }
+        if (wait-- > 0) return;
+        Runnable next = STEPS.poll();
+        if (next != null) {
+            try {
+                next.run();
+            } catch (Throwable t) {
+                failed++;
+                EcMoons.LOGGER.error(P + "FAIL: exception", t);
+            }
+        }
+    }
+
+    private static void plan() {
+        then(200, () -> {
+            cmd("gamerule doDaylightCycle false");
+            cmd("gamerule doWeatherCycle false");
+            cmd("gamerule doMobSpawning false");
+            cmd("weather clear");
+            cmd("time set 18000");
+            cmd("difficulty peaceful");
+            Minecraft.getInstance().options.hideGui = true;
+        });
+        // ---- moon designs, looking straight up at the midnight (full) moon from above the clouds
+        then(40, () -> {
+            ClientPlayerEntity p = player();
+            px = (int) Math.floor(p.getX());
+            pz = (int) Math.floor(p.getZ());
+            cmd("tp @a " + px + " 220 " + pz);
+            p.abilities.flying = true;
+            p.onUpdateAbilities();
+        });
+        then(60, ClientSelfTest::lookUp);
+        then(10, () -> shot("moon_00_ordinary"));
+        int i = 1;
+        for (MoonType type : MoonType.MOONS) {
+            final String name = String.format("moon_%02d_%s", i++, type.id());
+            then(1, () -> cmd("ecmoons start " + type.defaultKey));
+            waitFor(200, () -> Moons.reported(Minecraft.getInstance().level) == type);
+            then(60, () -> {
+                check(type.id() + " synced to client", Moons.reported(Minecraft.getInstance().level) == type);
+                lookUp();
+            });
+            then(5, () -> shot(name));
+        }
+        then(1, () -> cmd("ecmoons start enhancedcelestials-super_blood_moon"));
+        then(80, () -> {
+            lookUp();
+            shot("moon_11_super_blood");
+        });
+
+        // ---- Mist fog: fade in, dimension change cleanup, fade out (night vision so the fog is visible in screenshots)
+        then(1, () -> {
+            int y = Minecraft.getInstance().level.getHeight(Heightmap.Type.MOTION_BLOCKING, px, pz);
+            cmd("ecmoons end");
+            cmd("tp @a " + px + " " + (y + 2) + " " + pz);
+            cmd("effect give @a minecraft:night_vision 600 0 true");
+        });
+        then(100, () -> {
+            lookAhead();
+            shot("mist_0_clear_night");
+            cmd("ecmoons start ecmoons-mist_moon");
+        });
+        then(60, () -> check("mist fading in (factor " + ClientEvents.mistFactor() + ")",
+                ClientEvents.mistFactor() > 0.05F && ClientEvents.mistFactor() < 1F));
+        waitFor(400, () -> ClientEvents.mistFactor() >= 1F);
+        then(5, () -> {
+            check("mist fully faded in", ClientEvents.mistFactor() >= 1F);
+            lookAhead();
+            shot("mist_1_fog_night");
+        });
+        then(5, () -> cmd("execute in minecraft:the_nether run tp @a 0 100 0"));
+        then(200, () -> check("no mist in the Nether (factor " + ClientEvents.mistFactor() + ")", ClientEvents.mistFactor() == 0F));
+        then(1, () -> cmd("execute in minecraft:overworld run tp @a " + px + " 120 " + pz));
+        waitFor(600, () -> ClientEvents.mistFactor() >= 1F);
+        then(5, () -> check("mist restored after returning to the overworld", ClientEvents.mistFactor() >= 1F));
+        then(1, () -> cmd("ecmoons end"));
+        waitFor(400, () -> ClientEvents.mistFactor() <= 0F);
+        then(5, () -> check("mist faded out after the moon ended", ClientEvents.mistFactor() <= 0F));
+
+        // ---- Frost: exposure slowdown, overlay, cleanup
+        then(1, () -> {
+            int y = Minecraft.getInstance().level.getHeight(Heightmap.Type.MOTION_BLOCKING, px, pz);
+            cmd("tp @a " + px + " " + y + " " + pz);
+            cmd("gamemode survival @a");
+            cmd("ecmoons start ecmoons-frost_moon");
+            Minecraft.getInstance().options.hideGui = false;
+        });
+        waitFor(900, () -> ClientState.frostState() == FrostStatePacket.CHILLED);
+        then(80, () -> {
+            boolean modifier = player().getAttribute(Attributes.MOVEMENT_SPEED).getModifier(FrostFeatures.SLOW_MODIFIER) != null;
+            check("frost: chilled state received", ClientState.frostState() == FrostStatePacket.CHILLED);
+            check("frost: movement modifier synced to client", modifier);
+            lookAhead();
+            shot("frost_overlay_chilled");
+            cmd("ecmoons end");
+        });
+        then(60, () -> {
+            check("frost: modifier removed when the moon ended",
+                    player().getAttribute(Attributes.MOVEMENT_SPEED).getModifier(FrostFeatures.SLOW_MODIFIER) == null);
+            check("frost: client state cleared", ClientState.frostState() == FrostStatePacket.NONE);
+        });
+
+        // ---- Drift: jump height and fall damage, vanilla first
+        then(1, () -> {
+            platformY = 150;
+            cmd("fill " + (px - 3) + " " + platformY + " " + (pz - 3) + " " + (px + 3) + " " + platformY + " " + (pz + 3) + " minecraft:stone");
+            cmd("tp @a " + px + ".5 " + (platformY + 1) + " " + pz + ".5");
+            cmd("effect clear @a");
+        });
+        waitFor(100, () -> player().isOnGround());
+        then(10, () -> startJump());
+        then(30, () -> {
+            vanillaJump = jumpMaxY - jumpStartY;
+            EcMoons.LOGGER.info(P + "vanilla jump height " + vanillaJump);
+            cmd("ecmoons start ecmoons-drift_moon");
+        });
+        waitFor(200, () -> Moons.is(Minecraft.getInstance().level, MoonType.DRIFT));
+        waitFor(100, () -> player().isOnGround());
+        then(10, () -> startJump());
+        then(30, () -> {
+            driftJump = jumpMaxY - jumpStartY;
+            check(String.format("drift jump higher than vanilla (%.2f vs %.2f) but below 2 blocks", driftJump, vanillaJump),
+                    driftJump > vanillaJump + 0.15 && driftJump < 1.95);
+            cmd("ecmoons end");
+        });
+        // vanilla fall from 12 blocks
+        then(40, () -> {
+            cmd("effect give @a minecraft:instant_health 1 10");
+        });
+        then(20, () -> {
+            healthBefore = player().getHealth();
+            cmd("tp @a " + px + ".5 " + (platformY + 13) + " " + pz + ".5");
+        });
+        then(10, () -> {});
+        waitFor(200, () -> player().isOnGround());
+        then(20, () -> {
+            vanillaFallDamage = healthBefore - player().getHealth();
+            EcMoons.LOGGER.info(P + "vanilla 12-block fall damage " + vanillaFallDamage);
+            cmd("effect give @a minecraft:instant_health 1 10");
+            cmd("ecmoons start ecmoons-drift_moon");
+        });
+        waitFor(200, () -> Moons.is(Minecraft.getInstance().level, MoonType.DRIFT));
+        then(20, () -> {
+            healthBefore = player().getHealth();
+            cmd("tp @a " + px + ".5 " + (platformY + 13) + " " + pz + ".5");
+        });
+        then(10, () -> {});
+        waitFor(300, () -> player().isOnGround());
+        then(20, () -> {
+            driftFallDamage = healthBefore - player().getHealth();
+            check(String.format("drift fall damage about half of vanilla (%.1f vs %.1f)", driftFallDamage, vanillaFallDamage),
+                    vanillaFallDamage > 0 && driftFallDamage > 0 && driftFallDamage <= Math.ceil(vanillaFallDamage / 2.0) + 0.01);
+            cmd("effect give @a minecraft:instant_health 1 10");
+        });
+        // landing grace: moon ends while airborne
+        then(20, () -> {
+            healthBefore = player().getHealth();
+            cmd("tp @a " + px + ".5 " + (platformY + 30) + " " + pz + ".5");
+        });
+        then(15, () -> cmd("ecmoons end"));
+        waitFor(400, () -> player().isOnGround());
+        then(20, () -> {
+            float dmg = healthBefore - player().getHealth();
+            check(String.format("airborne when Drift ended: landing still reduced (%.1f damage from 29 blocks, vanilla would be 26)", dmg),
+                    dmg > 0 && dmg <= 14);
+        });
+
+        then(20, () -> {
+            EcMoons.LOGGER.info(P + "CLIENTTEST COMPLETE passed=" + passed + " failed=" + failed);
+            Minecraft.getInstance().stop();
+        });
+    }
+
+    private static void startJump() {
+        ClientPlayerEntity p = player();
+        jumpStartY = p.getY();
+        jumpMaxY = p.getY();
+        p.jumpFromGround();
+        // track the apex over the next ticks
+        for (int t = 0; t < 25; t++) {
+            STEPS.addFirst(() -> {
+                jumpMaxY = Math.max(jumpMaxY, player().getY());
+                wait = 0;
+            });
+        }
+    }
+}

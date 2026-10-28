@@ -98,3 +98,50 @@ jobs:
           name: ecmoons-jar
           path: build/libs/*.jar
           if-no-files-found: warn
+
+  client-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '8'
+
+      - name: Cache Gradle and ForgeGradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-fg-${{ hashFiles('build.gradle', 'gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: gradle-fg-
+
+      - name: Install virtual display and software OpenGL
+        run: sudo apt-get update -q && sudo apt-get install -y -q xvfb mesa-utils libgl1-mesa-dri
+
+      - name: Client test (real Minecraft client, software rendering)
+        timeout-minutes: 40
+        env:
+          LIBGL_ALWAYS_SOFTWARE: 'true'
+          ECMOONS_CLIENTTEST: 'true'
+        run: |
+          chmod +x gradlew
+          mkdir -p run-client
+          printf "pauseOnLostFocus:false\ntutorialStep:none\nskipMultiplayerWarning:true\nrenderDistance:8\ngraphicsMode:1\nfov:0.0\njoinedFirstServer:true\nnarrator:0\nsoundCategory_master:0.0\n" > run-client/options.txt
+          set -o pipefail
+          timeout 2100 xvfb-run -a -s "-screen 0 1280x720x24" ./gradlew runClient --no-daemon 2>&1 | tee client-full.log || true
+          grep -E "ECMOONS-CLIENTTEST|Mixin|ERROR|Exception|Caused by|OpenGL|GL version" client-full.log | head -n 600 > client.log || true
+          tail -n 80 client-full.log >> client.log
+          grep -q "CLIENTTEST COMPLETE passed=[0-9]* failed=0" client-full.log
+
+      - name: Publish client test output to the ci-client branch
+        if: always()
+        run: |
+          mkdir -p ci-out && cp client.log client-full.log ci-out/ 2>/dev/null || true
+          cp -r run-client/screenshots ci-out/ 2>/dev/null || true
+          cp run-client/logs/latest.log ci-out/client-latest.log 2>/dev/null || true
+          cd ci-out && git init -q && git checkout -q -b ci-client
+          git add -A && git -c user.name=ci -c user.email=ci@users.noreply.github.com commit -qm "Client test output for run ${GITHUB_RUN_NUMBER} (${GITHUB_SHA})" || true
+          git push -q -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" ci-client || true

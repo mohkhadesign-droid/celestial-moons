@@ -48,3 +48,16 @@ net.minecraft.world.gen.settings.DimensionGeneratorSettings
 net.minecraft.util.registry.DynamicRegistries
 net.minecraft.client.entity.player.ClientPlayerEntity
 net.minecraftforge.common.ForgeHooks
+net.minecraftforge.common.capabilities.CapabilityDispatcher
+net.minecraftforge.common.capabilities.CapabilityProvider
+net.minecraftforge.event.entity.EntityTeleportEvent
+net.minecraftforge.client.event.RenderWorldLastEvent
+net.minecraft.entity.player.ServerPlayerEntity
+net.minecraft.world.gen.FlatGenerationSettings
+net.minecraftforge.event.entity.item.ItemTossEvent
+net.minecraftforge.event.entity.player.FillBucketEvent
+net.minecraft.entity.player.PlayerInventory
+net.minecraft.client.renderer.ActiveRenderInfo
+net.minecraftforge.event.entity.living.LivingDamageEvent
+net.minecraftforge.common.util.ITeleporter
+net.minecraft.world.gen.feature.template.Template

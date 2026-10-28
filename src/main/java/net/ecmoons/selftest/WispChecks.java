@@ -65,6 +65,7 @@ final class WispChecks {
         by = w.getHeight(Heightmap.Type.MOTION_BLOCKING, bx, bz) + 30;
         fill(w, bx - 3, by - 1, bz - 3, bx + 8, by - 1, bz + 3, Blocks.STONE.defaultBlockState());
         fill(w, bx + 6, by, bz - 3, bx + 6, by + 4, bz + 3, Blocks.STONE.defaultBlockState());
+        w.setBlockAndUpdate(new BlockPos(bx + 3, by, bz), Blocks.OAK_PRESSURE_PLATE.defaultBlockState()); // in the wisp's path
         fp = FakePlayerFactory.get(w, new GameProfile(UUID.randomUUID(), "ecm_wisp"));
         new net.minecraft.network.play.ServerPlayNetHandler(w.getServer(),
                 new net.minecraft.network.NetworkManager(net.minecraft.network.PacketDirection.SERVERBOUND), fp);
@@ -77,7 +78,17 @@ final class WispChecks {
                 && wisp.isAlive() && Math.abs(wisp.getY() + wisp.getBbHeight() / 2 - fp.getEyeY()) < 0.05);
         check.accept("wisp: the player's game mode is unchanged (not spectator)", !fp.isSpectator());
         startX = wisp == null ? 0 : wisp.getX();
-        input(1, -90, 0); // forward = east, towards the wall
+        WispAbility.onInput(fp, 1, 0, -1, -90, 0); // forward = east, towards the wall, and down to the floor (over a plate)
+    }
+
+    /** 10 ticks in: the wisp is on the floor, over or just past the plate. */
+    static void plate(ServerWorld w, BiConsumer<String, Boolean> check) {
+        WispEntity wisp = WispAbility.wispOf(fp);
+        check.accept(String.format("wisp: flying low over a wooden pressure plate doesn't press it (wisp at %.2f %.2f)",
+                wisp == null ? 0 : wisp.getX() - bx, wisp == null ? 0 : wisp.getY() - by),
+                w.getBlockState(new BlockPos(bx + 3, by, bz)).getBlock() == Blocks.OAK_PRESSURE_PLATE
+                        && !w.getBlockState(new BlockPos(bx + 3, by, bz)).getValue(net.minecraft.block.PressurePlateBlock.POWERED)
+                        && wisp != null && wisp.getY() - by < 0.3 && wisp.getX() - bx > 2.5);
     }
 
     static void afterFlight(ServerWorld w, BiConsumer<String, Boolean> check) {
@@ -86,7 +97,7 @@ final class WispChecks {
         check.accept(String.format("wisp: flies under control and stops at a wall (x %.2f, wall face %d)", x - bx, 6),
                 wisp != null && x - startX > 3 && x + wisp.getBbWidth() / 2 <= bx + 6 + 1e-3);
         // back off a little and look at the wall: place three observers at different heights
-        input(-1, -90, 0);
+        WispAbility.onInput(fp, -1, 0, 1, -90, 0); // back off from the wall and rise to eye height
     }
 
     static void place(ServerWorld w, BiConsumer<String, Boolean> check) {

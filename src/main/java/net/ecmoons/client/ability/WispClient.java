@@ -64,6 +64,7 @@ public final class WispClient {
         stateAt = ticks;
         waiting = 0;
         WispEntity.localPilotId = mode == WispStatePacket.PILOT ? entityId : -1;
+        ObserverEntity.localViewId = mode == WispStatePacket.VIEW ? entityId : -1;
         if (mode == WispStatePacket.NONE) restoreCamera();
         else {
             Minecraft mc = Minecraft.getInstance();
@@ -88,6 +89,7 @@ public final class WispClient {
     private static void restoreCamera() {
         Minecraft mc = Minecraft.getInstance();
         WispEntity.localPilotId = -1;
+        ObserverEntity.localViewId = -1;
         if (mc.player != null && mc.getCameraEntity() != mc.player) mc.setCameraEntity(mc.player);
     }
 

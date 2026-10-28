@@ -118,7 +118,8 @@ public final class SelfTest {
         step("shell after collapse", 25, w -> ShellChecks.verifyAfterCollapse(w, SelfTest::check));
         step("wisp moon start", 1, w -> check("/ecmoons start ecmoons-wisp_moon", cmd("ecmoons start ecmoons-wisp_moon") == 1));
         step("wisp pilot", 5, w -> WispChecks.setup(w, SelfTest::check));
-        step("wisp flight", 25, w -> WispChecks.afterFlight(w, SelfTest::check));
+        step("wisp plate", 9, w -> WispChecks.plate(w, SelfTest::check));
+        step("wisp flight", 16, w -> WispChecks.afterFlight(w, SelfTest::check));
         step("wisp place", 4, w -> WispChecks.place(w, SelfTest::check));
         step("wisp arrow", 10, w -> WispChecks.afterArrow(w, SelfTest::check));
         step("wisp range", 180, w -> WispChecks.afterRange(w, SelfTest::check));

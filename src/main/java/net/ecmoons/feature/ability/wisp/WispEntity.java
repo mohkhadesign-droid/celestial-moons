@@ -56,6 +56,11 @@ public class WispEntity extends Entity {
         return false;
     }
 
+    /** Never presses pressure plates or trips tripwires (vanilla asks every entity this). */
+    public boolean isIgnoringBlockTriggers() {
+        return true;
+    }
+
     @Override
     public boolean hurt(DamageSource source, float amount) {
         if (isInvulnerableTo(source)) return false;
@@ -71,7 +76,7 @@ public class WispEntity extends Entity {
     public void tick() {
         super.tick();
         if (level.isClientSide) {
-            if (random.nextInt(8) == 0) {
+            if (getId() != localPilotId && random.nextInt(8) == 0) { // none in front of the pilot's own camera
                 level.addParticle(ParticleTypes.SOUL_FIRE_FLAME, getX() + (random.nextDouble() - 0.5) * 0.2,
                         getY() + 0.15 + random.nextDouble() * 0.1, getZ() + (random.nextDouble() - 0.5) * 0.2, 0, 0.01, 0);
             }

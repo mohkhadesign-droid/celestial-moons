@@ -787,6 +787,7 @@ public final class ClientSelfTest {
     private static void abilities() {
         // coordinates are only known once the world exists (px/pz are measured at run time)
         then(5, () -> {
+            Minecraft.getInstance().options.chatVisibility = net.minecraft.entity.player.ChatVisibility.HIDDEN; // clear screenshots
             ax = px + 80;
             az = pz;
             ay = 200;
@@ -834,14 +835,12 @@ public final class ClientSelfTest {
         then(0, () -> {
             check("afterimage: step 2 done inside the window", net.ecmoons.client.ability.AbilityClient.afterimageStage() == 2);
             tap();
-            Minecraft.getInstance().gui.getChat().clearMessages(false);
             shot("afterimage_0_steps");
         });
         waitFor(20, () -> net.ecmoons.client.ability.AbilityClient.afterimagePhase() == 3);
         then(0, () -> {
             check("afterimage: third step done, final attack window on the HUD", net.ecmoons.client.ability.AbilityClient.afterimagePhase() == 3);
             check("afterimage: afterimages drawn (" + net.ecmoons.client.ability.AbilityFx.lastGhostsDrawn + ")", net.ecmoons.client.ability.AbilityFx.lastGhostsDrawn > 0);
-            Minecraft.getInstance().gui.getChat().clearMessages(false);
             shot("afterimage_1_final_window");
             ClientPlayerEntity p = player();
             java.util.List<net.minecraft.entity.monster.ZombieEntity> z = Minecraft.getInstance().level.getEntitiesOfClass(
@@ -964,7 +963,6 @@ public final class ClientSelfTest {
         waitFor(10, () -> net.ecmoons.client.ability.AbilityClient.shellState() == 1);
         then(0, () -> {
             check("shell: crouch + hold starts charging (HUD)", net.ecmoons.client.ability.AbilityClient.shellState() == 1);
-            Minecraft.getInstance().gui.getChat().clearMessages(false);
             shot("shell_0_charging");
         });
         waitFor(80, () -> net.ecmoons.client.ability.AbilityClient.shellState() == 2);
@@ -972,7 +970,6 @@ public final class ClientSelfTest {
             check("shell: deployed after the charge", net.ecmoons.client.ability.AbilityClient.shellState() == 2);
             check("shell: shell drawn (" + net.ecmoons.client.ability.AbilityFx.lastShellsDrawn + ")", net.ecmoons.client.ability.AbilityFx.lastShellsDrawn > 0);
             onServer(net.ecmoons.selftest.AbilityPlayerChecks::snapshot);
-            Minecraft.getInstance().gui.getChat().clearMessages(false);
             shot("shell_1_up");
         });
         then(2, () -> {
@@ -1009,6 +1006,7 @@ public final class ClientSelfTest {
             cmd("gamerule doMobSpawning true");
             cmd("gamerule naturalRegeneration true");
             cmd("gamerule doMobLoot true");
+            Minecraft.getInstance().options.chatVisibility = net.minecraft.entity.player.ChatVisibility.FULL;
             cmd("gamemode creative @a");
             cmd("fill " + (ax - 20) + " " + (ay - 1) + " " + (az - 15) + " " + (ax + 24) + " " + (ay + 5) + " " + (az + 15) + " air");
             cmd("tp @a " + px + " 150 " + pz); // back near the start so the next tests find loaded terrain
@@ -1047,7 +1045,6 @@ public final class ClientSelfTest {
         waitFor(40, () -> menu() != null);
         then(2, () -> {
             check("wisp: the Moon Ability key opens the Wisp menu", menu() != null);
-            Minecraft.getInstance().gui.getChat().clearMessages(false);
             shot("wisp_0_menu");
             wispStartX = player().getX();
             net.ecmoons.client.ability.WispClient.send(net.ecmoons.feature.ability.WispAbility.PILOT, 0);
@@ -1078,7 +1075,6 @@ public final class ClientSelfTest {
         then(5, () -> {
             check("wisp: the Use key places a soul observer on the wall (" + net.ecmoons.client.ability.WispClient.count + ")",
                     net.ecmoons.client.ability.WispClient.count == 1);
-            Minecraft.getInstance().gui.getChat().clearMessages(false);
             shot("wisp_1_observer_placed");
             ClientPlayerEntity p = player();
             p.yRot = 90F; // look back west at the body
@@ -1089,7 +1085,6 @@ public final class ClientSelfTest {
         then(5, () -> {
             check("wisp: the body is drawn while the camera is on the wisp (" + net.ecmoons.client.ability.WispClient.lastBodyDrawn + ")",
                     net.ecmoons.client.ability.WispClient.lastBodyDrawn == 1);
-            Minecraft.getInstance().gui.getChat().clearMessages(false);
             shot("wisp_2_body_seen_from_wisp");
             tap(); // the Moon Ability key returns to the body
         });
@@ -1104,7 +1099,6 @@ public final class ClientSelfTest {
             net.ecmoons.client.ability.WispMenuScreen m = menu();
             check("wisp: the menu lists observer 1 in range", m != null && m.data.numbers.length == 1 && m.data.inRange[0]);
             check("wisp: Pilot Wisp is not offered during the cooldown", m != null && m.data.cooldown > 0);
-            Minecraft.getInstance().gui.getChat().clearMessages(false);
             shot("wisp_3_menu_observer");
             net.ecmoons.client.ability.WispClient.send(net.ecmoons.feature.ability.WispAbility.VIEW, 1);
         });
@@ -1120,7 +1114,6 @@ public final class ClientSelfTest {
             net.minecraft.entity.Entity cam = Minecraft.getInstance().getCameraEntity();
             float d = cam == null ? 999 : net.minecraft.util.math.MathHelper.wrapDegrees(player().yRot - cam.yRot);
             check(String.format("wisp: the observer view only turns a limited amount (%.0f degrees)", d), Math.abs(d) <= 60.01F);
-            Minecraft.getInstance().gui.getChat().clearMessages(false);
             shot("wisp_4_observer_view");
             onServer(server -> server.getPlayerList().getPlayers().get(0).hurt(net.minecraft.util.DamageSource.GENERIC, 1F));
         });

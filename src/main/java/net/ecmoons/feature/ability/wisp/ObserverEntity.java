@@ -20,6 +20,8 @@ import java.util.UUID;
  * projectile or explosion) that the server and protection mods allow destroys it.
  */
 public class ObserverEntity extends Entity {
+    /** Client only: the observer the local player is looking through (no particles in front of the lens). */
+    public static int localViewId = -1;
     @Nullable public UUID owner;
     public int number;
 
@@ -57,6 +59,11 @@ public class ObserverEntity extends Entity {
         return false;
     }
 
+    /** Never presses pressure plates or trips tripwires (vanilla asks every entity this). */
+    public boolean isIgnoringBlockTriggers() {
+        return true;
+    }
+
     @Override
     public boolean hurt(DamageSource source, float amount) {
         if (isInvulnerableTo(source) || removed) return false;
@@ -74,7 +81,7 @@ public class ObserverEntity extends Entity {
         yo = getY();
         zo = getZ();
         if (level.isClientSide) {
-            if (random.nextInt(14) == 0) {
+            if (getId() != localViewId && random.nextInt(14) == 0) {
                 level.addParticle(ParticleTypes.SOUL_FIRE_FLAME, getX() + (random.nextDouble() - 0.5) * 0.15, getY() + 0.12,
                         getZ() + (random.nextDouble() - 0.5) * 0.15, 0, 0.008, 0);
             }

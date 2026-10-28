@@ -188,9 +188,6 @@ public final class MoonConfig {
         pop();
 
         moon("war", "War Moon - a temporary last-player-standing tournament in a separate arena dimension.", false);
-        bool("locked", true, "LOCKED: the War Moon is switched off completely - it never appears in the forecast, cannot be started",
-                "by any command, and no tournament can run. Recovery still works (/ecmoons war records, recover, and gear is",
-                "restored at login). Set to false and restart the server to allow the War Moon again.");
         intv("warningSeconds", 120, 10, 1800, "Warning before the tournament (reminders at 60, 30 and 10 seconds).");
         intv("minParticipants", 2, 1, 64, "Fewer eligible players than this cancels the tournament for this night.");
         intv("maxParticipants", 16, 2, 16, "At most this many players are enrolled (one per starting cell).");

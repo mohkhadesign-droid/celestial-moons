@@ -144,10 +144,6 @@ public final class WarFeatures {
     public static void startWarning(MinecraftServer server, int seconds, boolean soloMode) {
         WarState st = state(server);
         if (st.phase != WarState.Phase.IDLE) return;
-        if (Settings.server().warLocked()) {
-            EcMoons.LOGGER.info("War Moon is locked (war.locked = true): no tournament started");
-            return;
-        }
         solo = soloMode;
         forced = true; // cleared again by onWarMoonRise for natural tournaments
         deferrals = 0;

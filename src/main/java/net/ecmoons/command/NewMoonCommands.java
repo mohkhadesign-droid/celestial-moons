@@ -285,7 +285,6 @@ public final class NewMoonCommands {
 
     private static int warStatus(CommandContext<CommandSource> c) {
         MinecraftServer server = c.getSource().getServer();
-        if (net.ecmoons.config.Settings.server().warLocked()) info(c.getSource(), "War Moon: LOCKED (war.locked = true) - it cannot happen or be started.");
         info(c.getSource(), "War Moon: " + WarFeatures.describe(server));
         info(c.getSource(), "Arena dimension: " + (WarArena.world(server) != null ? "loaded" : "MISSING (data pack not loaded)")
                 + ", Flan Warfare capture active: " + WarFeatures.captureActiveForStatus());
@@ -295,9 +294,6 @@ public final class NewMoonCommands {
     private static int warStart(CommandContext<CommandSource> c, boolean now, boolean solo) {
         MinecraftServer server = c.getSource().getServer();
         if (WarFeatures.phase(server) != WarState.Phase.IDLE) return fail(c.getSource(), "A tournament is already running: " + WarFeatures.describe(server));
-        if (net.ecmoons.config.Settings.server().warLocked()) {
-            return fail(c.getSource(), "The War Moon is locked (war.locked = true in ecmoons-common.toml). Set it to false and restart to allow it.");
-        }
         if (now) WarFeatures.startNow(server, solo);
         else WarFeatures.startWarning(server, net.ecmoons.config.Settings.server().i("war.warningSeconds"), false);
         ok(c.getSource(), "War Moon tournament started" + (now ? " (no warning)" : "") + (solo ? " in solo test mode (1 player is enough)" : ""));

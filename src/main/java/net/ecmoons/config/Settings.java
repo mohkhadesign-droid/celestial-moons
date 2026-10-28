@@ -124,13 +124,7 @@ public final class Settings {
     }
 
     public boolean moonEnabled(MoonType type) {
-        if (type == MoonType.WAR && warLocked()) return false;
         return type != MoonType.NONE && b(type.id() + ".enabled");
-    }
-
-    /** The War Moon is locked off (war.locked): no forecast entry, no commands, no tournament. */
-    public boolean warLocked() {
-        return b("war.locked");
     }
 
     public boolean dimensionAllowed(MoonType type, @Nullable ResourceLocation dimension) {

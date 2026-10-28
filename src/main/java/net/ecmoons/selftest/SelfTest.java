@@ -118,7 +118,8 @@ public final class SelfTest {
             check("/ecmoons list", cmd("ecmoons list") > 0);
             check("/ecmoons settings mist", cmd("ecmoons settings mist") > 0);
             check("/ecmoons inspect loot", cmd("ecmoons inspect loot") > 0);
-            check("/ecmoons inspect block", cmd("ecmoons inspect block 0 64 0") == 1);
+            BlockPos spawn = w.getSharedSpawnPos();
+            check("/ecmoons inspect block", cmd("ecmoons inspect block " + spawn.getX() + " " + spawn.getY() + " " + spawn.getZ()) == 1);
             check("/ecmoons reload", cmd("ecmoons reload") == 1);
         });
         step("finish", 1, w -> {

@@ -39,3 +39,12 @@ net.minecraft.util.IntReferenceHolder
 net.minecraft.block.CropsBlock
 net.minecraft.world.World
 net.minecraft.entity.Entity
+net.minecraft.client.Minecraft
+net.minecraft.client.gui.screen.CreateWorldScreen
+net.minecraft.client.gui.screen.MainMenuScreen
+net.minecraft.util.ScreenShotHelper
+net.minecraft.world.WorldSettings
+net.minecraft.world.gen.settings.DimensionGeneratorSettings
+net.minecraft.util.registry.DynamicRegistries
+net.minecraft.client.entity.player.ClientPlayerEntity
+net.minecraftforge.common.ForgeHooks

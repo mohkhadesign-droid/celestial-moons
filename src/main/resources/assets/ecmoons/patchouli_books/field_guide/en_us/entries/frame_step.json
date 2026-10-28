@@ -1,0 +1,30 @@
+{
+  "name": "Frame Step (Afterimage)",
+  "icon": "minecraft:phantom_membrane",
+  "category": "ecmoons:abilities",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:image",
+      "images": [
+        "ecmoons:textures/gui/book/afterimage.png"
+      ],
+      "title": "Frame Step",
+      "border": true,
+      "text": "Afterimage Moon only. Three timed dashes: 2, 3 and 4 blocks."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Press $(k:ecmoons.moon_ability) to dash $(l)2 blocks$() the way your movement keys point (or where you look). When the step ends, a short window opens (about a quarter of a second): press again for $(l)3 blocks$(), then again for $(l)4 blocks$(). Each step can turn up to 45 degrees.",
+      "title": "How it works"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Too early$() (while still moving, or before the window): the sequence breaks and you're slowed by 40% for half a second.$(br2)Miss the window and the sequence simply ends.$(br2)After the third step, your next melee hit within 1 second has $(l)+60% knockback$(), once."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Cooldown:$() 8 seconds, starting when the sequence ends.$(br2)$(l)Limits:$() steps stop at walls, doors, ceilings and the world border; you never pass through blocks. No dashing while flying, gliding, swimming or riding. There's no invulnerability and fall damage is normal.$(br2)$(l)Counterplay:$() back away after the third step; the bonus only lasts a second."
+    }
+  ]
+}

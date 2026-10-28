@@ -5,11 +5,11 @@ license="LGPL-3.0-or-later"
 [[mods]]
 modId="ecmoons"
 version="${file.jarVersion}"
-displayName="Enhanced Celestials: Ten Moons"
+displayName="Enhanced Celestials: Moons"
 logoFile="logo.png"
 authors="mohkhadesign"
 description='''
-Ten-moon lineup add-on for Enhanced Celestials 2.0.9.
+New lunar events for Enhanced Celestials 2.0.9, with sky atmosphere, the Moon Ability key and a Patchouli field guide.
 '''
 
 [[dependencies.ecmoons]]
@@ -29,4 +29,10 @@ Ten-moon lineup add-on for Enhanced Celestials 2.0.9.
     mandatory=true
     versionRange="[2.0.9,)"
     ordering="AFTER"
+    side="BOTH"
+[[dependencies.ecmoons]]
+    modId="patchouli"
+    mandatory=false
+    versionRange="[1.16.4-50,)"
+    ordering="NONE"
     side="BOTH"

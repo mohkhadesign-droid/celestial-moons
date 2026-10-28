@@ -1,0 +1,25 @@
+{
+  "name": "Arcane Moon",
+  "icon": "minecraft:lapis_lazuli",
+  "category": "ecmoons:moons",
+  "sortnum": 5,
+  "pages": [
+    {
+      "type": "patchouli:image",
+      "images": [
+        "ecmoons:textures/gui/book/arcane.png"
+      ],
+      "title": "Arcane Moon",
+      "border": true,
+      "text": "A violet moon covered in runes."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Enchanting and anvils cost 25% fewer levels (rounded, minimum 1): the enchanting table costs 1 / 2 / 2 levels. Material repairs on an anvil restore 25% more per material."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Limits:$() the level requirement and lapis cost don't change. A \"Too Expensive!\" job stays too expensive. The discount for a table is decided when you open it, so a moon setting mid-use can't trick you."
+    }
+  ]
+}

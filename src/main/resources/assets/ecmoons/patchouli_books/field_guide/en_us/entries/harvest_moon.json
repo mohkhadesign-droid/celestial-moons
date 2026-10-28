@@ -1,0 +1,25 @@
+{
+  "name": "Harvest Moon",
+  "icon": "minecraft:wheat",
+  "category": "ecmoons:moons",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:image",
+      "images": [
+        "ecmoons:textures/gui/book/harvest.png"
+      ],
+      "title": "Harvest Moon",
+      "border": true,
+      "text": "A golden moon over the fields."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Crops grow about twice as fast: each crop's growth tick gets one extra roll. Mature crops drop double (Enhanced Celestials).$(br2)You get hungry 25% more slowly."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Limits:$() only crops listed by the server grow faster (wheat, carrots, potatoes, beetroot, nether wart, cocoa, berries, sugar cane, cactus, bamboo by default). Immature crops aren't doubled. Other blocks and the world's tick speed are untouched."
+    }
+  ]
+}

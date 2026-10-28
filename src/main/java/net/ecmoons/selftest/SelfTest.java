@@ -101,6 +101,11 @@ public final class SelfTest {
         EcMoons.LOGGER.info(P + "starting");
         step("static checks", 1, SelfTest::staticChecks);
         step("new moon static checks", 1, w -> NewMoonChecks.staticChecks(w, SelfTest::check));
+        step("field guide recipe", 1, w -> {
+            boolean patchouli = net.minecraftforge.fml.ModList.get().isLoaded("patchouli");
+            boolean recipe = w.getServer().getRecipeManager().byKey(new net.minecraft.util.ResourceLocation("ecmoons", "field_guide")).isPresent();
+            check("field guide: crafting recipe loaded only when Patchouli is installed (patchouli " + patchouli + ", recipe " + recipe + ")", patchouli == recipe);
+        });
         step("shell projectiles", 1, w -> ShellChecks.setup(w, SelfTest::check));
         step("shell verify", 25, w -> ShellChecks.verify(w, SelfTest::check));
         step("shell exhaust", 25, w -> ShellChecks.verifyExhaust(w, SelfTest::check));

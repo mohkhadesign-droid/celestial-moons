@@ -1,0 +1,25 @@
+{
+  "name": "Thread Moon",
+  "icon": "minecraft:string",
+  "category": "ecmoons:moons",
+  "sortnum": 11,
+  "pages": [
+    {
+      "type": "patchouli:image",
+      "images": [
+        "ecmoons:textures/gui/book/thread.png"
+      ],
+      "title": "Thread Moon",
+      "border": true,
+      "text": "A moon wound with rose-coloured thread."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Teammates (teams are set by the server with $(o)/moonteams$()) within 12 blocks with a clear line of sight are $(l)bonded$(). Each bonded teammate gives 5% damage reduction, up to 15%. A thin thread links you, and \"Thread bond\" shows by the hotbar."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Separate and the bonus fades over 3 seconds.$(br2)$(l)Not reduced:$() fall, fire, lava, drowning, starvation, magic, wither and the void. Only your team sees your threads; pets and mobs never bond."
+    }
+  ]
+}

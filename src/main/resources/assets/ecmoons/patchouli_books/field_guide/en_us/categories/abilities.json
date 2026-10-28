@@ -1,0 +1,6 @@
+{
+  "name": "Moon Abilities",
+  "description": "Moons that give the $(l)Moon Ability$() key something to do.",
+  "icon": "minecraft:phantom_membrane",
+  "sortnum": 2
+}

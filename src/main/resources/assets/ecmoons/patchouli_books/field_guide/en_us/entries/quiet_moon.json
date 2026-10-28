@@ -1,0 +1,25 @@
+{
+  "name": "Quiet Moon",
+  "icon": "minecraft:white_bed",
+  "category": "ecmoons:moons",
+  "sortnum": 8,
+  "pages": [
+    {
+      "type": "patchouli:image",
+      "images": [
+        "ecmoons:textures/gui/book/quiet.png"
+      ],
+      "title": "Quiet Moon",
+      "border": true,
+      "text": "A soft, pale moon."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Only about a third as many monsters spawn (existing ones stay).$(br2)If you're well fed (18+ food) and haven't hit or been hit for 12 seconds, you heal half a heart every 2 seconds on top of normal healing."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Tip:$() a good night to explore or build outside. PvP, claims and raids are unchanged."
+    }
+  ]
+}

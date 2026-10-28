@@ -1,0 +1,30 @@
+{
+  "name": "Shell",
+  "icon": "minecraft:turtle_helmet",
+  "category": "ecmoons:abilities",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:image",
+      "images": [
+        "ecmoons:textures/gui/book/shell.png"
+      ],
+      "title": "Shell",
+      "border": true,
+      "text": "Shell Moon only. A dome that stops every projectile, both ways."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Crouch$() and $(l)hold$() $(k:ecmoons.moon_ability). After 2 seconds of charging without moving, a dome of radius 3 rises around you for up to 6 seconds.$(br2)It collapses when you let go, stand up, move, when it runs out or breaks.",
+      "title": "How it works"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Projectiles$() can't cross it in either direction: arrows, tridents, potions, pearls, fireballs, snowballs and fireworks. Arrows and tridents drop as items at the edge. Nothing splashes, teleports or explodes past it.$(br2)$(l)Durability:$() 100. Each projectile costs 10, explosive ones 30."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Players inside take $(l)75% less$() explosion damage.$(br2)$(l)Not blocked:$() people and mobs can walk in and out, and melee works as normal. Shells can't overlap.$(br2)$(l)Cooldown:$() 20 seconds after it collapses. You can't raise one where you aren't allowed to build (claims and protected areas).$(br2)$(l)Counterplay:$() walk in and fight up close, or wait it out."
+    }
+  ]
+}

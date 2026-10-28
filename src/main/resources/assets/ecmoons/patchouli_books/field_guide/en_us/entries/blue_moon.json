@@ -1,0 +1,25 @@
+{
+  "name": "Blue Moon",
+  "icon": "minecraft:prismarine_crystals",
+  "category": "ecmoons:moons",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:image",
+      "images": [
+        "ecmoons:textures/gui/book/blue.png"
+      ],
+      "title": "Blue Moon",
+      "border": true,
+      "text": "A calm blue moon. Lucky night."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Everyone gets $(l)Luck$() (Enhanced Celestials).$(br2)Fishing bites come 30% sooner, and Lure still works on top. Some catches can include extra bonus loot chosen by the server."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Tip:$() it's the best night for fishing and for opening loot chests."
+    }
+  ]
+}

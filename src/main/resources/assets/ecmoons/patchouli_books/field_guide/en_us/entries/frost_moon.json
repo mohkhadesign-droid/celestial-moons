@@ -1,0 +1,25 @@
+{
+  "name": "Frost Moon",
+  "icon": "minecraft:snowball",
+  "category": "ecmoons:moons",
+  "sortnum": 4,
+  "pages": [
+    {
+      "type": "patchouli:image",
+      "images": [
+        "ecmoons:textures/gui/book/frost.png"
+      ],
+      "title": "Frost Moon",
+      "border": true,
+      "text": "An icy, cracked moon."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "After 20 seconds under the open sky you get cold: 15% slower.$(br2)$(l)Warm up:$() stand within 4 blocks of a lit campfire, fire, lava, magma or a lit furnace; go under any roof; or eat (45 s of warmth)."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Each piece of leather armour gives 10 more seconds before you get cold; a full leather set keeps you warm all night.$(br2)Blocks, water and crops never freeze."
+    }
+  ]
+}

@@ -1,6 +1,6 @@
-# Enhanced Celestials: Fourteen Moons (`ecmoons`)
+# Enhanced Celestials: Sixteen Moons (`ecmoons`)
 
-A Forge **1.16.5** add-on for **Enhanced Celestials 2.0.9**. It turns Enhanced Celestials' three lunar events into a fourteen-moon lineup:
+A Forge **1.16.5** add-on for **Enhanced Celestials 2.0.9**. It turns Enhanced Celestials' three lunar events into a sixteen-moon lineup:
 
 | # | Moon | Theme | Event key |
 |---|------|-------|-----------|
@@ -18,6 +18,10 @@ A Forge **1.16.5** add-on for **Enhanced Celestials 2.0.9**. It turns Enhanced C
 | 12 | Thread Moon | team bonds (admin-assigned moon teams) | `ecmoons-thread_moon` |
 | 13 | War Moon | a temporary equal-kit arena tournament | `ecmoons-war_moon` |
 | 14 | Gluttony Moon | variety of food = temporary hearts | `ecmoons-gluttony_moon` |
+| 15 | Afterimage Moon | Frame Step: a timed three-step dash (Moon Ability key) | `ecmoons-afterimage_moon` |
+| 16 | Shell Moon | a temporary projectile barrier (Moon Ability key) | `ecmoons-shell_moon` |
+
+Players can read about every moon in the **Lunar Field Guide**, a Patchouli book (§10), if Patchouli is installed.
 
 The original Enhanced Celestials jar is **not modified**. The add-on depends on it and plugs into its systems.
 
@@ -36,12 +40,12 @@ The original Enhanced Celestials jar is **not modified**. The add-on depends on 
 Steps:
 1. Stop the server and put `ecmoons-…jar` in `mods/`.
 2. Put the same jar in every player's `mods/` folder. Clients need it for the moon textures, fog, Drift movement, the frost overlay and the Arcane tooltip. A client without it is refused at login with a version-mismatch message, so nobody can join without it by accident.
-3. Start the server once. It creates `config/ecmoons-common.toml` and `config/ecmoons/blue_moon_bonus_loot.json`. It also adds the eleven new event files to every world's Enhanced Celestials folder (see §3).
+3. Start the server once. It creates `config/ecmoons-common.toml` and `config/ecmoons/blue_moon_bonus_loot.json`. It also adds the thirteen new event files to every world's Enhanced Celestials folder (see §3).
 4. Optionally restart after editing the config.
 
 The War Moon arena is a separate dimension, `ecmoons:war_arena`, defined in the add-on's built-in data pack (`data/ecmoons/dimension*/war_arena.json`). Nothing in your normal worlds is touched. Because of this dimension, opening a **singleplayer** world shows Mojang's "Worlds using Experimental Settings are not supported" prompt (click Proceed); dedicated servers and players joining them never see it. The War Moon also checks **Flan Warfare** (if installed) so it never starts during an active flag capture.
 
-Optional mods it integrates with: **Lootr** (per-player chest loot gets Blue Moon bonus rolls) and **IDAS** (`idas:chests/pillager_fortress/pillager_basic` is a pre-configured Blue Moon table). Neither is required.
+Optional mods it integrates with: **Patchouli** (the Lunar Field Guide, §10), **Lootr** (per-player chest loot gets Blue Moon bonus rolls) and **IDAS** (`idas:chests/pillager_fortress/pillager_basic` is a pre-configured Blue Moon table). Neither is required.
 
 ---
 
@@ -84,7 +88,9 @@ The add-on decides **what** each moon does.
 
 Each file holds `chance`, `minNumberOfNightsBetween`, `validMoonPhases` (0 = full … 4 = new), `blockSleeping`, `textComponents` (notifications) and `clientSettings` (sky-light colour, moon size, texture, sound). The global spacing is in `lunar-settings.json` (`minDaysBetweenLunarEvents`, default 5).
 
-Default chances for the new moons are 0.03–0.04, the same range as the originals (Blood 0.07, Harvest 0.035, Blue 0.02). Ordinary nights stay the norm. To make a moon rarer or more common, edit its `chance` and run `/ec lunarForecast recompute`.
+Default chances for the new moons are 0.02–0.04, the same range as the originals (Blood 0.07, Harvest 0.035, Blue 0.02). Ordinary nights stay the norm. To make a moon rarer or more common, edit its `chance` and run `/ec lunarForecast recompute`.
+
+Afterimage and Shell were added with the lowest default chance (0.02 each, like War and Blue). Enhanced Celestials' global spacing (`minDaysBetweenLunarEvents`, default 5) still allows at most one special night per 5 days, so new moons mainly share the existing special nights rather than adding many more. If you want the overall rate to stay exactly as before, lower another moon's `chance` by the same amount (for example Mist and Quiet from 0.04 to 0.02) and run `/ec lunarForecast recompute`.
 
 ### 3.2 What moons do: `config/ecmoons-common.toml`
 
@@ -172,6 +178,22 @@ Main values (defaults shown):
 | | `arenaFloorSize` / `arenaWallHeight` | 48 / 12 | Built-in arena. |
 | | `arenaTemplate`, `arenaCells`, `arenaSpectatorPos` | empty | Replace the built-in arena with a structure template. |
 | | `championMinutes` | 30 | Minutes of online time. |
+| Afterimage | `step1Distance` / `step2Distance` / `step3Distance` | 2 / 3 / 4 | Blocks per step. |
+| | `stepTicks` | 3 | Each step moves over this many ticks, stopping at the first collision. |
+| | `inputWindowTicks` | 5 | Window after a step ends in which the next press counts. |
+| | `maxSteerDegrees` | 45 | How far step 2 and 3 can turn from the previous one. |
+| | `penaltyTicks` / `penaltySlowdown` | 10 / 0.4 | A too-early press: −40% speed for 0.5 s. |
+| | `cooldownSeconds` | 8 | Starts when the sequence ends (completed, missed or broken). |
+| | `finalWindowTicks` / `knockbackBonus` | 20 / 0.6 | After step 3, the next melee hit within 1 s gets +60% knockback, once. |
+| | `afterimageTicks` | 12 | How long the visual afterimages last. |
+| Shell | `chargeTicks` | 40 | Crouch and hold this long without moving. |
+| | `radius` / `durationTicks` | 3.0 / 120 | |
+| | `cooldownSeconds` | 20 | Starts when the shell ends. |
+| | `moveTolerance` | 0.6 | Moving further than this from where it was raised collapses it. |
+| | `durability` / `projectileCost` / `explosiveCost` | 100 / 10 / 30 | Fireballs, wither skulls and fireworks are explosive. |
+| | `explosionReduction` | 0.75 | For players inside, applied once even where shells meet. |
+| | `extraProjectileEntities` | (none) | Modded projectile entity ids that don't extend vanilla's projectile class. |
+| | `respectProtection` | true | Only where the caster could place a block (see §5). |
 | Gluttony | `maxBonusHearts` | 4 | |
 | | `foodCategories` | 20 vanilla groups (beef, pork, fish, …) | `name=item,item,#tag`. Unlisted foods (including modded) count as their own category. |
 | | `excludedFoods` | rotten flesh, spider eye, poisonous potato, pufferfish | |
@@ -243,6 +265,10 @@ All commands act on the dimension the command runs in. Use `/execute in <dim> ru
 | `/moonteams assign <player> <teamId>` | 2 | Put a player in a team (moves them out of any other; offline players by name work if the server knows them). |
 | `/moonteams remove <player>` | 2 | Remove from their team. |
 | `/moonteams list` / `info <teamId>` / `delete <teamId>` | 2 | |
+| `/ecmoons ability status <player>` | 2 | Afterimage step/window/bonus and cooldown, Shell charge/active shell and cooldown. |
+| `/ecmoons ability reset <players>` | 2 | Clear Moon Ability cooldowns and stop any running Frame Step or shell for those players. |
+| `/ecmoons shell list` | 2 | Every active shell: owner, dimension, position, durability, time left. |
+| `/ecmoons shell clear` | 2 | Collapse every active shell (cooldowns start as usual). |
 | `/warmoon spectate` | 0 | Any player: toggle watching the next War Moon battle instead of fighting. |
 | `/warmoon status` | 0 | Tournament phase and your remaining War Champion time. |
 
@@ -357,6 +383,25 @@ Enhanced Celestials' own `/ec setLunarEvent <key>` and `/ec lunarForecast [recom
 - The hearts are one event-owned max-health modifier, never saved into the player file. Progress is stored per night, so relogging during the same Gluttony night keeps it. It resets on death.
 - When the moon ends, when you leave its dimension or enter a War Moon match, the hearts are removed and health is clamped to the new maximum.
 
+**The Moon Ability key** (default **V**, rebindable under Controls → Enhanced Celestials Moons). One key for every moon ability; it does nothing on other nights ("No moon ability tonight"). The client only sends key down/up and the direction the movement keys point; the server checks the moon, timing, distances, collisions, cooldowns and permissions, and sends back what the small indicator next to the crosshair shows. Abilities are refused in the War Moon arena dimension and for anyone taking part in a War Moon tournament, and are cleaned up on death, logout, dimension change, moon end and server stop.
+
+**Afterimage Moon — Frame Step.**
+- Press: step 1 moves 2 blocks over 3 ticks in the movement-key direction (or the look direction). When the step ends, a 5-tick window opens: a press in it does step 2 (3 blocks), then step 3 (4 blocks). Steps 2 and 3 may turn at most 45° from the previous step.
+- A press while a step is still moving or before the window is a mistimed input: the sequence breaks, −40% speed for 10 ticks, cooldown starts. Missing the window just ends the sequence.
+- After step 3 the next direct melee hit within 20 ticks gets +60% knockback (once). Projectiles never qualify. Damage is unchanged.
+- Movement is a server-side teleport in four sub-steps per tick, each checked with the collision box and the world border, so a step stops before walls, closed doors, ceilings and barriers and never passes through blocks. No dashing while riding, flying, gliding or swimming. No invulnerability; fall damage is unchanged.
+- Afterimages are client-side drawings of the player's model (no entities), sent to the player and everyone tracking them.
+- **Limit:** the dash itself doesn't ask claim mods whether you may *enter* a claim; it moves you the way walking would (2–4 blocks, never through walls). Claim mods that block walking into a claim by teleporting players back still apply.
+
+**Shell Moon — Shell.**
+- Crouch and hold the key: after 2 s (`chargeTicks`) without moving more than 0.6 blocks, a sphere of radius 3 centred on the player's chest appears for up to 6 s. Releasing the key, standing up, moving, running out of durability, the moon ending, dying, logging out or changing dimension collapses it. Cooldown 20 s after it ends.
+- **Every projectile entity** (anything extending vanilla's `ProjectileEntity`, which covers arrows, tridents, snowballs, eggs, ender pearls, fishing hooks, splash/lingering potions, XP bottles, fireballs, wither skulls, firework rockets, llama spit, shulker bullets, and modded projectiles built on it) is stopped at the boundary in **both** directions. At the start of each world tick, before projectiles move, each projectile's straight path for that tick is tested against the sphere, so very fast projectiles that would jump across the boundary are caught too. A side-change check after the tick and a `ProjectileImpactEvent` guard catch anything that moved another way.
+- Stopped projectiles are removed without hitting: no splash, no teleport, no explosion, no fire. Arrows and tridents that could have been picked up drop as exactly one item at the boundary on the side they came from; creative-only and non-pickup arrows drop nothing (as vanilla).
+- Durability 100: each projectile costs 10, explosive projectiles 30. The projectile that empties it is still stopped, then the shell collapses.
+- Players inside take 75% less explosion damage (once, even if shells overlap — overlapping shells are refused anyway). Melee, walking in and out, blocks and other damage are unaffected.
+- **Protection:** before raising a shell, the add-on asks the protection mods whether the player could place a block there, by posting Forge's own block-place event (`respectProtection`). Flan, World Protector/YAWP and other mods that protect against block placement refuse it there. This is a synthetic event: a protection mod that only checks real item use would not see it.
+- **Limits:** projectiles that are not entities (hitscan guns, beams, some modded weapons that damage directly) can't be stopped. Modded projectile entities that don't extend `ProjectileEntity` need their id in `extraProjectileEntities`.
+
 ---
 
 ## 6. Moon designs
@@ -437,3 +482,13 @@ Every push runs two automated suites:
 - a **real Minecraft client** test: 178 checks (including the atmosphere of all 14 moons). It takes screenshots of all fourteen moons in the sky, the Revealing eye blinking and a reveal marker, the Thread HUD, Gluttony hearts and a solo War Moon match; it measures Mist fog, the Frost overlay, Drift movement and the Arcane tooltip, and runs the ore, XP, rare-drop, Gluttony and War Moon save/strip/restore rules with a real player.
 
 See [TESTING.md](TESTING.md) for exactly what is verified and what still needs checking with the full modpack. The latest screenshots are on the `ci-client` branch.
+
+---
+
+## 10. Lunar Field Guide (Patchouli)
+
+With **Patchouli** installed (it is part of Crazy Craft Updated), the add-on ships an in-game book, the **Lunar Field Guide**: a picture of every moon as it appears in the sky, what it does, the default numbers and the limits and counterplay, plus chapters on the Moon Ability key, Frame Step and Shell. Patchouli is optional: without it the book and its recipe are simply not loaded.
+
+- Craft it: **book + clock** (shapeless).
+- Or give it: `/give @p patchouli:guide_book{"patchouli:book":"ecmoons:field_guide"}`
+- The text uses the default config values. If you change them, edit `tools/book/build_book.py` and rebuild, or override the entries with a resource pack (`assets/ecmoons/patchouli_books/field_guide/en_us/`).

@@ -65,11 +65,14 @@ mixin {
 repositories {
     // libs/enhancedcelestials-2.0.9-1.16.5.jar: the unmodified Enhanced Celestials release (LGPLv3).
     flatDir { dirs 'libs' }
+    // Patchouli: only at runtime in the dev/test environment, so the tests can load the Lunar Field Guide.
+    maven { url = 'https://maven.blamejared.com' }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     implementation fg.deobf('local:enhancedcelestials:2.0.9-1.16.5')
+    runtimeOnly fg.deobf('vazkii.patchouli:Patchouli:1.16.4-53.3')
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 

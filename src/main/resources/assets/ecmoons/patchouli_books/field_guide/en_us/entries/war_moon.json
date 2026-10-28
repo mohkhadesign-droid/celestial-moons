@@ -1,0 +1,25 @@
+{
+  "name": "War Moon",
+  "icon": "minecraft:iron_sword",
+  "category": "ecmoons:moons",
+  "sortnum": 12,
+  "pages": [
+    {
+      "type": "patchouli:image",
+      "images": [
+        "ecmoons:textures/gui/book/war.png"
+      ],
+      "title": "War Moon",
+      "border": true,
+      "text": "A cracked, burning moon. The arena calls."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Two minutes after it rises, every eligible online player (up to 16) fights in a separate arena with the same kit. Your own gear, XP and effects are saved first and given back afterwards.$(br2)Use $(l)/warmoon spectate$() to watch from the gallery instead."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "10 seconds in the cells, then the gates open. Lethal damage knocks you out to the gallery: no death, no drops. After 6 minutes a shrinking safe square starts.$(br2)The last fighter standing becomes $(l)War Champion$(): Haste I and a gold aura for 30 minutes of online time."
+    }
+  ]
+}

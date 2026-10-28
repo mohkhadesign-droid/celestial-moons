@@ -1,0 +1,21 @@
+{
+  "name": "Wisdom Moon",
+  "icon": "minecraft:experience_bottle",
+  "category": "ecmoons:moons",
+  "sortnum": 7,
+  "pages": [
+    {
+      "type": "patchouli:image",
+      "images": [
+        "ecmoons:textures/gui/book/wisdom.png"
+      ],
+      "title": "Wisdom Moon",
+      "border": true,
+      "text": "A deep blue moon traced with constellations."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Double XP from monsters killed by a player and from natural ores mined by hand.$(br2)$(l)Limits:$() spawner mobs, XP bottles, smelting, breeding, fishing and trading are unchanged. Picking up orbs is never multiplied."
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "Revealing Moon",
+  "icon": "minecraft:ender_eye",
+  "category": "ecmoons:moons",
+  "sortnum": 10,
+  "pages": [
+    {
+      "type": "patchouli:image",
+      "images": [
+        "ecmoons:textures/gui/book/revealing.png"
+      ],
+      "title": "Revealing Moon",
+      "border": true,
+      "text": "An eye opens in the sky. It blinks."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Every 60 seconds you see \"The eye is searching...\" and a 5-second countdown. When it ends, the eye opens fully and everyone within 256 blocks of you is marked for 8 seconds with a spectral eye, an approximate distance and a direction (never coordinates)."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Underground players are marked at the surface above them: only their horizontal position shows.$(br2)$(l)Never revealed:$() spectators, creative players, War Moon fighters and areas the server protects. Claims are not hidden automatically.$(br2)$(l)Counterplay:$() keep moving between scans."
+    }
+  ]
+}

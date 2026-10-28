@@ -1,0 +1,13 @@
+{
+  "name": "Commands for Everyone",
+  "icon": "minecraft:paper",
+  "category": "ecmoons:basics",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(li)$(l)/warmoon status$(): War Moon tournament state and your remaining War Champion time.$(li)$(l)/warmoon spectate$(): toggle watching the next War Moon tournament from the gallery instead of fighting.$(br2)Everything else under $(o)/ecmoons$() is for server operators.",
+      "title": "Commands"
+    }
+  ]
+}

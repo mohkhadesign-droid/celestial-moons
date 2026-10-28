@@ -1,0 +1,18 @@
+{
+  "name": "How Moons Work",
+  "icon": "minecraft:clock",
+  "category": "ecmoons:basics",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "At dusk the server may pick a lunar event for the night. Each moon has its own chance and look; only one can be up at a time, and it sets at dawn.$(br2)A moon only affects the dimension it rises in (normally the Overworld). The Nether and the End never get one.",
+      "title": "How Moons Work"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "You'll see a message when a moon rises and when it sets. The sky, fog and light change colour while it's up, and some moons add particles or sounds.$(br2)Players who join in the middle of a moon see it straight away.$(br2)How much of the sky effects you see is set per player in $(o)config/ecmoons-client.toml$(): $(l)quality$() OFF / LOW / MEDIUM / HIGH. It never changes what a moon does."
+    }
+  ],
+  "priority": true
+}

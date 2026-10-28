@@ -356,6 +356,7 @@ public final class ClientSelfTest {
 
         newMoons();
         abilities();
+        fieldGuide();
         atmosphere();
 
         then(20, () -> {
@@ -775,10 +776,26 @@ public final class ClientSelfTest {
     }
 
     /** Moon Ability key with a real player: Afterimage Frame Step and Shell Moon shell. */
+    private static String tpStart() {
+        return "tp @a " + (ax + 0.5) + " " + ay + " " + (az + 0.5) + " -90 10";
+    }
+
+    private static String tpShell() {
+        return "tp @a " + (ax + 10.5) + " " + ay + " " + (az + 0.5) + " -90 10";
+    }
+
     private static void abilities() {
-        final int ax = px + 80, az = pz, ay = 200;
-        final String tpStart = "tp @a " + (ax + 0.5) + " " + ay + " " + (az + 0.5) + " -90 10";
+        // coordinates are only known once the world exists (px/pz are measured at run time)
         then(5, () -> {
+            ax = px + 80;
+            az = pz;
+            ay = 200;
+            cmd("gamemode creative @a");
+            player().abilities.flying = true;
+            player().onUpdateAbilities();
+            cmd(tpStart());
+        });
+        then(40, () -> {
             cmd("gamerule doMobSpawning false");
             cmd("gamerule naturalRegeneration false");
             cmd("kill @e[type=!player]");
@@ -786,7 +803,7 @@ public final class ClientSelfTest {
             cmd("gamemode survival @a");
             cmd("fill " + (ax - 20) + " " + (ay - 1) + " " + (az - 15) + " " + (ax + 24) + " " + (ay - 1) + " " + (az + 15) + " obsidian");
             cmd("fill " + (ax - 20) + " " + ay + " " + (az - 15) + " " + (ax + 24) + " " + (ay + 5) + " " + (az + 15) + " air");
-            cmd(tpStart);
+            cmd(tpStart());
             cmd("ecmoons start ecmoons-afterimage_moon");
         });
         waitFor(200, () -> Moons.is(Minecraft.getInstance().level, MoonType.AFTERIMAGE));
@@ -871,7 +888,7 @@ public final class ClientSelfTest {
         then(1, () -> {
             cmd("kill @e[tag=ectest]");
             cmd("ecmoons ability reset @p");
-            cmd(tpStart);
+            cmd(tpStart());
         });
         waitFor(60, () -> player().isOnGround());
         // a second press one tick later (sent directly; the key itself only reports edges): the 3-tick step is still moving
@@ -893,7 +910,7 @@ public final class ClientSelfTest {
         // a wall stops the step: nothing passes through blocks
         then(1, () -> {
             cmd("ecmoons ability reset @p");
-            cmd(tpStart);
+            cmd(tpStart());
             cmd("fill " + (ax + 2) + " " + ay + " " + (az - 2) + " " + (ax + 2) + " " + (ay + 2) + " " + (az + 2) + " stone");
         });
         waitFor(60, () -> player().isOnGround());
@@ -913,9 +930,8 @@ public final class ClientSelfTest {
         waitFor(200, () -> Moons.reported(Minecraft.getInstance().level) == MoonType.NONE);
 
         // ---- Shell Moon: crouch + hold to charge, collapse on release, explosion reduction
-        final String tpShell = "tp @a " + (ax + 10.5) + " " + ay + " " + (az + 0.5) + " -90 10";
         then(5, () -> {
-            cmd(tpShell);
+            cmd(tpShell());
             // a wall right behind the player so the explosion's push can't throw them off the platform
             cmd("fill " + (ax + 9) + " " + ay + " " + (az - 3) + " " + (ax + 9) + " " + (ay + 4) + " " + (az + 3) + " obsidian");
             cmd("ecmoons start ecmoons-shell_moon");
@@ -930,7 +946,7 @@ public final class ClientSelfTest {
         then(2, () -> {
             controlDamage = player().getMaxHealth() - net.ecmoons.selftest.AbilityPlayerChecks.health;
             EcMoons.LOGGER.info(P + "control explosion damage " + controlDamage);
-            cmd(tpShell);
+            cmd(tpShell());
         });
         waitFor(60, () -> player().isOnGround());
         // pressing without crouching does nothing
@@ -987,9 +1003,85 @@ public final class ClientSelfTest {
             cmd("gamerule doMobSpawning true");
             cmd("gamerule naturalRegeneration true");
             cmd("gamemode creative @a");
+            cmd("fill " + (ax - 20) + " " + (ay - 1) + " " + (az - 15) + " " + (ax + 24) + " " + (ay + 5) + " " + (az + 15) + " air");
+            cmd("tp @a " + px + " 150 " + pz); // back near the start so the next tests find loaded terrain
             Minecraft.getInstance().options.setCameraType(net.minecraft.client.settings.PointOfView.FIRST_PERSON);
         });
         waitFor(200, () -> Moons.reported(Minecraft.getInstance().level) == MoonType.NONE);
+    }
+
+    private static Object patchouli() throws ReflectiveOperationException {
+        return Class.forName("vazkii.patchouli.api.PatchouliAPI").getMethod("get").invoke(null);
+    }
+
+    private static void openGuide(String entry, int page) {
+        try {
+            net.minecraft.util.ResourceLocation book = new net.minecraft.util.ResourceLocation("ecmoons", "field_guide");
+            Object api = patchouli();
+            if (entry == null) api.getClass().getMethod("openBookGUI", net.minecraft.util.ResourceLocation.class).invoke(api, book);
+            else api.getClass().getMethod("openBookEntry", net.minecraft.util.ResourceLocation.class, net.minecraft.util.ResourceLocation.class, int.class)
+                    .invoke(api, book, new net.minecraft.util.ResourceLocation("ecmoons", entry), page);
+        } catch (Throwable t) {
+            check("field guide: open " + entry + " (" + t + ")", false);
+        }
+    }
+
+    /** The Patchouli Lunar Field Guide (Patchouli is on the test runtime classpath). */
+    private static void fieldGuide() {
+        then(5, () -> {
+            if (!net.minecraftforge.fml.ModList.get().isLoaded("patchouli")) {
+                check("field guide: Patchouli present in the test environment", false);
+                return;
+            }
+            try {
+                Class<?> reg = Class.forName("vazkii.patchouli.common.book.BookRegistry");
+                Object inst = reg.getField("INSTANCE").get(null);
+                java.util.Map<?, ?> books = (java.util.Map<?, ?>) reg.getField("books").get(inst);
+                Object book = books.get(new net.minecraft.util.ResourceLocation("ecmoons", "field_guide"));
+                check("field guide: Patchouli registered the book", book != null);
+                Object contents = book.getClass().getField("contents").get(book);
+                java.util.Map<?, ?> entries = (java.util.Map<?, ?>) contents.getClass().getField("entries").get(contents);
+                java.util.Map<?, ?> cats = (java.util.Map<?, ?>) contents.getClass().getField("categories").get(contents);
+                check("field guide: 3 categories and 21 entries loaded (" + cats.size() + ", " + entries.size() + ")", cats.size() == 3 && entries.size() == 21);
+            } catch (Throwable t) {
+                check("field guide: reading the book contents (" + t + ")", false);
+            }
+            Minecraft.getInstance().options.hideGui = false;
+            openGuide(null, 0);
+        });
+        then(20, () -> {
+            check("field guide: book screen open (" + Minecraft.getInstance().screen + ")", Minecraft.getInstance().screen != null);
+            shot("guide_0_landing");
+            openGuide("moon_ability_key", 0);
+        });
+        then(20, () -> {
+            shot("guide_1_ability_key");
+            openGuide("frame_step", 0);
+        });
+        then(20, () -> {
+            shot("guide_2_frame_step");
+            openGuide("frame_step", 2);
+        });
+        then(20, () -> {
+            shot("guide_3_frame_step_rules");
+            openGuide("shell", 0);
+        });
+        then(20, () -> {
+            shot("guide_4_shell");
+            openGuide("shell", 2);
+        });
+        then(20, () -> {
+            shot("guide_5_shell_rules");
+            openGuide("revealing_moon", 0);
+        });
+        then(20, () -> {
+            shot("guide_6_revealing");
+            openGuide("war_moon", 0);
+        });
+        then(20, () -> {
+            shot("guide_7_war");
+            Minecraft.getInstance().setScreen(null);
+        });
     }
 
     private static int enchantTooltip(boolean arcane) {

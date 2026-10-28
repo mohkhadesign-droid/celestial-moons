@@ -1,0 +1,25 @@
+{
+  "name": "Gluttony Moon",
+  "icon": "minecraft:cooked_beef",
+  "category": "ecmoons:moons",
+  "sortnum": 13,
+  "pages": [
+    {
+      "type": "patchouli:image",
+      "images": [
+        "ecmoons:textures/gui/book/gluttony.png"
+      ],
+      "title": "Gluttony Moon",
+      "border": true,
+      "text": "A moon that looks good enough to eat."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Each different kind of food you finish eating gives one extra max heart, up to 4. Raw and cooked versions are one kind; repeats don't count. The new hearts start empty."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The hearts go away when the moon sets, when you die, leave the dimension or enter a War Moon match. Rotten flesh, spider eyes, poisonous potatoes and pufferfish never count."
+    }
+  ]
+}

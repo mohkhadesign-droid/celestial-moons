@@ -1,0 +1,21 @@
+{
+  "name": "Shell Moon",
+  "icon": "minecraft:turtle_helmet",
+  "category": "ecmoons:moons",
+  "sortnum": 15,
+  "pages": [
+    {
+      "type": "patchouli:image",
+      "images": [
+        "ecmoons:textures/gui/book/shell.png"
+      ],
+      "title": "Shell Moon",
+      "border": true,
+      "text": "A pale green moon with a shell-plate pattern."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Gives the $(l)Moon Ability$() key the $(l)Shell$(): crouch and hold to raise a dome that stops every projectile. See the $(o)Moon Abilities$() chapter."
+    }
+  ]
+}

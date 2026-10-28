@@ -1,0 +1,25 @@
+{
+  "name": "Blood Moon",
+  "icon": "minecraft:redstone",
+  "category": "ecmoons:moons",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:image",
+      "images": [
+        "ecmoons:textures/gui/book/blood.png"
+      ],
+      "title": "Blood Moon",
+      "border": true,
+      "text": "A red moon. Monsters swarm and nobody sleeps."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Hostile mobs spawn in far greater numbers (Enhanced Celestials' own rule) and beds don't work.$(br2)$(l)Rare drops$() from monsters killed by a player are 25% more likely: a 4% wither skull becomes 5%. Normal drops are never doubled."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Limits:$() spawner mobs and machine kills (fake players) don't get the bonus. Equipment a mob was wearing isn't a loot-table drop and isn't affected.$(br2)$(l)Counterplay:$() light up and wall in your base before dusk; it's a good night to farm skulls."
+    }
+  ]
+}

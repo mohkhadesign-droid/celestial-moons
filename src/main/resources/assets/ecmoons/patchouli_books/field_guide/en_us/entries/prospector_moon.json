@@ -1,0 +1,25 @@
+{
+  "name": "Prospector's Moon",
+  "icon": "minecraft:diamond",
+  "category": "ecmoons:moons",
+  "sortnum": 6,
+  "pages": [
+    {
+      "type": "patchouli:image",
+      "images": [
+        "ecmoons:textures/gui/book/prospector.png"
+      ],
+      "title": "Prospector's Moon",
+      "border": true,
+      "text": "A moon glinting with ore."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Mining natural ore by hand: 25% chance of one extra drop. Stone and ores break 25% faster.$(br2)Exposed ore faces in view glint softly."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Limits:$() ore you placed yourself, cobblestone/stone from generators and blocks moved by pistons don't count. Silk Touch disables the bonus, which doesn't stack with Fortune. Machines and fake players are excluded."
+    }
+  ]
+}

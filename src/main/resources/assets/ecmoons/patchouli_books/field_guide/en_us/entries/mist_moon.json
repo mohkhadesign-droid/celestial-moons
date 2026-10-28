@@ -1,0 +1,25 @@
+{
+  "name": "Mist Moon",
+  "icon": "minecraft:white_wool",
+  "category": "ecmoons:moons",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:image",
+      "images": [
+        "ecmoons:textures/gui/book/mist.png"
+      ],
+      "title": "Mist Moon",
+      "border": true,
+      "text": "A pale, smudged moon. Thick fog rolls in."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "A grey fog fades in over 10 seconds: you can see about 24-30 blocks.$(br2)Name tags of other players are hidden beyond 22 blocks, and footsteps are heard at half the usual distance. Combat and other sounds are unchanged."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Counterplay:$() listen for attacks, not footsteps; stay close to friends.$(br2)Shader packs and OptiFine's \"Fog: Off\" may not show the fog, but name tags and footsteps are still reduced by the server."
+    }
+  ]
+}

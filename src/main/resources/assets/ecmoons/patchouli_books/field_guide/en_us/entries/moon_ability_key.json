@@ -1,0 +1,17 @@
+{
+  "name": "The Moon Ability Key",
+  "icon": "minecraft:phantom_membrane",
+  "category": "ecmoons:basics",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Some moons give you an ability. They all use one key: $(l)Moon Ability$(), $(k:ecmoons.moon_ability) by default. Change it under $(o)Options > Controls > Enhanced Celestials Moons$().$(br2)On any other night the key just says \"No moon ability tonight\".",
+      "title": "Moon Ability Key"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The server decides everything: timing, distance, cooldowns and where an ability is allowed. A small indicator next to the crosshair shows steps, windows, charge and cooldowns.$(br2)Abilities never work in the War Moon arena or for players taking part in a War Moon tournament. They end if you die, log out or change dimension."
+    }
+  ]
+}

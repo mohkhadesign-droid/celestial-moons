@@ -1,0 +1,21 @@
+{
+  "name": "Afterimage Moon",
+  "icon": "minecraft:phantom_membrane",
+  "category": "ecmoons:moons",
+  "sortnum": 14,
+  "pages": [
+    {
+      "type": "patchouli:image",
+      "images": [
+        "ecmoons:textures/gui/book/afterimage.png"
+      ],
+      "title": "Afterimage Moon",
+      "border": true,
+      "text": "A lavender moon trailed by fading copies of itself."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Gives the $(l)Moon Ability$() key the $(l)Frame Step$(): a three-step dash in rhythm. See the $(o)Moon Abilities$() chapter for the timing.$(br2)Each step leaves a fading afterimage of you that everyone nearby can see."
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "Drift Moon",
+  "icon": "minecraft:feather",
+  "category": "ecmoons:moons",
+  "sortnum": 9,
+  "pages": [
+    {
+      "type": "patchouli:image",
+      "images": [
+        "ecmoons:textures/gui/book/drift.png"
+      ],
+      "title": "Drift Moon",
+      "border": true,
+      "text": "A light moon with drifting fragments."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Jumps go a little higher (about 1.6 blocks) and you fall more slowly. Fall damage is halved, and jumping costs half the hunger.$(br2)Two-block walls still stop you."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "If the moon sets while you're in the air, your landing is still softened. Sprinting, attacks and projectiles are unchanged."
+    }
+  ]
+}

@@ -31,5 +31,13 @@
   "ecmoons.notification.war_moon.set": "The \"War Moon\" sets...",
   "ecmoons.name.gluttony_moon": "Gluttony Moon",
   "ecmoons.notification.gluttony_moon.rise": "The \"Gluttony Moon\" rises... Every new taste makes you stronger.",
-  "ecmoons.notification.gluttony_moon.set": "The \"Gluttony Moon\" sets... The feast is over."
+  "ecmoons.notification.gluttony_moon.set": "The \"Gluttony Moon\" sets... The feast is over.",
+  "ecmoons.name.afterimage_moon": "Afterimage Moon",
+  "ecmoons.notification.afterimage_moon.rise": "The \"Afterimage Moon\" rises... Every step leaves a ghost behind.",
+  "ecmoons.notification.afterimage_moon.set": "The \"Afterimage Moon\" sets... The echoes fade.",
+  "ecmoons.name.shell_moon": "Shell Moon",
+  "ecmoons.notification.shell_moon.rise": "The \"Shell Moon\" rises... Plates of light await a steady hand.",
+  "ecmoons.notification.shell_moon.set": "The \"Shell Moon\" sets... The shells crack and fall away.",
+  "key.ecmoons.moon_ability": "Moon Ability",
+  "key.categories.ecmoons": "Enhanced Celestials Moons"
 }

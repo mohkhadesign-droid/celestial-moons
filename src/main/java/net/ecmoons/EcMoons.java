@@ -61,6 +61,9 @@ public class EcMoons {
         forge.register(QuietFeatures.class);
         forge.register(DriftFeatures.class);
         forge.register(MoonLifecycle.class);
+        forge.register(net.ecmoons.feature.ability.MoonAbilities.class);
+        forge.register(net.ecmoons.feature.ability.AfterimageAbility.class);
+        forge.register(net.ecmoons.feature.ability.ShellAbility.class);
         forge.register(net.ecmoons.feature.ThreadFeatures.class);
         forge.register(net.ecmoons.feature.war.WarFeatures.class);
         forge.addListener(net.ecmoons.feature.war.WarFeatures::onServerStarted);

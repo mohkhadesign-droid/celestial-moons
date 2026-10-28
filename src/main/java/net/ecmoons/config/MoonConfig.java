@@ -238,6 +238,36 @@ public final class MoonConfig {
                 "Foods that never count (ids or #tags).");
         pop();
 
+        moon("afterimage", "Afterimage Moon - Frame Step: a timed three-step dash with afterimages (Moon Ability key).", false);
+        dbl("step1Distance", 2.0, 0.5, 8.0, "Distance of the first step (blocks).");
+        dbl("step2Distance", 3.0, 0.5, 8.0, "Distance of the second step.");
+        dbl("step3Distance", 4.0, 0.5, 8.0, "Distance of the third step.");
+        intv("stepTicks", 3, 1, 10, "Ticks each step takes (20 ticks = 1 second).");
+        intv("inputWindowTicks", 5, 2, 20, "After a step ends, the next press must come within this many ticks (5 = 0.25 s).");
+        dbl("maxSteerDegrees", 45.0, 0.0, 180.0, "How far the direction may turn between steps (it never turns during a step).");
+        intv("cooldownSeconds", 8, 0, 600, "Cooldown, starting when the sequence ends or is interrupted.");
+        intv("penaltyTicks", 10, 0, 100, "Mistimed press: ticks of reduced movement (10 = 0.5 s).");
+        dbl("penaltySlowdown", 0.4, 0.0, 0.9, "Mistimed press: movement reduction (0.4 = 40% slower; never a full freeze).");
+        intv("finalWindowTicks", 20, 0, 100, "After a successful third step, the next valid melee hit within this many ticks gets the knockback bonus.");
+        dbl("knockbackBonus", 0.6, 0.0, 3.0, "Extra knockback for that hit (0.6 = +60%). Damage, reach and attack cooldown are unchanged.");
+        intv("afterimageTicks", 12, 2, 60, "How long the visual afterimages last.");
+        pop();
+
+        moon("shell", "Shell Moon - deploy a temporary projectile barrier by crouching and holding the Moon Ability key.", false);
+        intv("chargeTicks", 40, 5, 200, "How long to crouch and hold the key before the shell appears (40 = 2 s).");
+        dbl("radius", 3.0, 1.0, 8.0, "Shell radius (blocks).");
+        intv("durationTicks", 120, 20, 1200, "Maximum duration (120 = 6 s). Releasing the key, standing up or moving collapses it earlier.");
+        intv("cooldownSeconds", 20, 0, 600, "Cooldown, starting when the shell ends.");
+        dbl("moveTolerance", 0.6, 0.1, 3.0, "How far the caster may drift from the deployment position before the shell collapses.");
+        intv("durability", 100, 1, 10000, "Shared durability. The hit that exhausts it is still stopped; then the shell collapses.");
+        intv("projectileCost", 10, 0, 1000, "Durability used by an ordinary projectile.");
+        intv("explosiveCost", 30, 0, 1000, "Durability used by an explosive projectile (fireballs, wither skulls, fireworks...).");
+        dbl("explosionReduction", 0.75, 0.0, 1.0, "Explosion damage reduction for players inside an active shell (applied once, even where shells overlap).");
+        list("extraProjectileEntities", ImmutableList.of(),
+                "Entity ids or #tags that are also treated as projectiles (for modded attacks that are not ordinary projectile entities).");
+        bool("respectProtection", true, "Only allow a shell where the caster could place a block (claims, protected areas).");
+        pop();
+
         // ---- atmosphere (visual only; synced to clients, rendered by the client add-on) ----------------------------
         push("atmosphere", "Atmosphere: how the world looks while each moon is up. Purely visual and rendered on each player's",
                 "client (clients need this add-on installed). Turning anything here off never changes a moon's gameplay.");
@@ -295,6 +325,10 @@ public final class MoonConfig {
         atmo("war", "30303a", "53545d", "b5adb0", "e76a38", "e76a38", 0.30, 0.30, 0.88, 0.20);
         dbl("arenaBoost", 1.3, 1.0, 2.0, "Atmosphere strength inside the War Moon arena (visibility for combat is always kept).");
         bool("preBattleBuildup", true, "Turbulence and orange flashes build up during the battle warning, with one pulse when players are summoned.");
+        pop();
+        atmo("afterimage", "2a2540", "6f6699", "d8ccf5", "c8b8f0", "e0d8ff", 0.25, 0.10, 1.0, 0.15);
+        pop();
+        atmo("shell", "26302a", "7d8a72", "e6eedc", "bfe3cf", "d8e8d0", 0.25, 0.10, 1.0, 0.1);
         pop();
         atmo("gluttony", "30242d", "742f42", "f3d6a0", "e8b65f", "e8b65f", 0.30, 0.15, 1.0, 0.0);
         bool("steam", true, "Sparse steam above lit furnaces, smokers and campfires near the player (bounded sampling).");

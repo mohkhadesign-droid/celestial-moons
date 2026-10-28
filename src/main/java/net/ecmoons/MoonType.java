@@ -29,10 +29,12 @@ public enum MoonType {
     REVEALING("ecmoons-revealing_moon"),
     THREAD("ecmoons-thread_moon"),
     WAR("ecmoons-war_moon"),
-    GLUTTONY("ecmoons-gluttony_moon");
+    GLUTTONY("ecmoons-gluttony_moon"),
+    AFTERIMAGE("ecmoons-afterimage_moon"),
+    SHELL("ecmoons-shell_moon");
 
     public static final MoonType[] MOONS = {BLOOD, BLUE, HARVEST, MIST, FROST, ARCANE, PROSPECTOR, WISDOM, QUIET, DRIFT,
-            REVEALING, THREAD, WAR, GLUTTONY};
+            REVEALING, THREAD, WAR, GLUTTONY, AFTERIMAGE, SHELL};
 
     /** Event key used by Enhanced Celestials for the default config file of this moon (file name without .json). */
     @Nullable public final String defaultKey;

@@ -123,6 +123,7 @@ public final class MoonLifecycle {
         LAST.clear();
         RevealingFeatures.clear();
         ThreadFeatures.clear();
+        net.ecmoons.feature.ability.MoonAbilities.onServerStopped();
     }
 
     /** Settings changed (config file edited or /ecmoons reload): rebuild caches and push to every client. */

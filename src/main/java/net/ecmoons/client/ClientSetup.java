@@ -11,6 +11,10 @@ public final class ClientSetup {
         MinecraftForge.EVENT_BUS.register(RevealClient.class);
         MinecraftForge.EVENT_BUS.register(ThreadClient.class);
         MinecraftForge.EVENT_BUS.register(net.ecmoons.client.atmo.AtmoEvents.class);
+        MinecraftForge.EVENT_BUS.register(net.ecmoons.client.ability.AbilityClient.class);
+        MinecraftForge.EVENT_BUS.register(net.ecmoons.client.ability.AbilityFx.class);
+        net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext.get().getModEventBus().addListener(
+                (net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent e) -> net.ecmoons.client.ability.AbilityClient.register());
         if (Boolean.getBoolean("ecmoons.clienttest")) MinecraftForge.EVENT_BUS.register(ClientSelfTest.class);
     }
 }

@@ -36,7 +36,8 @@ import java.util.Set;
  */
 public final class DefaultEvents {
     public static final MoonType[] NEW_MOONS = {MoonType.MIST, MoonType.FROST, MoonType.ARCANE, MoonType.PROSPECTOR,
-            MoonType.WISDOM, MoonType.QUIET, MoonType.DRIFT, MoonType.REVEALING, MoonType.THREAD, MoonType.WAR, MoonType.GLUTTONY};
+            MoonType.WISDOM, MoonType.QUIET, MoonType.DRIFT, MoonType.REVEALING, MoonType.THREAD, MoonType.WAR, MoonType.GLUTTONY,
+            MoonType.AFTERIMAGE, MoonType.SHELL};
 
     private DefaultEvents() {}
 
@@ -71,6 +72,9 @@ public final class DefaultEvents {
             case THREAD: sky = "f2b8c8"; blend = 0.30; chance = 0.03; colour = TextFormatting.LIGHT_PURPLE; break;
             case WAR: sky = "b4282d"; blend = 0.45; chance = 0.02; colour = TextFormatting.DARK_RED; break;
             case GLUTTONY: sky = "f0a040"; blend = 0.30; chance = 0.035; colour = TextFormatting.YELLOW; break;
+            // ability moons: rarer; Enhanced Celestials' minDaysBetweenLunarEvents still limits special nights overall
+            case AFTERIMAGE: sky = "c8b8f0"; blend = 0.30; chance = 0.02; colour = TextFormatting.LIGHT_PURPLE; break;
+            case SHELL: sky = "c8dcc0"; blend = 0.25; chance = 0.02; colour = TextFormatting.GREEN; break;
             default: throw new IllegalArgumentException(type.name());
         }
         String key = type.id() + "_moon";

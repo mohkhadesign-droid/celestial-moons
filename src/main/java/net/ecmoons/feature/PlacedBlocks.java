@@ -48,6 +48,8 @@ import java.util.List;
  */
 public final class PlacedBlocks {
     private static final ResourceLocation KEY = new ResourceLocation(EcMoons.MOD_ID, "placed");
+    /** Set while the add-on asks protection mods "could this player place here?" (nothing is actually placed). */
+    public static boolean probing;
 
     @CapabilityInject(Data.class)
     public static Capability<Data> CAP = null;
@@ -111,7 +113,7 @@ public final class PlacedBlocks {
     /** Entity (player, enderman, fake player...) placed a block. Multi-place (beds, doors) is a subclass. */
     @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
     public static void onPlace(BlockEvent.EntityPlaceEvent event) {
-        if (event.getWorld().isClientSide()) return;
+        if (event.getWorld().isClientSide() || probing) return;
         if (event instanceof BlockEvent.EntityMultiPlaceEvent) {
             for (net.minecraftforge.common.util.BlockSnapshot snap : ((BlockEvent.EntityMultiPlaceEvent) event).getReplacedBlockSnapshots()) {
                 BlockState placed = event.getWorld().getBlockState(snap.getPos());

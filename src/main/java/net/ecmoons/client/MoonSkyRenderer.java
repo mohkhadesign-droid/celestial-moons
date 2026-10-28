@@ -75,6 +75,14 @@ public final class MoonSkyRenderer {
                 alpha = 1.0F;
                 if (animate) dz = (float) (Math.sin(t * 0.9) * size * 0.035);
                 break;
+            case AFTERIMAGE: // the fading duplicates trail behind the moon, drifting very slightly
+                alpha = 0.5F;
+                dx = size * 0.13F + (animate ? (float) Math.sin(t * 0.5) * size * 0.015F : 0F);
+                dz = -size * 0.06F;
+                break;
+            case SHELL: // the mint central plate breathes slowly
+                alpha = animate ? (float) (0.45 + 0.35 * Math.sin(t * 0.6)) : 0.6F;
+                break;
             case GLUTTONY: // sesame seeds: part of the bun, no animation
                 alpha = 1.0F;
                 break;
@@ -105,14 +113,19 @@ public final class MoonSkyRenderer {
         textures.bind(details);
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, alpha);
         Matrix4f m = matrixStack.last().pose();
-        BufferBuilder buffer = Tessellator.getInstance().getBuilder();
-        buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        buffer.vertex(m, -size + dx, -100.0F, size + dz).uv(u1, v1).endVertex();
-        buffer.vertex(m, size + dx, -100.0F, size + dz).uv(u0, v1).endVertex();
-        buffer.vertex(m, size + dx, -100.0F, -size + dz).uv(u0, v0).endVertex();
-        buffer.vertex(m, -size + dx, -100.0F, -size + dz).uv(u1, v0).endVertex();
-        buffer.end();
-        WorldVertexBufferUploader.end(buffer);
+        int copies = type == MoonType.AFTERIMAGE ? 2 : 1;
+        for (int k = 1; k <= copies; k++) {
+            if (k > 1) RenderSystem.color4f(1.0F, 1.0F, 1.0F, alpha * 0.45F);
+            float ox = dx * k, oz = dz * k;
+            BufferBuilder buffer = Tessellator.getInstance().getBuilder();
+            buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+            buffer.vertex(m, -size + ox, -100.0F, size + oz).uv(u1, v1).endVertex();
+            buffer.vertex(m, size + ox, -100.0F, size + oz).uv(u0, v1).endVertex();
+            buffer.vertex(m, size + ox, -100.0F, -size + oz).uv(u0, v0).endVertex();
+            buffer.vertex(m, -size + ox, -100.0F, -size + oz).uv(u1, v0).endVertex();
+            buffer.end();
+            WorldVertexBufferUploader.end(buffer);
+        }
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, rain);
         RenderSystem.disableTexture();
     }

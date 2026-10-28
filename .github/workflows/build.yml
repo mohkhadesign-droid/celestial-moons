@@ -19,12 +19,21 @@ jobs:
           distribution: temurin
           java-version: '8'
 
+      - name: Cache Gradle and ForgeGradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-fg-${{ hashFiles('build.gradle', 'gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: gradle-fg-
+
       - name: Compile and package
-        timeout-minutes: 15
+        timeout-minutes: 20
         run: |
           chmod +x gradlew
           set -o pipefail
-          timeout 840 ./gradlew build --no-daemon --stacktrace 2>&1 | tee build.log
+          timeout 1140 ./gradlew build --no-daemon --stacktrace 2>&1 | tee build.log
 
       - name: Dedicated server self test
         id: selftest

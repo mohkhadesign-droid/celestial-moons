@@ -434,7 +434,11 @@ public final class ClientSelfTest {
             p.xRot = 5F;
             p.xRotO = 5F;
             check("revealing: marker drawn in the world (" + RevealClient.lastDrawn + ")", RevealClient.lastDrawn > 0);
+            Minecraft.getInstance().options.hideGui = true; // the chat would cover the marker in the screenshot
+        });
+        then(2, () -> {
             shot("reveal_3_marker");
+            Minecraft.getInstance().options.hideGui = false;
         });
         waitFor(200, () -> RevealClient.markerCount() == 0);
         then(1, () -> check("revealing: markers disappear after markerSeconds", RevealClient.markerCount() == 0));

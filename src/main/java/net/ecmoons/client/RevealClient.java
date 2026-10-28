@@ -217,6 +217,8 @@ public final class RevealClient {
         if (alpha <= 0.02f) return;
 
         RenderSystem.pushMatrix();
+        mc.gameRenderer.lightTexture().turnOffLightLayer(); // markers glow: no night-time lightmap darkening
+        RenderSystem.disableLighting();
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
         RenderSystem.disableCull();
@@ -232,7 +234,7 @@ public final class RevealClient {
             if (dist < 0.5) continue;
             double shown = Math.min(dist, 48.0);
             Vector3d pos = rel.scale(shown / dist);
-            float size = (float) (Math.max(0.9, dist * 0.04) * shown / dist);
+            float size = (float) (Math.max(1.4, dist * 0.055) * shown / dist);
 
             ms.pushPose();
             ms.translate(pos.x, pos.y, pos.z);
@@ -262,6 +264,7 @@ public final class RevealClient {
             ms.popPose();
             lastDrawn++;
         }
+        mc.gameRenderer.lightTexture().turnOnLightLayer();
         RenderSystem.enableFog();
         RenderSystem.enableCull();
         RenderSystem.depthMask(true);

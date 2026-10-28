@@ -68,11 +68,10 @@ public final class ClientSelfTest {
         });
     }
 
+    /** Wait delayTicks, then run r. */
     private static void then(int delayTicks, Runnable r) {
-        STEPS.add(() -> {
-            wait = delayTicks;
-            r.run();
-        });
+        STEPS.add(() -> wait = delayTicks);
+        STEPS.add(r);
     }
 
     private static void waitFor(int timeoutTicks, BooleanSupplier condition) {
@@ -96,8 +95,8 @@ public final class ClientSelfTest {
         ClientPlayerEntity p = player();
         p.xRot = -90F;
         p.xRotO = -90F;
-        p.yRot = 0F;
-        p.yRotO = 0F;
+        p.yRot = -90F; // facing east: the moon's texture is upright as seen at moonrise/moonset
+        p.yRotO = -90F;
     }
 
     private static void lookAhead() {
@@ -185,8 +184,8 @@ public final class ClientSelfTest {
             cmd("tp @a " + px + " " + (y + 2) + " " + pz);
             cmd("effect give @a minecraft:night_vision 600 0 true");
         });
-        then(100, () -> {
-            lookAhead();
+        then(100, ClientSelfTest::lookAhead);
+        then(5, () -> {
             shot("mist_0_clear_night");
             cmd("ecmoons start ecmoons-mist_moon");
         });
@@ -196,8 +195,8 @@ public final class ClientSelfTest {
         then(5, () -> {
             check("mist fully faded in", ClientEvents.mistFactor() >= 1F);
             lookAhead();
-            shot("mist_1_fog_night");
         });
+        then(5, () -> shot("mist_1_fog_night"));
         then(5, () -> cmd("execute in minecraft:the_nether run tp @a 0 100 0"));
         then(200, () -> check("no mist in the Nether (factor " + ClientEvents.mistFactor() + ")", ClientEvents.mistFactor() == 0F));
         then(1, () -> cmd("execute in minecraft:overworld run tp @a " + px + " 120 " + pz));
@@ -212,6 +211,7 @@ public final class ClientSelfTest {
             int y = Minecraft.getInstance().level.getHeight(Heightmap.Type.MOTION_BLOCKING, px, pz);
             cmd("tp @a " + px + " " + y + " " + pz);
             cmd("gamemode survival @a");
+            cmd("effect clear @a");
             cmd("ecmoons start ecmoons-frost_moon");
             Minecraft.getInstance().options.hideGui = false;
         });
@@ -221,6 +221,8 @@ public final class ClientSelfTest {
             check("frost: chilled state received", ClientState.frostState() == FrostStatePacket.CHILLED);
             check("frost: movement modifier synced to client", modifier);
             lookAhead();
+        });
+        then(5, () -> {
             shot("frost_overlay_chilled");
             cmd("ecmoons end");
         });
@@ -239,7 +241,7 @@ public final class ClientSelfTest {
         });
         waitFor(100, () -> player().isOnGround());
         then(10, () -> startJump());
-        then(30, () -> {
+        then(1, () -> {
             vanillaJump = jumpMaxY - jumpStartY;
             EcMoons.LOGGER.info(P + "vanilla jump height " + vanillaJump);
             cmd("ecmoons start ecmoons-drift_moon");
@@ -247,7 +249,7 @@ public final class ClientSelfTest {
         waitFor(200, () -> Moons.is(Minecraft.getInstance().level, MoonType.DRIFT));
         waitFor(100, () -> player().isOnGround());
         then(10, () -> startJump());
-        then(30, () -> {
+        then(1, () -> {
             driftJump = jumpMaxY - jumpStartY;
             check(String.format("drift jump higher than vanilla (%.2f vs %.2f) but below 2 blocks", driftJump, vanillaJump),
                     driftJump > vanillaJump + 0.15 && driftJump < 1.95);
@@ -308,10 +310,7 @@ public final class ClientSelfTest {
         p.jumpFromGround();
         // track the apex over the next ticks
         for (int t = 0; t < 25; t++) {
-            STEPS.addFirst(() -> {
-                jumpMaxY = Math.max(jumpMaxY, player().getY());
-                wait = 0;
-            });
+            STEPS.addFirst(() -> jumpMaxY = Math.max(jumpMaxY, player().getY()));
         }
     }
 }

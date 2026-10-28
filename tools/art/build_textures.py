@@ -72,9 +72,9 @@ def mist_wisps():
 def halo_cell(avg):
     yy,xx=np.mgrid[0:CELL,0:CELL]+0.5
     dx=np.maximum(np.abs(xx-CELL/2)-N/2,0); dy=np.maximum(np.abs(yy-CELL/2)-N/2,0)
-    d=np.maximum(dx,dy)/4.0       # distance in vanilla-scale pixels
-    edge=np.clip((CELL/2-np.maximum(np.abs(xx-CELL/2),np.abs(yy-CELL/2)))/10.0,0,1)
-    inten=24*np.exp(-d/4.5)*(d>0)*edge
+    d=np.sqrt(dx*dx+dy*dy)/4.0    # rounded distance from the moon, in vanilla-scale pixels
+    edge=np.clip((CELL/2-np.maximum(np.abs(xx-CELL/2),np.abs(yy-CELL/2)))/16.0,0,1)
+    inten=18*np.exp(-d/3.5)*(d>0)*edge
     col=avg/np.max(avg)
     return inten[...,None]*col[None,None,:]
 

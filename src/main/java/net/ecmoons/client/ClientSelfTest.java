@@ -142,6 +142,19 @@ public final class ClientSelfTest {
             }
             return;
         }
+        if (mc.player == null && mc.screen instanceof net.minecraft.client.gui.screen.ConfirmScreen) {
+            // Vanilla 1.16 asks to confirm "experimental settings" for worlds with data-pack dimensions
+            // (the War Moon arena). Singleplayer only; dedicated servers never ask. Accept it.
+            for (net.minecraft.client.gui.IGuiEventListener l : mc.screen.children()) {
+                if (l instanceof net.minecraft.client.gui.widget.button.Button) {
+                    EcMoons.LOGGER.info(P + "confirming screen: " + mc.screen.getTitle().getString() + " -> "
+                            + ((net.minecraft.client.gui.widget.button.Button) l).getMessage().getString());
+                    ((net.minecraft.client.gui.widget.button.Button) l).onPress();
+                    break;
+                }
+            }
+            return;
+        }
         if (mc.player == null || mc.level == null || mc.getSingleplayerServer() == null) return;
         if (waitUntil != null) {
             if (waitUntil.getAsBoolean() || --waitUntilTimeout <= 0) waitUntil = null;

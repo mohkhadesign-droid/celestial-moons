@@ -102,6 +102,19 @@ public final class SelfTest {
         step("static checks", 1, SelfTest::staticChecks);
         step("new moon static checks", 1, w -> NewMoonChecks.staticChecks(w, SelfTest::check));
         for (MoonType type : MoonType.MOONS) {
+            if (type == MoonType.WAR && Settings.server().warLocked()) {
+                step("war locked", 2, w -> {
+                    check("War Moon locked: /ecmoons start " + type.defaultKey + " is refused", cmd("ecmoons start " + type.defaultKey) == 0);
+                    check("War Moon locked: /ecmoons war start now is refused", cmd("ecmoons war start now") == 0);
+                    check("War Moon locked: /ecmoons war start solo is refused", cmd("ecmoons war start solo") == 0);
+                });
+                step("war locked verify", 5, w -> {
+                    check("War Moon locked: no War Moon and no tournament", Moons.reported(w) != MoonType.WAR
+                            && net.ecmoons.feature.war.WarFeatures.phase(server) == net.ecmoons.feature.war.WarState.Phase.IDLE);
+                    check("War Moon locked: /ecmoons war status and records still work", cmd("ecmoons war status") == 1 && cmd("ecmoons war records") == 0);
+                });
+                continue;
+            }
             step("start " + type.id(), 2, w -> check("/ecmoons start " + type.defaultKey, cmd("ecmoons start " + type.defaultKey) == 1));
             step("verify " + type.id(), 5, w -> {
                 check(type.id() + " reported by Enhanced Celestials", Moons.reported(w) == type);
@@ -129,7 +142,7 @@ public final class SelfTest {
             check("/ecmoons war arena clear", cmd("ecmoons war arena clear") == 1);
             check("/ecmoons reveal status", cmd("ecmoons reveal status") == 1);
             check("/ecmoons reveal scan (no players)", cmd("ecmoons reveal scan") == 0);
-            check("/ecmoons war start now with nobody online is cancelled safely", cmd("ecmoons war start now") == 1);
+            check("/ecmoons war start now is refused while the War Moon is locked", cmd("ecmoons war start now") == 0);
         });
         step("war cancelled", 5, w -> check("war tournament cancelled for lack of players (" + net.ecmoons.feature.war.WarFeatures.describe(server) + ")",
                 net.ecmoons.feature.war.WarFeatures.phase(server) == net.ecmoons.feature.war.WarState.Phase.IDLE));
@@ -176,6 +189,11 @@ public final class SelfTest {
         check("Enhanced Celestials lunar context exists in the overworld", ctx != null);
         if (ctx == null) return;
         for (MoonType t : MoonType.MOONS) {
+            if (t == MoonType.WAR && Settings.server().warLocked()) {
+                check("War Moon locked (default): its event is removed from the lunar context and forecast", !ctx.getLunarEvents().containsKey(t.defaultKey)
+                        && ctx.getLunarForecast().getForecast().stream().noneMatch(e -> e.getLunarEventKey().equals(t.defaultKey)));
+                continue;
+            }
             check("event " + t.defaultKey + " loaded", ctx.getLunarEvents().containsKey(t.defaultKey));
         }
         for (String sup : new String[]{"enhancedcelestials-super_blood_moon", "enhancedcelestials-super_blue_moon", "enhancedcelestials-super_harvest_moon"}) {

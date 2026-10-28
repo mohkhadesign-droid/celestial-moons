@@ -137,6 +137,9 @@ public final class ClientSelfTest {
                 GameRules rules = new GameRules();
                 WorldSettings settings = new WorldSettings("ecmoons-clienttest", GameType.CREATIVE, false, Difficulty.EASY,
                         true, rules, DatapackCodec.DEFAULT);
+                // the War Moon ships locked; the client test unlocks it to exercise the full tournament
+                ((net.minecraftforge.common.ForgeConfigSpec.BooleanValue) net.ecmoons.config.MoonConfig.VALUES.get("war.locked")).set(false);
+                net.ecmoons.config.Settings.reloadServer();
                 mc.createLevel("ecmoons-clienttest", settings, registries, DimensionGeneratorSettings.demoSettings(registries));
                 plan();
             }

@@ -145,6 +145,7 @@ public final class DefaultEvents {
                 } else {
                     remove = !s.b(type.id() + ".enabled");
                 }
+                if (type == MoonType.WAR && s.warLocked()) remove = true;
             }
             if (remove) {
                 removed.add(e.getKey());

@@ -336,8 +336,6 @@ Enhanced Celestials' own `/ec setLunarEvent <key>` and `/ec lunarForecast [recom
 - Never bonded: spectators, dead players, players without a team, War Moon participants. Pets and other mobs are not players and never take part. Excluded damage types (starvation, drowning, the void, suffocation, fall, fire/lava, magic, wither by default) are never reduced.
 - Team members (and only they) receive the links and see rose-coloured thread particles between bonded teammates. A small "Thread bond -10%" indicator appears next to the hotbar.
 
-**War Moon — currently LOCKED OFF.** `war.locked = true` (the default) removes the War Moon from the forecast, refuses `/ecmoons start ecmoons-war_moon` and every `/ecmoons war start` variant, and stops any tournament from starting. Recovery still works: `/ecmoons war records`, `/ecmoons war recover <player>`, and gear restore at login. To allow it again, set `locked = false` under `[war]` in `config/ecmoons-common.toml` and restart the server.
-
 **War Moon.** A last-player-standing tournament in the separate `ecmoons:war_arena` dimension. The main world's PvP, raid windows and claims are never changed.
 - **Warning:** when the War Moon rises (once per War Moon night) everyone sees "WAR MOON APPROACHES — Arena battle begins in 2:00. Your equipment will be stored safely. Everyone fights with the same loadout.", with reminders at 1:00, 0:30 and 0:10. If the moon sets during the warning, it is cancelled.
 - **Flan Warfare:** if a flag capture is running when the warning ends, the battle is postponed by 2 minutes (up to 5 times, then cancelled for the night). Raids are never interrupted.

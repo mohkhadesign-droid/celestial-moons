@@ -77,6 +77,13 @@ public final class AtmoParticles {
         return count;
     }
 
+    /** Particles inside a box (tests: nothing spawns inside a closed room). */
+    public static int countInside(double x0, double y0, double z0, double x1, double y1, double z1) {
+        int n = 0;
+        for (int i = 0; i < count; i++) if (x[i] >= x0 && x[i] <= x1 && y[i] >= y0 && y[i] <= y1 && z[i] >= z0 && z[i] <= z1) n++;
+        return n;
+    }
+
     public static void clear() {
         count = 0;
         for (int i = 0; i < glintExpire.length; i++) glintExpire[i] = 0;
@@ -463,6 +470,13 @@ public final class AtmoParticles {
             if (hit.getType() == RayTraceResult.Type.BLOCK && hit.getBlockPos().equals(ore)) return d;
         }
         return null;
+    }
+
+    /** Ore blocks currently remembered for glints (tests): only exposed, visible faces ever get here. */
+    public static java.util.List<BlockPos> glintBlocks() {
+        java.util.List<BlockPos> out = new java.util.ArrayList<>();
+        for (int j = 0; j < glintPos.length; j++) if (glintExpire[j] > Atmosphere.ticks()) out.add(BlockPos.of(glintPos[j]));
+        return out;
     }
 
     private static void remember(BlockPos bp, Direction face, long now) {

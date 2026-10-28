@@ -37,6 +37,7 @@ public final class AtmoSky {
     private static final int CONST = 6, CONST_STARS = 6;
     private static final float[][] constX = new float[CONST][CONST_STARS], constY = new float[CONST][CONST_STARS], constZ = new float[CONST][CONST_STARS];
     public static int lastLayers; // diagnostics: layers drawn in the last frame
+    public static int lastConstellations; // constellations with visible lines in the last frame
 
     static {
         Random r = new Random(1984);
@@ -329,6 +330,7 @@ public final class AtmoSky {
             }
             buf.end();
             WorldVertexBufferUploader.end(buf);
+            lastConstellations = 0;
             if (wis > 0.01f && anim && AtmoProfile.of(MoonType.WISDOM).flag("constellations")) constellations(m, t, wis * star * 2f, cw);
             lastLayers++;
         }
@@ -417,6 +419,7 @@ public final class AtmoSky {
             else if (ph < in + hold + out) { vis = 1f - (ph - in - hold) / out; drawn = 1f; }
             else continue;
             float a = 0.45f * vis * strength;
+            lastConstellations++;
             int segs = CONST_STARS - 1;
             float upto = drawn * segs;
             for (int s = 0; s < segs && s < upto; s++) {

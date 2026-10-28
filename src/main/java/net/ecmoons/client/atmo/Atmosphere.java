@@ -284,6 +284,19 @@ public final class Atmosphere {
     }
 
     /** Light-map pixel (x = block light, y = sky light, ABGR). Only the sky-light part is graded. */
+    /** Light-map updates seen by the grading hook (proves the injection is applied; tests/diagnostics). */
+    public static volatile long gradeCalls;
+
+    /** Called by the light-map hook once per light-map update (also counts calls, proving the hook is applied). */
+    public static boolean gradingNeeded() {
+        gradeCalls++;
+        return gradeAmount > 0f || gradeBright != 1f || gradeDesat > 0f || pulse > 0f;
+    }
+
+    public static float gradeAmount() {
+        return gradeAmount;
+    }
+
     public static int gradeLightmap(int blockLevel, int skyLevel, int abgr) {
         if (gradeAmount <= 0f && gradeBright == 1f && gradeDesat <= 0f && pulse <= 0f) return abgr;
         float sky = skyLevel / 15f;

@@ -28,7 +28,7 @@ import net.minecraft.util.math.vector.Matrix4f;
 public final class MoonSkyRenderer {
     private MoonSkyRenderer() {}
 
-    private static MoonType visibleMoon(ClientWorld level) {
+    static MoonType visibleMoon(ClientWorld level) {
         if (level == null || !ClientConfig.USE_ADDON_MOON_TEXTURES.get()) return MoonType.NONE;
         LunarContext ctx = Moons.context(level);
         if (ctx == null) return MoonType.NONE;
@@ -39,7 +39,7 @@ public final class MoonSkyRenderer {
     public static void bindMoon(TextureManager textures, ClientWorld level, float partialTicks) {
         MoonType type = visibleMoon(level);
         if (type == MoonType.NONE) return;
-        textures.bind(type.moonTexture());
+        textures.bind(type == MoonType.REVEALING ? RevealClient.eyeTexture(partialTicks) : type.moonTexture());
         // Enhanced Celestials tints the moon with the event colour; our designs carry their own colours.
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F - level.getRainLevel(partialTicks));
     }
@@ -50,6 +50,7 @@ public final class MoonSkyRenderer {
         MoonType type = visibleMoon(level);
         ResourceLocation details = type.detailTexture();
         if (details == null) return;
+        if (type == MoonType.REVEALING && RevealClient.frame(partialTicks) != 0) return; // veins only on the open eye
         LunarEvent event = Moons.currentEvent(level);
         float size = event != null && event.getClient() != null ? event.getClient().getMoonSize() : 20.0F;
         float rain = 1.0F - level.getRainLevel(partialTicks);
@@ -67,7 +68,12 @@ public final class MoonSkyRenderer {
                 alpha = 1.0F;
                 if (animate) dz = (float) (Math.sin(t * 0.9) * size * 0.035);
                 break;
+            case GLUTTONY: // sesame seeds: part of the bun, no animation
+                alpha = 1.0F;
+                break;
             case BLOOD:
+            case WAR:
+            case REVEALING:
                 alpha = animate ? (float) (0.55 + 0.45 * Math.sin(t * 1.3)) : 0.6F;
                 break;
             case ARCANE:

@@ -61,6 +61,9 @@ public class EcMoons {
         forge.register(QuietFeatures.class);
         forge.register(DriftFeatures.class);
         forge.register(MoonLifecycle.class);
+        forge.register(net.ecmoons.feature.ThreadFeatures.class);
+        forge.register(net.ecmoons.feature.war.WarFeatures.class);
+        forge.addListener(net.ecmoons.feature.war.WarFeatures::onServerStarted);
         forge.addGenericListener(Chunk.class, PlacedBlocks::attach);
         forge.addListener(this::registerCommands);
         forge.addListener(MoonLifecycle::onServerStopped);
@@ -99,5 +102,6 @@ public class EcMoons {
 
     private void registerCommands(RegisterCommandsEvent event) {
         MoonCommands.register(event.getDispatcher());
+        net.ecmoons.command.NewMoonCommands.register(event.getDispatcher());
     }
 }

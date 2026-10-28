@@ -15,6 +15,7 @@
     "MobEntityMixin",
     "PlayerEntityMixin",
     "RepairContainerMixin",
+    "ServerPlayerEntityMixin",
     "ServerWorldMixin"
   ],
   "client": [

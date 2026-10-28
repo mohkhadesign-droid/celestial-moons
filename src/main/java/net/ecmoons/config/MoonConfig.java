@@ -161,6 +161,80 @@ public final class MoonConfig {
         dbl("jumpExhaustionMultiplier", 0.5, 0.0, 1.0, "Hunger exhaustion from jumping multiplier.");
         pop();
 
+
+        moon("revealing", "Revealing Moon - the eye searches and reveals where players were standing.", false);
+        intv("scanIntervalSeconds", 60, 10, 3600, "Seconds between scans (one \"The eye is searching\" warning per interval, the scan follows after countdownSeconds).");
+        intv("countdownSeconds", 5, 1, 60, "Warning countdown before each scan.");
+        intv("markerSeconds", 8, 1, 120, "How long the eye markers stay visible at the recorded positions.");
+        intv("revealRadius", 256, 16, 2048, "Viewers only receive markers within this horizontal distance (blocks).");
+        bool("includeCreative", false, "Reveal players in creative mode too (spectators are never revealed).");
+        list("protectedAreas", ImmutableList.of(),
+                "Areas where players are never revealed: dimension|x1,z1|x2,z2 (e.g. minecraft:overworld|-100,-100|100,100).",
+                "Claims are NOT automatically protected. Players with the scoreboard tag ecmoons_reveal_exempt are also skipped.");
+        intv("blinkCloseTicks", 6, 2, 40, "Ticks for the eyelids to close (and again to open) during a blink.");
+        intv("blinkHoldTicks", 4, 0, 40, "Ticks the eye stays shut in an idle blink.");
+        intv("idleBlinkMinSeconds", 6, 1, 600, "Shortest gap between idle blinks.");
+        intv("idleBlinkMaxSeconds", 14, 1, 600, "Longest gap between idle blinks.");
+        pop();
+
+        moon("thread", "Thread Moon - teammates bound together share protection. Teams are /moonteams (admin-assigned).", false);
+        dbl("bondRange", 12.0, 2.0, 64.0, "Teammates within this distance (and with a clear line of sight) bond.");
+        dbl("reductionPerTeammate", 0.05, 0.0, 0.5, "Damage reduction per bonded teammate (0.05 = 5%).");
+        dbl("maxReduction", 0.15, 0.0, 0.9, "Cap on the total reduction.");
+        intv("fadeSeconds", 3, 0, 60, "After teammates separate, the bonus fades to zero over this many seconds.");
+        bool("requireLineOfSight", true, "Bonding needs a clear line between the players' eyes (no walls or floors between them).");
+        list("excludedDamageTypes", ImmutableList.of("starve", "drown", "outOfWorld", "inWall", "cramming", "fall", "lava", "inFire", "onFire", "hotFloor", "magic", "wither"),
+                "Damage source ids (DamageSource msgId) that are never reduced.");
+        pop();
+
+        moon("war", "War Moon - a temporary last-player-standing tournament in a separate arena dimension.", false);
+        intv("warningSeconds", 120, 10, 1800, "Warning before the tournament (reminders at 60, 30 and 10 seconds).");
+        intv("minParticipants", 2, 1, 64, "Fewer eligible players than this cancels the tournament for this night.");
+        intv("maxParticipants", 16, 2, 16, "At most this many players are enrolled (one per starting cell).");
+        intv("prepSeconds", 10, 3, 120, "Countdown inside the cells before the gates open.");
+        intv("matchSeconds", 360, 30, 3600, "Time limit before sudden death starts.");
+        intv("suddenDeathShrinkSeconds", 8, 1, 120, "Sudden death: the safe square shrinks by 2 blocks every this many seconds.");
+        intv("celebrationSeconds", 10, 0, 120, "Time between the winner announcement and everyone's return.");
+        intv("deferMinutes", 2, 1, 60, "If a Flan Warfare flag capture is in progress, the tournament is postponed by this long.");
+        intv("maxDeferrals", 5, 0, 50, "After this many postponements the tournament is cancelled for this night.");
+        list("excludedPlayers", ImmutableList.of(), "Player names or UUIDs never enrolled. The tag ecmoons_war_exempt does the same.");
+        list("kit", ImmutableList.of("head=minecraft:iron_helmet", "chest=minecraft:iron_chestplate", "legs=minecraft:iron_leggings",
+                        "feet=minecraft:iron_boots", "offhand=minecraft:shield", "minecraft:iron_sword", "minecraft:bow",
+                        "minecraft:arrow*16", "minecraft:cooked_beef*16"),
+                "Equal kit: slot=item or item*count (slots: head, chest, legs, feet, offhand; others go to the inventory).");
+        list("accessoryCapabilities", ImmutableList.of("curios:inventory"),
+                "Player capabilities that hold equipment (accessory mods). Their items are saved, emptied for the match and restored.",
+                "If such a capability cannot be saved, that player is not enrolled and told why.");
+        intv("arenaFloorSize", 48, 24, 96, "Fighting floor size (blocks, square).");
+        intv("arenaWallHeight", 12, 6, 32, "Outer wall height.");
+        str("arenaTemplate", "", "Optional structure template (namespace:path, e.g. from a structure block) to place instead of the",
+                "built-in arena. When set, arenaCells must list 'x,y,z' start positions relative to the template origin,",
+                "and arenaSpectatorPos the viewing position.");
+        list("arenaCells", ImmutableList.of(), "Start positions for a custom arenaTemplate (relative x,y,z).");
+        str("arenaSpectatorPos", "", "Viewing position for a custom arenaTemplate (relative x,y,z).");
+        intv("championMinutes", 30, 1, 1440, "War Champion reward duration (minutes of online time). Winning again refreshes it.");
+        pop();
+
+        moon("gluttony", "Gluttony Moon - every different food eaten adds a temporary heart.", false);
+        intv("maxBonusHearts", 4, 1, 20, "Maximum extra hearts.");
+        list("foodCategories", ImmutableList.of(
+                        "beef=minecraft:beef,minecraft:cooked_beef", "pork=minecraft:porkchop,minecraft:cooked_porkchop",
+                        "chicken=minecraft:chicken,minecraft:cooked_chicken", "mutton=minecraft:mutton,minecraft:cooked_mutton",
+                        "rabbit=minecraft:rabbit,minecraft:cooked_rabbit,minecraft:rabbit_stew",
+                        "fish=minecraft:cod,minecraft:cooked_cod,minecraft:salmon,minecraft:cooked_salmon,minecraft:tropical_fish",
+                        "potato=minecraft:potato,minecraft:baked_potato", "carrot=minecraft:carrot,minecraft:golden_carrot",
+                        "apple=minecraft:apple", "golden_apple=minecraft:golden_apple,minecraft:enchanted_golden_apple",
+                        "stew=minecraft:mushroom_stew,minecraft:suspicious_stew,minecraft:beetroot_soup",
+                        "beetroot=minecraft:beetroot", "bread=minecraft:bread", "cookie=minecraft:cookie", "pie=minecraft:pumpkin_pie",
+                        "berries=minecraft:sweet_berries", "melon=minecraft:melon_slice", "kelp=minecraft:dried_kelp",
+                        "honey=minecraft:honey_bottle", "chorus=minecraft:chorus_fruit"),
+                "Food categories: name=item,item,#tag. Items in one category count once together. Foods not listed count",
+                "as their own category (so modded foods work without configuration).");
+        list("excludedFoods", ImmutableList.of("minecraft:rotten_flesh", "minecraft:spider_eye", "minecraft:poisonous_potato",
+                        "minecraft:pufferfish"),
+                "Foods that never count (ids or #tags).");
+        pop();
+
         SPEC = B.build();
         B = null;
     }

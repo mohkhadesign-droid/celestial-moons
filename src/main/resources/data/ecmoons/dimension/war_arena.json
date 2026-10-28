@@ -1,0 +1,13 @@
+{
+  "type": "ecmoons:war_arena",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "minecraft:the_void",
+      "lakes": false,
+      "features": false,
+      "layers": [],
+      "structures": { "structures": {} }
+    }
+  }
+}

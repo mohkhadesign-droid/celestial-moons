@@ -47,6 +47,12 @@ public final class Matchers {
                 rl -> ItemTags.getAllTags().getTag(rl))).contains(item);
     }
 
+    /** Like {@link #item} for an arbitrary entry list (e.g. one food category), cached under cacheKey. */
+    public static boolean itemIn(Settings s, String cacheKey, List<String> entries, Item item) {
+        return resolve(s, "items:" + cacheKey, () -> build(entries, ForgeRegistries.ITEMS,
+                rl -> ItemTags.getAllTags().getTag(rl))).contains(item);
+    }
+
     public static boolean entity(Settings s, String entry, EntityType<?> type) {
         if (entry.equals("*")) return true;
         return resolve(s, "entity:" + entry, () -> build(Collections.singletonList(entry), ForgeRegistries.ENTITIES,

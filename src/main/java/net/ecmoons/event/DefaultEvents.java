@@ -36,7 +36,7 @@ import java.util.Set;
  */
 public final class DefaultEvents {
     public static final MoonType[] NEW_MOONS = {MoonType.MIST, MoonType.FROST, MoonType.ARCANE, MoonType.PROSPECTOR,
-            MoonType.WISDOM, MoonType.QUIET, MoonType.DRIFT};
+            MoonType.WISDOM, MoonType.QUIET, MoonType.DRIFT, MoonType.REVEALING, MoonType.THREAD, MoonType.WAR, MoonType.GLUTTONY};
 
     private DefaultEvents() {}
 
@@ -67,6 +67,10 @@ public final class DefaultEvents {
             case WISDOM: sky = "7070f0"; blend = 0.40; chance = 0.035; colour = TextFormatting.BLUE; break;
             case QUIET: sky = "d8f2e2"; blend = 0.25; chance = 0.04; colour = TextFormatting.GREEN; break;
             case DRIFT: sky = "c8c0f5"; blend = 0.35; chance = 0.03; colour = TextFormatting.DARK_AQUA; break;
+            case REVEALING: sky = "f0b060"; blend = 0.25; chance = 0.03; colour = TextFormatting.GOLD; break;
+            case THREAD: sky = "f2b8c8"; blend = 0.30; chance = 0.03; colour = TextFormatting.LIGHT_PURPLE; break;
+            case WAR: sky = "b4282d"; blend = 0.45; chance = 0.02; colour = TextFormatting.DARK_RED; break;
+            case GLUTTONY: sky = "f0a040"; blend = 0.30; chance = 0.035; colour = TextFormatting.YELLOW; break;
             default: throw new IllegalArgumentException(type.name());
         }
         String key = type.id() + "_moon";
@@ -82,6 +86,7 @@ public final class DefaultEvents {
     /** Existing worlds already have an events folder, so Enhanced Celestials would never add the new moons. */
     public static void writeMissingFiles(Path eventsDir) {
         if (eventsDir == null || !Files.isDirectory(eventsDir)) return; // EC writes all defaults into a new folder
+        migrateFeastMoon(eventsDir);
         for (MoonType type : NEW_MOONS) {
             String fileKey = id(type).toString().replace(":", "-");
             Path json = eventsDir.resolve(fileKey + ".json");
@@ -99,6 +104,29 @@ public final class DefaultEvents {
             } catch (IOException e) {
                 EcMoons.LOGGER.error("Could not write {}: {}", json, e.toString());
             }
+        }
+    }
+
+    /**
+     * "Feast Moon" was the working name of Gluttony Moon. If a world has an ecmoons-feast_moon file (from a
+     * pre-release build or a hand-made copy), it becomes the Gluttony Moon file so there are never two scheduled
+     * food moons. Its chance/phases/text are kept; only the event type is changed to gluttony.
+     */
+    private static void migrateFeastMoon(Path eventsDir) {
+        Path feast = eventsDir.resolve("ecmoons-feast_moon.json");
+        Path gluttony = eventsDir.resolve("ecmoons-gluttony_moon.json");
+        if (!Files.exists(feast)) return;
+        try {
+            if (!Files.exists(gluttony)) {
+                String json = new String(Files.readAllBytes(feast), StandardCharsets.UTF_8)
+                        .replace("ecmoons:feast_moon", "ecmoons:gluttony_moon");
+                Files.write(gluttony, json.getBytes(StandardCharsets.UTF_8));
+            }
+            Files.move(feast, eventsDir.resolve("ecmoons-feast_moon.json.migrated"),
+                    java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            EcMoons.LOGGER.info("Migrated Feast Moon event file to Gluttony Moon in {}", eventsDir);
+        } catch (IOException e) {
+            EcMoons.LOGGER.error("Could not migrate {}: {}", feast, e.toString());
         }
     }
 

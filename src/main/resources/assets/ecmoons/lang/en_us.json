@@ -19,5 +19,17 @@
   "ecmoons.notification.quiet_moon.set": "The \"Quiet Moon\" sets... The night stirs again.",
   "ecmoons.name.drift_moon": "Drift Moon",
   "ecmoons.notification.drift_moon.rise": "The \"Drift Moon\" rises... You feel lighter on your feet.",
-  "ecmoons.notification.drift_moon.set": "The \"Drift Moon\" sets... Your weight returns. Mind the drop."
+  "ecmoons.notification.drift_moon.set": "The \"Drift Moon\" sets... Your weight returns. Mind the drop.",
+  "ecmoons.name.revealing_moon": "Revealing Moon",
+  "ecmoons.notification.revealing_moon.rise": "The \"Revealing Moon\" rises... An eye opens in the sky. Nowhere is hidden for long.",
+  "ecmoons.notification.revealing_moon.set": "The \"Revealing Moon\" sets... The eye closes.",
+  "ecmoons.name.thread_moon": "Thread Moon",
+  "ecmoons.notification.thread_moon.rise": "The \"Thread Moon\" rises... Those who stand together are bound together.",
+  "ecmoons.notification.thread_moon.set": "The \"Thread Moon\" sets... The threads loosen.",
+  "ecmoons.name.war_moon": "War Moon",
+  "ecmoons.notification.war_moon.rise": "The \"War Moon\" rises... The arena calls for champions.",
+  "ecmoons.notification.war_moon.set": "The \"War Moon\" sets...",
+  "ecmoons.name.gluttony_moon": "Gluttony Moon",
+  "ecmoons.notification.gluttony_moon.rise": "The \"Gluttony Moon\" rises... Every new taste makes you stronger.",
+  "ecmoons.notification.gluttony_moon.set": "The \"Gluttony Moon\" sets... The feast is over."
 }

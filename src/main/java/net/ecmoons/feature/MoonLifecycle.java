@@ -15,7 +15,10 @@ import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.ecmoons.feature.war.WarFeatures;
 import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 
 import java.util.HashMap;
@@ -36,13 +39,17 @@ public final class MoonLifecycle {
         MoonType now = Moons.active(world);
         MoonType before = LAST.put(world.dimension(), now);
         if (before != null && before != now) onTransition(world, before, now);
+        RevealingFeatures.tick(world, now);
+        if (world.getServer().getTickCount() % 10 == 0) ThreadFeatures.tick(world, now);
     }
 
     private static void onTransition(ServerWorld world, MoonType from, MoonType to) {
         EcMoons.LOGGER.info("[{}] add-on moon effects: {} -> {}", world.dimension().location(), from, to);
+        if (to == MoonType.WAR) WarFeatures.onWarMoonRise(world);
         for (ServerPlayerEntity player : world.players()) {
             if (from == MoonType.FROST) FrostFeatures.clear(player);
             MistFeatures.updateNametag(player, to == MoonType.MIST);
+            if (from == MoonType.GLUTTONY || to == MoonType.GLUTTONY) GluttonyFeatures.tick(player);
             // Drift: players still in the air keep their fall-damage grace until they land (DriftFeatures).
         }
     }
@@ -55,7 +62,10 @@ public final class MoonLifecycle {
         QuietFeatures.tick(player, active);
         DriftFeatures.tick(player, active);
         if (player.tickCount % FrostFeatures.CHECK_INTERVAL == 0) FrostFeatures.tick(player, active);
-        if (player.tickCount % 20 == 0) MistFeatures.updateNametag(player, active == MoonType.MIST);
+        if (player.tickCount % 20 == 0) {
+            MistFeatures.updateNametag(player, active == MoonType.MIST);
+            GluttonyFeatures.tick(player);
+        }
     }
 
     @SubscribeEvent
@@ -63,6 +73,13 @@ public final class MoonLifecycle {
         if (!(event.getEntityLiving() instanceof ServerPlayerEntity) || !event.getItem().isEdible()) return;
         ServerPlayerEntity player = (ServerPlayerEntity) event.getEntityLiving();
         if (Moons.is(player.level, MoonType.FROST)) FrostFeatures.onAte(player);
+        if (Moons.is(player.level, MoonType.GLUTTONY)) GluttonyFeatures.onAte(player, event.getItem());
+    }
+
+    /** Gluttony progress ends with the player's life (cancelled deaths, e.g. War Moon knockouts, never get here). */
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onDeath(LivingDeathEvent event) {
+        if (event.getEntityLiving() instanceof ServerPlayerEntity) GluttonyFeatures.onDeath((ServerPlayerEntity) event.getEntityLiving());
     }
 
     @SubscribeEvent
@@ -85,6 +102,7 @@ public final class MoonLifecycle {
         Network.syncSettings(player);
         FrostFeatures.clear(player);
         MistFeatures.updateNametag(player, Moons.is(player.level, MoonType.MIST));
+        GluttonyFeatures.tick(player);
     }
 
     @SubscribeEvent
@@ -93,6 +111,7 @@ public final class MoonLifecycle {
         FrostFeatures.forget(player.getUUID());
         QuietFeatures.forget(player.getUUID());
         DriftFeatures.forget(player.getUUID());
+        ThreadFeatures.forget(player.getUUID());
     }
 
     @SubscribeEvent
@@ -102,6 +121,8 @@ public final class MoonLifecycle {
 
     public static void onServerStopped(FMLServerStoppedEvent event) {
         LAST.clear();
+        RevealingFeatures.clear();
+        ThreadFeatures.clear();
     }
 
     /** Settings changed (config file edited or /ecmoons reload): rebuild caches and push to every client. */

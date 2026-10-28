@@ -1,0 +1,145 @@
+package net.ecmoons.feature;
+
+import net.ecmoons.MoonType;
+import net.ecmoons.Moons;
+import net.ecmoons.config.Settings;
+import net.ecmoons.feature.war.WarFeatures;
+import net.ecmoons.net.Network;
+import net.ecmoons.net.ThreadPacket;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+/**
+ * Thread Moon. Every 10 ticks, per world with the moon up, players of the same /moonteams team within bondRange and
+ * with a clear line of sight between their eyes are bonded. Each bonded teammate gives reductionPerTeammate damage
+ * reduction, capped at maxReduction. When teammates separate, the reduction fades over fadeSeconds.
+ * <p>
+ * The reduction is applied once per damage event (LivingHurtEvent) and is a plain reduction: no damage is moved to
+ * teammates. Damage types in excludedDamageTypes are never reduced. Spectators, dead players, players without a
+ * team, players in other dimensions and War Moon participants never bond. Pets and other mobs are not players and
+ * never take part.
+ */
+public final class ThreadFeatures {
+    private static final Map<UUID, Float> CURRENT = new HashMap<>();
+    private static final Map<UUID, Integer> SENT = new HashMap<>(); // hash of the last packet per player
+
+    private ThreadFeatures() {}
+
+    public static float reduction(ServerPlayerEntity p) {
+        return CURRENT.getOrDefault(p.getUUID(), 0f);
+    }
+
+    private static boolean canBond(ServerPlayerEntity p) {
+        return p.isAlive() && !p.isSpectator() && !WarFeatures.isInvolved(p);
+    }
+
+    static boolean lineOfSight(ServerWorld w, ServerPlayerEntity a, ServerPlayerEntity b) {
+        Vector3d from = a.getEyePosition(1f), to = b.getEyePosition(1f);
+        BlockRayTraceResult hit = w.clip(new RayTraceContext(from, to, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, a));
+        return hit.getType() == RayTraceResult.Type.MISS;
+    }
+
+    /** Every 10 ticks per world. */
+    public static void tick(ServerWorld world, MoonType active) {
+        if (active != MoonType.THREAD && CURRENT.isEmpty() && SENT.isEmpty()) return;
+        MoonTeams teams = MoonTeams.get(world.getServer());
+        Settings s = Settings.server();
+        boolean on = active == MoonType.THREAD;
+        double range = s.d("thread.bondRange");
+        float per = (float) s.d("thread.reductionPerTeammate");
+        float max = (float) s.d("thread.maxReduction");
+        int fade = s.i("thread.fadeSeconds");
+        float step = fade <= 0 ? 1f : max / (fade * 2f); // two updates per second
+        boolean los = s.b("thread.requireLineOfSight");
+
+        // team -> eligible members in this world
+        Map<String, List<ServerPlayerEntity>> byTeam = new HashMap<>();
+        for (ServerPlayerEntity p : world.players()) {
+            String team = teams.teamOf(p.getUUID());
+            if (on && team != null && canBond(p)) byTeam.computeIfAbsent(team, k -> new ArrayList<>()).add(p);
+        }
+        Map<String, List<Integer>> linksByTeam = new HashMap<>();
+        Map<UUID, Integer> counts = new HashMap<>();
+        for (Map.Entry<String, List<ServerPlayerEntity>> e : byTeam.entrySet()) {
+            List<ServerPlayerEntity> list = e.getValue();
+            List<Integer> links = new ArrayList<>();
+            for (int i = 0; i < list.size(); i++) {
+                for (int j = i + 1; j < list.size(); j++) {
+                    ServerPlayerEntity a = list.get(i), b = list.get(j);
+                    if (a.distanceToSqr(b) > range * range) continue;
+                    if (los && !lineOfSight(world, a, b)) continue;
+                    counts.merge(a.getUUID(), 1, Integer::sum);
+                    counts.merge(b.getUUID(), 1, Integer::sum);
+                    links.add(a.getId());
+                    links.add(b.getId());
+                }
+            }
+            linksByTeam.put(e.getKey(), links);
+        }
+        for (ServerPlayerEntity p : world.players()) {
+            float target = Math.min(max, counts.getOrDefault(p.getUUID(), 0) * per);
+            float cur = CURRENT.getOrDefault(p.getUUID(), 0f);
+            float next = target >= cur ? target : Math.max(target, cur - step);
+            if (!on || !canBond(p)) next = 0f;
+            if (next > 0f) CURRENT.put(p.getUUID(), next);
+            else CURRENT.remove(p.getUUID());
+
+            String team = teams.teamOf(p.getUUID());
+            List<Integer> links = team == null || !on ? null : linksByTeam.get(team);
+            int[] arr = links == null ? new int[0] : links.stream().mapToInt(Integer::intValue).toArray();
+            int hash = Float.floatToIntBits(next) * 31 + Arrays.hashCode(arr);
+            Integer last = SENT.get(p.getUUID());
+            if (last == null ? (next > 0f || arr.length > 0) : last != hash) {
+                Network.send(p, new ThreadPacket(next, arr));
+                if (next == 0f && arr.length == 0) SENT.remove(p.getUUID());
+                else SENT.put(p.getUUID(), hash);
+            }
+        }
+    }
+
+    public static boolean excluded(DamageSource source) {
+        return Settings.server().list("thread.excludedDamageTypes").contains(source.getMsgId());
+    }
+
+    /** Applied once per damage event; the reduction is never redistributed. */
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public static void onHurt(LivingHurtEvent event) {
+        if (!(event.getEntityLiving() instanceof ServerPlayerEntity)) return;
+        ServerPlayerEntity p = (ServerPlayerEntity) event.getEntityLiving();
+        float r = reduction(p);
+        if (r <= 0f || !Moons.is(p.level, MoonType.THREAD) || !canBond(p) || excluded(event.getSource())) return;
+        event.setAmount(event.getAmount() * (1f - r));
+    }
+
+    public static void forget(UUID id) {
+        CURRENT.remove(id);
+        SENT.remove(id);
+    }
+
+    public static void clear() {
+        CURRENT.clear();
+        SENT.clear();
+    }
+
+    public static String describe(ServerPlayerEntity p) {
+        MoonTeams teams = MoonTeams.get(p.server);
+        String team = teams.teamOf(p.getUUID());
+        return p.getScoreboardName() + ": team " + (team == null ? "none" : team + " (" + teams.displayName(team) + ")")
+                + ", bond reduction " + Math.round(reduction(p) * 100) + "%" + (Moons.is(p.level, MoonType.THREAD) ? "" : " (Thread Moon not active here)");
+    }
+}

@@ -25,9 +25,14 @@ public enum MoonType {
     PROSPECTOR("ecmoons-prospector_moon"),
     WISDOM("ecmoons-wisdom_moon"),
     QUIET("ecmoons-quiet_moon"),
-    DRIFT("ecmoons-drift_moon");
+    DRIFT("ecmoons-drift_moon"),
+    REVEALING("ecmoons-revealing_moon"),
+    THREAD("ecmoons-thread_moon"),
+    WAR("ecmoons-war_moon"),
+    GLUTTONY("ecmoons-gluttony_moon");
 
-    public static final MoonType[] MOONS = {BLOOD, BLUE, HARVEST, MIST, FROST, ARCANE, PROSPECTOR, WISDOM, QUIET, DRIFT};
+    public static final MoonType[] MOONS = {BLOOD, BLUE, HARVEST, MIST, FROST, ARCANE, PROSPECTOR, WISDOM, QUIET, DRIFT,
+            REVEALING, THREAD, WAR, GLUTTONY};
 
     /** Event key used by Enhanced Celestials for the default config file of this moon (file name without .json). */
     @Nullable public final String defaultKey;
@@ -57,7 +62,7 @@ public enum MoonType {
     /** Animated detail layer; Quiet Moon intentionally has none. */
     @Nullable
     public ResourceLocation detailTexture() {
-        return this == QUIET || this == NONE ? null
+        return this == QUIET || this == THREAD || this == NONE ? null
                 : new ResourceLocation(EcMoons.MOD_ID, "textures/environment/" + id() + "_moon_details.png");
     }
 

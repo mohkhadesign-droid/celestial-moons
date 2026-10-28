@@ -77,6 +77,35 @@ Bugs these suites found and that are fixed: a client-only `BlockPos` method used
 - Frame Step with real latency (players far from the server): the input window is 5 server ticks after a step ends.
 - Two players: Shell blocking each other's arrows both ways, melee inside the shell, the afterimages seen by the other player.
 
+## Wisp Moon (automated)
+
+**Dedicated server** (fake player, real wisp/observer entities, a stone floor and wall):
+- Piloting starts and a wisp appears at the player's eyes; the game mode is unchanged (not spectator).
+- The wisp flies down to the floor over an oak pressure plate without pressing it, then east until a stone wall stops it (it ends at the wall face minus half its width, never inside).
+- Three observers are placed on the wall face at different heights, all facing away from the wall; a fourth is refused at the limit; dismissing one leaves two.
+- Placement is refused where a protection listener (stand-in for Flan / World Protector) cancels block placement, and when no block face is in reach.
+- A real arrow destroys an observer.
+- Flying straight up for 60 blocks stops at exactly 48.00 blocks from the body; a point 2000 blocks away counts as unloaded/out of range.
+- Damage to the body ends piloting, removes the wisp and starts the cooldown.
+- Viewing an observer in range works; moving the body ends it; an observer 60+ blocks away can't be viewed.
+- Logging out removes the player's observers; when the moon ends, piloting stops and no wisp or observer entity is left.
+
+**Real client, real player** (screenshots `wisp_*`):
+- The Moon Ability key opens the Wisp menu; Pilot Wisp closes it and switches the camera to the wisp; the game mode stays survival.
+- The wisp flies with movement input (4.9 blocks in 12 ticks) while the body stays exactly where it was; a wall stops it.
+- The real Use key places an observer on the wall (HUD shows 1/3); looking back, the player's own body is drawn.
+- The Moon Ability key returns the camera to the body and the wisp disappears.
+- The menu then lists observer 1 in range and hides Pilot Wisp during the cooldown; viewing switches the camera to the observer; trying to turn 150° is clamped to 60°.
+- Real damage to the body returns the camera at once.
+- Ending the moon while piloting returns the camera, and no wisp or observer is left on the client.
+
+**Not covered by the automated tests (check on your server):**
+- The Escape key while piloting/viewing (handled by cancelling the pause screen when Escape is held; not pressed in the test).
+- Flan claims and World Protector/YAWP areas with real permissions (only a stand-in listener was tested).
+- Two players: another player seeing the wisp, the body and observers, and destroying an observer; PvP/claim rules on that hit.
+- Death, logout and dimension change while piloting with a real client (the server-side cleanup is tested; the camera is reset when the server says so and by vanilla on respawn/relog).
+- Servers with a small view distance (the reachable area is limited to chunks the body already has loaded).
+
 ## Verified by source review (not executed)
 
 - **Lootr 1.16** passes the opening player's Luck into each per-player loot context (`LootrChestTileEntity`/`LootrBarrelTileEntity`/`LootrShulkerTileEntity`/`LootrChestMinecartEntity.fillWithLoot`: `builder.withLuck(player.getLuck()).withParameter(LootParameters.THIS_ENTITY, player)`), generates a player's inventory only once (`DataStorage.getInventory` → `ChestData.getInventory(player)` → `createInventory` only when absent) and stores it per player UUID. Present since Lootr's first 1.16 version.

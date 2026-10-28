@@ -1,6 +1,6 @@
-# Enhanced Celestials: Sixteen Moons (`ecmoons`)
+# Enhanced Celestials: Seventeen Moons (`ecmoons`)
 
-A Forge **1.16.5** add-on for **Enhanced Celestials 2.0.9**. It turns Enhanced Celestials' three lunar events into a sixteen-moon lineup:
+A Forge **1.16.5** add-on for **Enhanced Celestials 2.0.9**. It turns Enhanced Celestials' three lunar events into a seventeen-moon lineup:
 
 | # | Moon | Theme | Event key |
 |---|------|-------|-----------|
@@ -20,6 +20,7 @@ A Forge **1.16.5** add-on for **Enhanced Celestials 2.0.9**. It turns Enhanced C
 | 14 | Gluttony Moon | variety of food = temporary hearts | `ecmoons-gluttony_moon` |
 | 15 | Afterimage Moon | Frame Step: a timed three-step dash (Moon Ability key) | `ecmoons-afterimage_moon` |
 | 16 | Shell Moon | a temporary projectile barrier (Moon Ability key) | `ecmoons-shell_moon` |
+| 17 | Wisp Moon | pilot a scouting wisp, place soul observers (Moon Ability key) | `ecmoons-wisp_moon` |
 
 Players can read about every moon in the **Lunar Field Guide**, a Patchouli book (§10), if Patchouli is installed.
 
@@ -40,7 +41,7 @@ The original Enhanced Celestials jar is **not modified**. The add-on depends on 
 Steps:
 1. Stop the server and put `ecmoons-…jar` in `mods/`.
 2. Put the same jar in every player's `mods/` folder. Clients need it for the moon textures, fog, Drift movement, the frost overlay and the Arcane tooltip. A client without it is refused at login with a version-mismatch message, so nobody can join without it by accident.
-3. Start the server once. It creates `config/ecmoons-common.toml` and `config/ecmoons/blue_moon_bonus_loot.json`. It also adds the thirteen new event files to every world's Enhanced Celestials folder (see §3).
+3. Start the server once. It creates `config/ecmoons-common.toml` and `config/ecmoons/blue_moon_bonus_loot.json`. It also adds the fourteen new event files to every world's Enhanced Celestials folder (see §3).
 4. Optionally restart after editing the config.
 
 The War Moon arena is a separate dimension, `ecmoons:war_arena`, defined in the add-on's built-in data pack (`data/ecmoons/dimension*/war_arena.json`). Nothing in your normal worlds is touched. Because of this dimension, opening a **singleplayer** world shows Mojang's "Worlds using Experimental Settings are not supported" prompt (click Proceed); dedicated servers and players joining them never see it. The War Moon also checks **Flan Warfare** (if installed) so it never starts during an active flag capture.
@@ -90,7 +91,7 @@ Each file holds `chance`, `minNumberOfNightsBetween`, `validMoonPhases` (0 = ful
 
 Default chances for the new moons are 0.02–0.04, the same range as the originals (Blood 0.07, Harvest 0.035, Blue 0.02). Ordinary nights stay the norm. To make a moon rarer or more common, edit its `chance` and run `/ec lunarForecast recompute`.
 
-Afterimage and Shell were added with the lowest default chance (0.02 each, like War and Blue). Enhanced Celestials' global spacing (`minDaysBetweenLunarEvents`, default 5) still allows at most one special night per 5 days, so new moons mainly share the existing special nights rather than adding many more. If you want the overall rate to stay exactly as before, lower another moon's `chance` by the same amount (for example Mist and Quiet from 0.04 to 0.02) and run `/ec lunarForecast recompute`.
+Afterimage, Shell and Wisp were added with the lowest default chance (0.02 each, like War and Blue). Enhanced Celestials' global spacing (`minDaysBetweenLunarEvents`, default 5) still allows at most one special night per 5 days, so new moons mainly share the existing special nights rather than adding many more. If you want the overall rate to stay exactly as before, lower another moon's `chance` by the same amount (for example Mist and Quiet from 0.04 to 0.02) and run `/ec lunarForecast recompute`.
 
 ### 3.2 What moons do: `config/ecmoons-common.toml`
 
@@ -194,6 +195,15 @@ Main values (defaults shown):
 | | `explosionReduction` | 0.75 | For players inside, applied once even where shells meet. |
 | | `extraProjectileEntities` | (none) | Modded projectile entity ids that don't extend vanilla's projectile class. |
 | | `respectProtection` | true | Only where the caster could place a block (see §5). |
+| Wisp | `pilotSpeed` | 0.35 | Blocks per tick (7 blocks/s). |
+| | `pilotRange` | 48 | The wisp never goes further from the body. |
+| | `maxPilotSeconds` / `pilotCooldownSeconds` | 90 / 10 | |
+| | `maxObservers` | 3 | Per player. |
+| | `placeReach` | 4.5 | From the wisp to the block face it looks at. |
+| | `viewRange` | 48 | Observers further from the body show as out of range. |
+| | `viewYawRange` / `viewPitchRange` | 60 / 45 | How far the view can turn from the observer's direction. |
+| | `bodyMoveTolerance` | 0.5 | Moving the body further than this returns you to it. |
+| | `respectProtection` | true | Observers only where the owner could place a block. |
 | Gluttony | `maxBonusHearts` | 4 | |
 | | `foodCategories` | 20 vanilla groups (beef, pork, fish, …) | `name=item,item,#tag`. Unlisted foods (including modded) count as their own category. |
 | | `excludedFoods` | rotten flesh, spider eye, poisonous potato, pufferfish | |
@@ -265,10 +275,12 @@ All commands act on the dimension the command runs in. Use `/execute in <dim> ru
 | `/moonteams assign <player> <teamId>` | 2 | Put a player in a team (moves them out of any other; offline players by name work if the server knows them). |
 | `/moonteams remove <player>` | 2 | Remove from their team. |
 | `/moonteams list` / `info <teamId>` / `delete <teamId>` | 2 | |
-| `/ecmoons ability status <player>` | 2 | Afterimage step/window/bonus and cooldown, Shell charge/active shell and cooldown. |
-| `/ecmoons ability reset <players>` | 2 | Clear Moon Ability cooldowns and stop any running Frame Step or shell for those players. |
+| `/ecmoons ability status <player>` | 2 | Afterimage step/window/bonus and cooldown, Shell charge/active shell and cooldown, Wisp piloting/viewing, observers and cooldown. |
+| `/ecmoons ability reset <players>` | 2 | Clear Moon Ability cooldowns and stop any running Frame Step, shell, piloting or viewing for those players (observers stay). |
 | `/ecmoons shell list` | 2 | Every active shell: owner, dimension, position, durability, time left. |
 | `/ecmoons shell clear` | 2 | Collapse every active shell (cooldowns start as usual). |
+| `/ecmoons wisp list` | 2 | Who is piloting (wisp position, distance from body), who is viewing, and every soul observer (owner, dimension, position). |
+| `/ecmoons wisp clear` | 2 | Remove every wisp and observer and return everyone to their body. |
 | `/warmoon spectate` | 0 | Any player: toggle watching the next War Moon battle instead of fighting. |
 | `/warmoon status` | 0 | Tournament phase and your remaining War Champion time. |
 
@@ -402,6 +414,16 @@ Enhanced Celestials' own `/ec setLunarEvent <key>` and `/ec lunarForecast [recom
 - **Protection:** before raising a shell, the add-on asks the protection mods whether the player could place a block there, by posting Forge's own block-place event (`respectProtection`). Flan, World Protector/YAWP and other mods that protect against block placement refuse it there. This is a synthetic event: a protection mod that only checks real item use would not see it.
 - **Limits:** projectiles that are not entities (hitscan guns, beams, some modded weapons that damage directly) can't be stopped. Modded projectile entities that don't extend `ProjectileEntity` need their id in `extraProjectileEntities`.
 
+**Wisp Moon — Soul Observers.**
+- The Moon Ability key opens a small menu: **Pilot Wisp** (hidden during the 10 s cooldown, which shows instead), **View observer n** (out-of-range ones are listed but disabled), **Dismiss observers…** (one or all). Number keys view an observer directly.
+- **Piloting** spawns a small visible wisp entity at the player's eyes and switches only that player's camera to it (`Minecraft.setCameraEntity`; the game mode never changes, so it is not spectator mode). Movement keys fly it (jump/sneak = up/down) at 0.35 blocks/tick. The server moves it with normal block collision (walls, closed doors, glass all stop it), clamps it to 48 blocks from the body, and never moves it into a chunk that isn't loaded and entity-ticking or outside the server's view distance from the body, so nothing is ever force-loaded. The pilot's client predicts the same movement for a smooth camera; the server's position wins if they differ by more than 1.5 blocks.
+- The body stays put, visible to everyone (and drawn for the pilot) and fully vulnerable. Its movement keys are diverted to the wisp; attacking, using items, interacting and breaking blocks are cancelled on the client and on the server. Any damage to the body, moving the body more than 0.5 blocks, death, logout, a dimension change, the moon ending, losing the wisp (any hit destroys it), 90 s of piloting, the Moon Ability key or Esc returns the camera to the body.
+- The wisp has no AI and can't attack, pick up, open, activate or trigger anything (it ignores pressure plates and tripwires). It is removed as soon as nobody controls it.
+- **Observers:** while piloting, the **Use** key (with an on-screen hint) places a soul observer on the block face the wisp looks at, within 4.5 blocks, so never through a wall. Refused: no block face in reach, no room, more than 48 blocks from the body, the owner couldn't place a block there (the same Forge place-event check as the Shell), or 3 observers already ("Observer limit reached (3/3): dismiss one first"). Observers face away from the block they're on; anyone can see them, and any hit (melee, arrow, explosion) that the server and protection mods allow destroys them.
+- **Viewing** switches the camera to one observer. The look can turn at most 60° sideways and 45° up/down from its direction. No markers, no coordinates, no x-ray: it's an ordinary camera, so walls, darkness and invisibility work as usual. Damage, moving the body, the observer being destroyed or out of range, the Moon Ability key or Esc end it.
+- Observers and wisps are never saved to disk. Observers disappear when the moon ends or when their owner logs out, dies or changes dimension. `/ecmoons wisp clear` removes everything.
+- **Limits:** the pilot's own HUD hotbar and hearts are hidden while the camera is away (vanilla only draws them for the camera player); the body's head still turns as the pilot looks around. Observers placed in an area a protection mod protects only from *entities* (not block placement) are allowed. Chunks around the wisp must already be loaded by the body's own view distance, so on a server with a small view distance the reachable area can be smaller than 48 blocks.
+
 ---
 
 ## 6. Moon designs
@@ -478,8 +500,8 @@ To build locally: `./gradlew build` produces `build/libs/ecmoons-<version>.jar`.
 ## 9. Tests
 
 Every push runs two automated suites:
-- a **dedicated server** self test: 318 checks (build 44), including Shell Moon projectiles of every vanilla kind in both directions;
-- a **real Minecraft client** test: 216 checks (build 44), including the atmosphere of every moon, Frame Step distances and timing with a real player, the Shell charge, collapse and TNT reduction, and the Lunar Field Guide. It takes screenshots of every moon in the sky, the Revealing eye blinking and a reveal marker, the Thread HUD, Gluttony hearts, a solo War Moon match, the abilities and the book; it measures Mist fog, the Frost overlay, Drift movement and the Arcane tooltip, and runs the ore, XP, rare-drop, Gluttony and War Moon save/strip/restore rules with a real player.
+- a **dedicated server** self test: 353 checks, including Shell Moon projectiles of every vanilla kind in both directions and the Wisp Moon rules (flight, walls, range, observers, protection, cleanup);
+- a **real Minecraft client** test: 236 checks, including the atmosphere of every moon, Frame Step distances and timing with a real player, the Shell charge, collapse and TNT reduction, the Wisp camera (piloting, placing, viewing, returning on damage and when the moon ends) and the Lunar Field Guide. It takes screenshots of every moon in the sky, the Revealing eye blinking and a reveal marker, the Thread HUD, Gluttony hearts, a solo War Moon match, the abilities and the book; it measures Mist fog, the Frost overlay, Drift movement and the Arcane tooltip, and runs the ore, XP, rare-drop, Gluttony and War Moon save/strip/restore rules with a real player.
 
 See [TESTING.md](TESTING.md) for exactly what is verified and what still needs checking with the full modpack. The latest screenshots are on the `ci-client` branch.
 
@@ -487,7 +509,7 @@ See [TESTING.md](TESTING.md) for exactly what is verified and what still needs c
 
 ## 10. Lunar Field Guide (Patchouli)
 
-With **Patchouli** installed (it is part of Crazy Craft Updated), the add-on ships an in-game book, the **Lunar Field Guide**: a picture of every moon as it appears in the sky, what it does, the default numbers and the limits and counterplay, plus chapters on the Moon Ability key, Frame Step and Shell. Patchouli is optional: without it the book and its recipe are simply not loaded.
+With **Patchouli** installed (it is part of Crazy Craft Updated), the add-on ships an in-game book, the **Lunar Field Guide**: a picture of every moon as it appears in the sky, what it does, the default numbers and the limits and counterplay, plus chapters on the Moon Ability key, Frame Step, Shell and Soul Observers. Patchouli is optional: without it the book and its recipe are simply not loaded.
 
 - Craft it: **book + clock** (shapeless).
 - Or give it: `/give @p patchouli:guide_book{"patchouli:book":"ecmoons:field_guide"}`

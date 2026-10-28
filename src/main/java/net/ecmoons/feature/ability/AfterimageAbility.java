@@ -51,7 +51,7 @@ public final class AfterimageAbility {
         int stage;          // steps performed so far (1..3)
         int stepTicksLeft;  // > 0 while moving
         double perTick;
-        Vector3d dir = Vector3d.ZERO;
+        Vector3d dir = Vector3d.ZERO, from = Vector3d.ZERO;
         long windowOpen = -1, windowClose = -1;
     }
 
@@ -60,6 +60,11 @@ public final class AfterimageAbility {
     private static final Map<UUID, Long> PENALTY_UNTIL = new HashMap<>();
     /** victim entity id -> knockback multiplier, valid for the tick of the qualifying hit. */
     private static final Map<Integer, double[]> PENDING_KNOCKBACK = new HashMap<>();
+
+    public static int bonusHits; // diagnostics / tests
+    public static float lastKnockback;
+    /** Horizontal distance actually covered by the last step 1, 2 and 3 (index 1..3). */
+    public static final double[] LAST_STEPS = new double[4];
 
     private AfterimageAbility() {}
 
@@ -135,6 +140,7 @@ public final class AfterimageAbility {
         seq.stepTicksLeft = ticks;
         seq.perTick = s().d("afterimage.step" + stage + "Distance") / ticks;
         seq.windowOpen = seq.windowClose = -1;
+        seq.from = new Vector3d(p.getX(), p.getY(), p.getZ());
         // a purely visual copy where the step started, for the user and everyone nearby
         Network.CHANNEL.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> p), new AbilityFxPacket(AbilityFxPacket.GHOST,
                 p.getId(), p.getX(), p.getY(), p.getZ(), p.yBodyRot, 0f, s().i("afterimage.afterimageTicks"), stage));
@@ -163,6 +169,7 @@ public final class AfterimageAbility {
                 boolean moved = move(p, seq.dir.scale(seq.perTick));
                 seq.stepTicksLeft = moved ? seq.stepTicksLeft - 1 : 0; // stop before an obstruction
                 if (seq.stepTicksLeft == 0) {
+                    LAST_STEPS[seq.stage] = Math.sqrt(Math.pow(p.getX() - seq.from.x, 2) + Math.pow(p.getZ() - seq.from.z, 2));
                     if (seq.stage >= 3) {
                         BONUS_UNTIL.put(p.getUUID(), now + s().i("afterimage.finalWindowTicks"));
                         it.remove();
@@ -287,7 +294,11 @@ public final class AfterimageAbility {
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onKnockback(LivingKnockBackEvent event) {
         double[] m = PENDING_KNOCKBACK.remove(event.getEntityLiving().getId());
-        if (m != null) event.setStrength((float) (event.getStrength() * m[0]));
+        if (m != null) {
+            event.setStrength((float) (event.getStrength() * m[0]));
+            bonusHits++;
+        }
+        lastKnockback = event.getStrength();
     }
 
     public static String describe(ServerPlayerEntity p) {

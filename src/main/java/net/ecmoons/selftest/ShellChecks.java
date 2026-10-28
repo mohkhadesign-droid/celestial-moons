@@ -77,7 +77,7 @@ final class ShellChecks {
         // C: very fast, would cross the whole shell in one tick (24 blocks/tick) towards a husk far behind it
         arrow(w, c.add(12, 0, 1.5), new Vector3d(-24, 0, 0));
         // D: entirely outside, moving away: never touched
-        away = arrow(w, c.add(4, 0, 4.5), new Vector3d(1, 0, 0));
+        away = arrow(w, c.add(4, 0, -4.5), new Vector3d(1, 0, 0)); // clear of every mob's lane
         // pearl from outside, owned by a husk: if it got through, the husk would be teleported in
         EnderPearlEntity pearl = new EnderPearlEntity(EntityType.ENDER_PEARL, w);
         pearl.setOwner(zpearl);
@@ -107,7 +107,7 @@ final class ShellChecks {
     }
 
     static void verify(ServerWorld w, BiConsumer<String, Boolean> check) {
-        AxisAlignedBB area = new AxisAlignedBB(c.add(-16, -6, -8), c.add(16, 8, 8));
+        AxisAlignedBB area = new AxisAlignedBB(c.add(-16, -64, -8), c.add(16, 8, 8)); // dropped items fall to the ground
         int arrowItems = 0, tridentItems = 0, flyingArrows = 0, tridents = 0;
         for (Entity e : w.getEntities((Entity) null, area, e -> true)) {
             if (e instanceof ItemEntity) {

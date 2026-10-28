@@ -355,6 +355,7 @@ public final class ClientSelfTest {
         });
 
         newMoons();
+        abilities();
         atmosphere();
 
         then(20, () -> {
@@ -754,6 +755,241 @@ public final class ClientSelfTest {
         then(5, () -> cmd("ecmoons war champion @p"));
         then(40, () -> onServer(WarPlayerChecks::champion));
         then(5, () -> cmd("gamemode creative @a"));
+    }
+
+    private static double abX;
+    private static float controlDamage;
+    private static int bonusHitsBefore;
+
+    private static void faceEast() {
+        ClientPlayerEntity p = player();
+        p.yRot = -90F;
+        p.yRotO = -90F;
+        p.xRot = 10F;
+        p.xRotO = 10F;
+    }
+
+    private static void tap() {
+        net.ecmoons.client.ability.AbilityClient.testKey(true);
+        STEPS.addFirst(() -> net.ecmoons.client.ability.AbilityClient.testKey(false));
+    }
+
+    /** Moon Ability key with a real player: Afterimage Frame Step and Shell Moon shell. */
+    private static void abilities() {
+        final int ax = px + 80, az = pz, ay = 200;
+        final String tpStart = "tp @a " + (ax + 0.5) + " " + ay + " " + (az + 0.5) + " -90 10";
+        then(5, () -> {
+            cmd("gamerule doMobSpawning false");
+            cmd("gamerule naturalRegeneration false");
+            cmd("kill @e[type=!player]");
+            cmd("effect clear @a");
+            cmd("gamemode survival @a");
+            cmd("fill " + (ax - 20) + " " + (ay - 1) + " " + (az - 15) + " " + (ax + 24) + " " + (ay - 1) + " " + (az + 15) + " obsidian");
+            cmd("fill " + (ax - 20) + " " + ay + " " + (az - 15) + " " + (ax + 24) + " " + (ay + 5) + " " + (az + 15) + " air");
+            cmd(tpStart);
+            cmd("ecmoons start ecmoons-afterimage_moon");
+        });
+        waitFor(200, () -> Moons.is(Minecraft.getInstance().level, MoonType.AFTERIMAGE));
+        waitFor(100, () -> player().isOnGround());
+        // a still target 1.8 blocks past where the three steps (2 + 3 + 4 = 9) should end
+        then(20, () -> {
+            cmd("summon zombie " + (ax + 11.3) + " " + ay + " " + (az + 0.5) + " {NoAI:1b,Silent:1b,IsBaby:0b,PersistenceRequired:1b,Tags:[\"ectest\"]}");
+            Minecraft.getInstance().options.setCameraType(net.minecraft.client.settings.PointOfView.THIRD_PERSON_FRONT);
+            faceEast();
+            onServer(net.ecmoons.selftest.AbilityPlayerChecks::snapshot);
+        });
+        then(3, () -> {
+            abX = net.ecmoons.selftest.AbilityPlayerChecks.x;
+            bonusHitsBefore = net.ecmoons.selftest.AbilityPlayerChecks.bonusHits;
+            faceEast();
+            tap();
+        });
+        waitFor(20, () -> net.ecmoons.client.ability.AbilityClient.afterimagePhase() == 2 && net.ecmoons.client.ability.AbilityClient.afterimageStage() == 1);
+        then(0, () -> {
+            check("afterimage: step 1 done and the input window opened (HUD phase " + net.ecmoons.client.ability.AbilityClient.afterimagePhase() + ")",
+                    net.ecmoons.client.ability.AbilityClient.afterimageStage() == 1);
+            check("afterimage: an afterimage is shown where the step started (" + net.ecmoons.client.ability.AbilityFx.ghostCount() + ")",
+                    net.ecmoons.client.ability.AbilityFx.ghostCount() > 0);
+            tap();
+        });
+        waitFor(20, () -> net.ecmoons.client.ability.AbilityClient.afterimagePhase() == 2 && net.ecmoons.client.ability.AbilityClient.afterimageStage() == 2);
+        then(0, () -> {
+            check("afterimage: step 2 done inside the window", net.ecmoons.client.ability.AbilityClient.afterimageStage() == 2);
+            tap();
+            shot("afterimage_0_steps");
+        });
+        waitFor(20, () -> net.ecmoons.client.ability.AbilityClient.afterimagePhase() == 3);
+        then(0, () -> {
+            check("afterimage: third step done, final attack window on the HUD", net.ecmoons.client.ability.AbilityClient.afterimagePhase() == 3);
+            check("afterimage: afterimages drawn (" + net.ecmoons.client.ability.AbilityFx.lastGhostsDrawn + ")", net.ecmoons.client.ability.AbilityFx.lastGhostsDrawn > 0);
+            shot("afterimage_1_final_window");
+            ClientPlayerEntity p = player();
+            java.util.List<net.minecraft.entity.monster.ZombieEntity> z = Minecraft.getInstance().level.getEntitiesOfClass(
+                    net.minecraft.entity.monster.ZombieEntity.class, p.getBoundingBox().inflate(4));
+            check("afterimage: target zombie in reach after the dash (" + z.size() + ")", !z.isEmpty());
+            if (!z.isEmpty()) {
+                Minecraft.getInstance().gameMode.attack(p, z.get(0));
+                p.swing(net.minecraft.util.Hand.MAIN_HAND);
+            }
+        });
+        then(3, () -> onServer(net.ecmoons.selftest.AbilityPlayerChecks::snapshot));
+        then(2, () -> {
+            double s1 = net.ecmoons.selftest.AbilityPlayerChecks.step1, s2 = net.ecmoons.selftest.AbilityPlayerChecks.step2,
+                    s3 = net.ecmoons.selftest.AbilityPlayerChecks.step3, moved = net.ecmoons.selftest.AbilityPlayerChecks.x - abX;
+            check(String.format("afterimage: step distances %.2f / %.2f / %.2f (expected 2 / 3 / 4)", s1, s2, s3),
+                    Math.abs(s1 - 2) < 0.05 && Math.abs(s2 - 3) < 0.05 && Math.abs(s3 - 4) < 0.05);
+            check(String.format("afterimage: total movement %.2f blocks east (expected 9)", moved), Math.abs(moved - 9) < 0.3);
+            check("afterimage: the first melee hit got the knockback bonus (" + net.ecmoons.selftest.AbilityPlayerChecks.knockback + ", hits "
+                    + (net.ecmoons.selftest.AbilityPlayerChecks.bonusHits - bonusHitsBefore) + ")",
+                    net.ecmoons.selftest.AbilityPlayerChecks.bonusHits - bonusHitsBefore == 1 && Math.abs(net.ecmoons.selftest.AbilityPlayerChecks.knockback - 0.64F) < 0.02F);
+            check("afterimage: bonus consumed by that hit", !net.ecmoons.selftest.AbilityPlayerChecks.bonus);
+            check("afterimage: cooldown started (" + net.ecmoons.selftest.AbilityPlayerChecks.cooldown + " ticks)",
+                    net.ecmoons.selftest.AbilityPlayerChecks.cooldown > 100);
+        });
+        // second hit after the attack cooldown: ordinary knockback
+        then(20, () -> {
+            ClientPlayerEntity p = player();
+            java.util.List<net.minecraft.entity.monster.ZombieEntity> z = Minecraft.getInstance().level.getEntitiesOfClass(
+                    net.minecraft.entity.monster.ZombieEntity.class, p.getBoundingBox().inflate(5));
+            if (!z.isEmpty()) {
+                Minecraft.getInstance().gameMode.attack(p, z.get(0));
+                p.swing(net.minecraft.util.Hand.MAIN_HAND);
+            }
+        });
+        then(3, () -> onServer(net.ecmoons.selftest.AbilityPlayerChecks::snapshot));
+        then(2, () -> check("afterimage: the next hit has normal knockback (" + net.ecmoons.selftest.AbilityPlayerChecks.knockback + ")",
+                net.ecmoons.selftest.AbilityPlayerChecks.bonusHits - bonusHitsBefore == 1 && Math.abs(net.ecmoons.selftest.AbilityPlayerChecks.knockback - 0.4F) < 0.02F));
+        // cooldown: pressing again does nothing
+        then(1, () -> {
+            abX = player().getX();
+            faceEast();
+            tap();
+        });
+        then(15, () -> check(String.format("afterimage: on cooldown the key does not move you (%.2f)", player().getX() - abX),
+                Math.abs(player().getX() - abX) < 0.05));
+        // pressing too early (while the first step is still moving) breaks the sequence with a short slowdown
+        then(1, () -> {
+            cmd("kill @e[tag=ectest]");
+            cmd("ecmoons ability reset @p");
+            cmd(tpStart);
+        });
+        waitFor(60, () -> player().isOnGround());
+        // a second press one tick later (sent directly; the key itself only reports edges): the 3-tick step is still moving
+        then(10, () -> {
+            faceEast();
+            net.ecmoons.client.ability.AbilityClient.testKey(true);
+            STEPS.addFirst(() -> {
+                net.ecmoons.client.ability.AbilityClient.testKey(false);
+                net.ecmoons.net.Network.CHANNEL.sendToServer(new net.ecmoons.net.AbilityPacket(net.ecmoons.net.AbilityPacket.PRESS, 0, 0));
+            });
+        });
+        then(2, () -> onServer(net.ecmoons.selftest.AbilityPlayerChecks::snapshot));
+        then(2, () -> check("afterimage: a too-early press breaks the sequence with a slowdown and starts the cooldown (stage "
+                + net.ecmoons.selftest.AbilityPlayerChecks.stage + ", penalised " + net.ecmoons.selftest.AbilityPlayerChecks.penalised + ", cd "
+                + net.ecmoons.selftest.AbilityPlayerChecks.cooldown + ")", net.ecmoons.selftest.AbilityPlayerChecks.stage == 0
+                && net.ecmoons.selftest.AbilityPlayerChecks.penalised && net.ecmoons.selftest.AbilityPlayerChecks.cooldown > 100));
+        then(15, () -> onServer(net.ecmoons.selftest.AbilityPlayerChecks::snapshot));
+        then(2, () -> check("afterimage: the slowdown wears off after penaltyTicks", !net.ecmoons.selftest.AbilityPlayerChecks.penalised));
+        // a wall stops the step: nothing passes through blocks
+        then(1, () -> {
+            cmd("ecmoons ability reset @p");
+            cmd(tpStart);
+            cmd("fill " + (ax + 2) + " " + ay + " " + (az - 2) + " " + (ax + 2) + " " + (ay + 2) + " " + (az + 2) + " stone");
+        });
+        waitFor(60, () -> player().isOnGround());
+        then(10, () -> {
+            faceEast();
+            tap();
+        });
+        then(10, () -> onServer(net.ecmoons.selftest.AbilityPlayerChecks::snapshot));
+        then(2, () -> {
+            double x = net.ecmoons.selftest.AbilityPlayerChecks.x;
+            check(String.format("afterimage: a wall stops the step before it (x %.2f, wall face at %d)", x, ax + 2),
+                    x <= ax + 2 - 0.3 + 1e-3 && x > ax + 1.2);
+            cmd("fill " + (ax + 2) + " " + ay + " " + (az - 2) + " " + (ax + 2) + " " + (ay + 2) + " " + (az + 2) + " air");
+            cmd("ecmoons ability reset @p");
+            cmd("ecmoons end");
+        });
+        waitFor(200, () -> Moons.reported(Minecraft.getInstance().level) == MoonType.NONE);
+
+        // ---- Shell Moon: crouch + hold to charge, collapse on release, explosion reduction
+        final String tpShell = "tp @a " + (ax + 10.5) + " " + ay + " " + (az + 0.5) + " -90 10";
+        then(5, () -> {
+            cmd(tpShell);
+            // a wall right behind the player so the explosion's push can't throw them off the platform
+            cmd("fill " + (ax + 9) + " " + ay + " " + (az - 3) + " " + (ax + 9) + " " + (ay + 4) + " " + (az + 3) + " obsidian");
+            cmd("ecmoons start ecmoons-shell_moon");
+            Minecraft.getInstance().options.setCameraType(net.minecraft.client.settings.PointOfView.THIRD_PERSON_BACK);
+        });
+        waitFor(200, () -> Moons.is(Minecraft.getInstance().level, MoonType.SHELL));
+        waitFor(100, () -> player().isOnGround());
+        // control: the same explosion without a shell
+        then(10, () -> onServer(net.ecmoons.selftest.AbilityPlayerChecks::prepareExplosion));
+        then(3, () -> cmd("summon tnt " + (ax + 13) + " " + ay + " " + (az + 0.5) + " {Fuse:1}"));
+        then(15, () -> onServer(net.ecmoons.selftest.AbilityPlayerChecks::snapshot));
+        then(2, () -> {
+            controlDamage = player().getMaxHealth() - net.ecmoons.selftest.AbilityPlayerChecks.health;
+            EcMoons.LOGGER.info(P + "control explosion damage " + controlDamage);
+            cmd(tpShell);
+        });
+        waitFor(60, () -> player().isOnGround());
+        // pressing without crouching does nothing
+        then(10, () -> {
+            faceEast();
+            tap();
+        });
+        then(5, () -> check("shell: without crouching the key raises nothing (" + net.ecmoons.client.ability.AbilityClient.shellState() + ")",
+                net.ecmoons.client.ability.AbilityClient.shellState() == 0));
+        then(1, () -> Minecraft.getInstance().options.keyShift.setDown(true));
+        then(5, () -> net.ecmoons.client.ability.AbilityClient.testKey(true));
+        waitFor(10, () -> net.ecmoons.client.ability.AbilityClient.shellState() == 1);
+        then(0, () -> {
+            check("shell: crouch + hold starts charging (HUD)", net.ecmoons.client.ability.AbilityClient.shellState() == 1);
+            shot("shell_0_charging");
+        });
+        waitFor(80, () -> net.ecmoons.client.ability.AbilityClient.shellState() == 2);
+        then(5, () -> {
+            check("shell: deployed after the charge", net.ecmoons.client.ability.AbilityClient.shellState() == 2);
+            check("shell: shell drawn (" + net.ecmoons.client.ability.AbilityFx.lastShellsDrawn + ")", net.ecmoons.client.ability.AbilityFx.lastShellsDrawn > 0);
+            onServer(net.ecmoons.selftest.AbilityPlayerChecks::snapshot);
+            shot("shell_1_up");
+        });
+        then(2, () -> {
+            check("shell: server has the shell", net.ecmoons.selftest.AbilityPlayerChecks.shell);
+            net.ecmoons.client.ability.AbilityClient.testKey(false);
+        });
+        then(5, () -> onServer(net.ecmoons.selftest.AbilityPlayerChecks::snapshot));
+        then(2, () -> check("shell: releasing the key collapses it and starts the cooldown (cd " + net.ecmoons.selftest.AbilityPlayerChecks.shellCooldown + ")",
+                !net.ecmoons.selftest.AbilityPlayerChecks.shell && net.ecmoons.selftest.AbilityPlayerChecks.shellCooldown > 300
+                        && net.ecmoons.client.ability.AbilityClient.shellState() == 0));
+        then(40, () -> check("shell: the shell fades away on the client (" + net.ecmoons.client.ability.AbilityFx.shellCount() + ")",
+                net.ecmoons.client.ability.AbilityFx.shellCount() == 0));
+        // with a shell: the same explosion
+        then(1, () -> {
+            cmd("ecmoons ability reset @p");
+            net.ecmoons.client.ability.AbilityClient.testKey(true);
+        });
+        waitFor(80, () -> net.ecmoons.client.ability.AbilityClient.shellState() == 2);
+        then(2, () -> onServer(net.ecmoons.selftest.AbilityPlayerChecks::prepareExplosion));
+        then(3, () -> cmd("summon tnt " + (ax + 13) + " " + ay + " " + (az + 0.5) + " {Fuse:1}"));
+        then(15, () -> onServer(net.ecmoons.selftest.AbilityPlayerChecks::snapshot));
+        then(2, () -> {
+            float dmg = player().getMaxHealth() - net.ecmoons.selftest.AbilityPlayerChecks.health;
+            check(String.format("shell: explosion damage inside the shell %.1f vs %.1f without (75%% less expected)", dmg, controlDamage),
+                    controlDamage > 2 && dmg > 0 && Math.abs(dmg - controlDamage * 0.25F) < Math.max(0.6F, controlDamage * 0.08F));
+            net.ecmoons.client.ability.AbilityClient.testKey(false);
+            Minecraft.getInstance().options.keyShift.setDown(false);
+        });
+        then(5, () -> {
+            cmd("ecmoons ability reset @p");
+            cmd("ecmoons end");
+            cmd("effect clear @a");
+            cmd("gamerule doMobSpawning true");
+            cmd("gamerule naturalRegeneration true");
+            cmd("gamemode creative @a");
+            Minecraft.getInstance().options.setCameraType(net.minecraft.client.settings.PointOfView.FIRST_PERSON);
+        });
+        waitFor(200, () -> Moons.reported(Minecraft.getInstance().level) == MoonType.NONE);
     }
 
     private static int enchantTooltip(boolean arcane) {

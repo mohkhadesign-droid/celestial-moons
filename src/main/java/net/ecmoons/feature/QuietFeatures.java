@@ -25,7 +25,7 @@ public final class QuietFeatures {
 
     private QuietFeatures() {}
 
-    @SubscribeEvent(priority = EventPriority.MONITOR, receiveCanceled = false)
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onHurt(LivingHurtEvent event) {
         LivingEntity victim = event.getEntityLiving();
         if (victim.level.isClientSide) return;

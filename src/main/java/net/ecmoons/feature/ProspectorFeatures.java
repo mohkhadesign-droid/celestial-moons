@@ -147,6 +147,10 @@ public final class ProspectorFeatures {
             super(conditions);
         }
 
+        ILootCondition[] lootConditions() {
+            return conditions;
+        }
+
         @Nonnull
         @Override
         protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
@@ -176,7 +180,7 @@ public final class ProspectorFeatures {
 
         @Override
         public JsonObject write(BonusModifier instance) {
-            return makeConditions(instance.conditions);
+            return makeConditions(instance.lootConditions());
         }
     }
 

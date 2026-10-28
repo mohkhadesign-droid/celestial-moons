@@ -93,6 +93,10 @@ public final class BloodMoonDrops {
             super(conditions);
         }
 
+        ILootCondition[] lootConditions() {
+            return conditions;
+        }
+
         @Nonnull
         @Override
         protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
@@ -139,7 +143,7 @@ public final class BloodMoonDrops {
 
         @Override
         public JsonObject write(Modifier instance) {
-            return makeConditions(instance.conditions);
+            return makeConditions(instance.lootConditions());
         }
     }
 }

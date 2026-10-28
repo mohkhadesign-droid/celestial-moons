@@ -414,17 +414,19 @@ public final class ClientSelfTest {
         waitFor(80, () -> RevealClient.frame(0) == 0);
         then(1, () -> check("revealing: the eye reopens after the scan", RevealClient.frame(0) == 0));
         // markers: scan including yourself, then step away and look at your own recorded position
+        // (away from the Drift test platform at px,pz; spreadplayers puts the player on the real ground)
         then(5, () -> {
-            int y = Minecraft.getInstance().level.getHeight(Heightmap.Type.MOTION_BLOCKING, px, pz);
-            cmd("tp @a " + px + ".5 " + y + " " + pz + ".5 -90 0");
+            cmd("gamemode survival @a");
+            cmd("spreadplayers " + (px + 40) + " " + pz + " 0 1 false @a");
             Minecraft.getInstance().options.hideGui = false;
         });
-        then(30, () -> cmd("execute as @p run ecmoons reveal scan self"));
+        waitFor(100, () -> player().isOnGround());
+        then(10, () -> cmd("execute as @p run ecmoons reveal scan self"));
         then(10, () -> {
             check("revealing: scan marker received (" + RevealClient.markerCount() + ")", RevealClient.markerCount() == 1);
-            int y = Minecraft.getInstance().level.getHeight(Heightmap.Type.MOTION_BLOCKING, px - 14, pz);
-            cmd("tp @a " + (px - 14) + ".5 " + (y + 2) + " " + pz + ".5 -90 5");
+            cmd("spreadplayers " + (px + 26) + " " + pz + " 0 1 false @a");
         });
+        waitFor(100, () -> player().isOnGround());
         then(15, () -> {
             ClientPlayerEntity p = player();
             p.yRot = -90F; // face east, towards the marker

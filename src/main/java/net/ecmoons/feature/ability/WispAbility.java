@@ -163,7 +163,14 @@ public final class WispAbility {
             place(p);
             return;
         }
-        if (inControl(p)) return; // the menu is only used from the body
+        if (action == DISMISS || action == DISMISS_ALL) { // allowed any time (also from admin tools and while piloting)
+            if (action == DISMISS) dismiss(p, index);
+            else removeObservers(p.getUUID(), null);
+            if (!inControl(p)) sendMenu(p);
+            else sendState(p);
+            return;
+        }
+        if (inControl(p)) return; // the rest of the menu is only used from the body
         String why = MoonAbilities.blocked(p, MoonType.WISP);
         if (why != null) {
             MoonAbilities.fail(p, why);

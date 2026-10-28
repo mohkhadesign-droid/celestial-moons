@@ -178,12 +178,12 @@ final class WispChecks {
     }
 
     static void afterMoonEnd(ServerWorld w, BiConsumer<String, Boolean> check) {
-        WispEntity wisp = WispAbility.wispOf(fp);
+        List<net.minecraft.entity.Entity> left = w.getEntities((net.minecraft.entity.Entity) null,
+                new AxisAlignedBB(bx - 60, by - 10, bz - 60, bx + 60, by + 60, bz + 60),
+                e -> (e instanceof WispEntity || e instanceof ObserverEntity) && e.isAlive());
         check.accept("wisp: when the moon ends piloting stops and every observer and wisp entity is gone (pilots "
-                + WispAbility.pilotCount() + ", observers " + WispAbility.observerCount() + ")",
-                !WispAbility.piloting(fp) && WispAbility.observerCount() == 0
-                        && w.getEntities((net.minecraft.entity.Entity) null, new AxisAlignedBB(bx - 60, by - 10, bz - 60, bx + 60, by + 10, bz + 60),
-                        e -> e instanceof WispEntity || e instanceof ObserverEntity).isEmpty());
+                + WispAbility.pilotCount() + ", observers " + WispAbility.observerCount() + ", entities left " + left + ")",
+                !WispAbility.piloting(fp) && WispAbility.observerCount() == 0 && left.isEmpty());
         fill(w, bx - 3, by - 1, bz - 3, bx + 8, by + 4, bz + 3, Blocks.AIR.defaultBlockState());
         WispAbility.TEST_PLAYERS.clear();
     }

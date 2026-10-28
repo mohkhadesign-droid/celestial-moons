@@ -4,7 +4,30 @@ Nothing below is marked as verified unless it was actually run. "Automated" mean
 
 ## Completed (automated, every push)
 
-AUTOMATED_RESULTS
+Two automated suites run on every push (GitHub Actions, Forge 36.2.39, Enhanced Celestials 2.0.9, this add-on). Output: `ci-logs` branch (server) and `ci-client` branch (client, including screenshots).
+
+**Dedicated server self test** (`-Decmoons.selftest=true`, `selftest/SelfTest.java`) - real dedicated server, no client:
+- Server starts with all add-on mixins applied (no client classes loaded on the dedicated server).
+- All ten moons are present in Enhanced Celestials' lunar context; the three Super variants are preserved; exactly one base Blood Moon (no duplicates); missing event files are written into an existing world's events folder.
+- `/ecmoons start <key>` for each of the ten moons: Enhanced Celestials reports the moon and the add-on effects switch to it; `/ecmoons active` works during each.
+- Super Blood Moon inherits Blood Moon features (same strength).
+- `/ecmoons end` returns to the ordinary moon; `/ecmoons list`, `settings`, `inspect loot`, `inspect block`, `inspect entity`, `reload` succeed.
+- Arcane rounding table (0->0, 1->1, 2->2, 3->2, 4->3, 10->8, 39->29) and repair-per-material value.
+- Blood rare-drop maths: 4% becomes exactly 5% (analytic) and ~5% in a 400k-sample Monte Carlo run.
+- Config lists resolve correctly (crops include wheat but not grass; speed blocks include stone and iron ore but not stone bricks; ripe vs. unripe wheat).
+- Blue Moon: bonus pools 1 and 2 are appended to `minecraft:chests/simple_dungeon` and the original pool is kept; the bonus condition is true only during Blue Moon, false with Luck 0, and pool 2 needs Luck 2.
+- Placement records make a block non-natural and clearing them restores it.
+- Spawn origins: a spawn-egg zombie is recorded as SPAWN_EGG and is not Wisdom-eligible; a natural zombie is eligible.
+- Per moon (all ten): Quiet monster-cap multiplier 0.35; Blood keeps Enhanced Celestials' x3; footstep broadcast radius halves only during Mist while explosions stay 16; exhaustion x0.75 only during Harvest; exactly one extra crop random tick during Harvest and none for non-crops or other moons; enchanting the third slot costs 2 levels during Arcane and 3 otherwise (real `onEnchantmentPerformed`); anvil with 2 iron ingots on a 240-damage iron pickaxe repairs 154 during Arcane vs. 124 vanilla, cost 2.
+
+**Client test** (`-Decmoons.clienttest=true`, `client/ClientSelfTest.java`) - a real Minecraft 1.16.5 client under a virtual display with software OpenGL, singleplayer world:
+- Each of the ten moons (and Super Blood) is synced to the client and drawn with its design; screenshots `moon_00`..`moon_11` are published.
+- Mist: fog fades in (partial after 3 s, full after 10 s); disappears in the Nether; returns after coming back to the overworld; fades out after the moon ends. Screenshots `mist_0_clear_night`, `mist_1_fog_night`.
+- Frost: after ~20 s exposed the client receives the chilled state and the server's speed modifier is synced to the client; both are removed when the moon ends. Screenshot `frost_overlay_chilled`.
+- Arcane: the real enchanting screen tooltip shows 3 levels without the lock and 2 with the server's Arcane lock.
+- Drift: jump height 1.25 blocks vanilla vs. 1.65 blocks during Drift (below 2 blocks); fall damage reduced (server log shows multiplier 0.5); a player still in the air when Drift ends lands with the reduction (13 damage from 29 blocks instead of 26).
+
+Bugs these suites found and that are fixed: a client-only `BlockPos` method used by `/ecmoons inspect block` (would have crashed a dedicated server), an enchanting-screen mixin that failed to apply (would have crashed the client when opening an enchanting table), and Drift's landing grace not recognising airborne players on the server.
 
 ## Verified by source review (not executed)
 

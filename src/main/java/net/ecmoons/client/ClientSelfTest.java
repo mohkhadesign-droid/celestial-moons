@@ -5,6 +5,7 @@ import net.ecmoons.MoonType;
 import net.ecmoons.Moons;
 import net.ecmoons.feature.FrostFeatures;
 import net.ecmoons.net.FrostStatePacket;
+import net.ecmoons.selftest.RealPlayerChecks;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.EnchantmentScreen;
@@ -75,6 +76,18 @@ public final class ClientSelfTest {
     }
 
     /** Wait delayTicks, then run r. */
+    private static void onServer(java.util.function.Consumer<MinecraftServer> action) {
+        MinecraftServer server = Minecraft.getInstance().getSingleplayerServer();
+        if (server != null) server.execute(() -> {
+            try {
+                action.accept(server);
+            } catch (Throwable t) {
+                RealPlayerChecks.FAILED.incrementAndGet();
+                EcMoons.LOGGER.error(P + "FAIL: exception in server-side check", t);
+            }
+        });
+    }
+
     private static void then(int delayTicks, Runnable r) {
         STEPS.add(() -> wait = delayTicks);
         STEPS.add(r);
@@ -246,6 +259,20 @@ public final class ClientSelfTest {
             check("arcane tooltip: 2 levels with the server's Arcane lock", enchantTooltip(true) == 2);
         });
 
+        // ---- Server-side rules that need a real player (integrated server thread)
+        then(1, () -> cmd("ecmoons end"));
+        then(40, () -> onServer(RealPlayerChecks::bloodBaseline));
+        then(20, () -> cmd("ecmoons start enhancedcelestials-blood_moon"));
+        waitFor(200, () -> Moons.is(Minecraft.getInstance().level, MoonType.BLOOD));
+        then(20, () -> onServer(RealPlayerChecks::blood));
+        then(20, () -> cmd("ecmoons start ecmoons-prospector_moon"));
+        waitFor(200, () -> Moons.is(Minecraft.getInstance().level, MoonType.PROSPECTOR));
+        then(20, () -> onServer(RealPlayerChecks::prospector));
+        then(20, () -> cmd("ecmoons start ecmoons-wisdom_moon"));
+        waitFor(200, () -> Moons.is(Minecraft.getInstance().level, MoonType.WISDOM));
+        then(20, () -> onServer(RealPlayerChecks::wisdom));
+        then(20, () -> cmd("ecmoons end"));
+
         // ---- Drift: jump height and fall damage, vanilla first
         then(1, () -> {
             platformY = 150;
@@ -314,6 +341,8 @@ public final class ClientSelfTest {
         });
 
         then(20, () -> {
+            passed += RealPlayerChecks.PASSED.get();
+            failed += RealPlayerChecks.FAILED.get();
             EcMoons.LOGGER.info(P + "CLIENTTEST COMPLETE passed=" + passed + " failed=" + failed);
             Minecraft.getInstance().stop();
         });

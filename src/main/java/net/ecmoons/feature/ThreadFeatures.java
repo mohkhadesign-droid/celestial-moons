@@ -114,7 +114,8 @@ public final class ThreadFeatures {
         for (int i = 0; i < members.size(); i++) {
             for (int j = i + 1; j < members.size(); j++) {
                 ServerPlayerEntity a = members.get(i), b = members.get(j);
-                if (a.distanceToSqr(b) > range * range) continue;
+                double dx = a.getX() - b.getX(), dy = a.getY() - b.getY(), dz = a.getZ() - b.getZ();
+                if (dx * dx + dy * dy + dz * dz > range * range) continue;
                 if (los && !lineOfSight(world, a, b)) continue;
                 counts.merge(a.getUUID(), 1, Integer::sum);
                 counts.merge(b.getUUID(), 1, Integer::sum);

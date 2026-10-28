@@ -454,7 +454,8 @@ public final class ClientSelfTest {
         then(60, () -> check("gluttony: bonus hearts gone when the moon ended (" + player().getMaxHealth() + ")", player().getMaxHealth() == 20F));
 
         // ---- War Moon: solo test match (save, strip, kit, prep, fight, knockout, restore)
-        then(5, () -> onServer(WarPlayerChecks::warPrepare));
+        waitFor(200, () -> player().isOnGround());
+        then(10, () -> onServer(WarPlayerChecks::warPrepare));
         then(5, () -> cmd("ecmoons war start solo"));
         waitFor(200, () -> Minecraft.getInstance().level.dimension().equals(net.ecmoons.feature.war.WarArena.DIMENSION));
         then(40, () -> {

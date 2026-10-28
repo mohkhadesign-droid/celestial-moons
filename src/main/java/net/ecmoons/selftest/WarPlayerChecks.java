@@ -132,7 +132,7 @@ public final class WarPlayerChecks {
     public static void warRestored(MinecraftServer server) {
         ServerPlayerEntity p = player(server);
         check("war: session finished (" + WarFeatures.describe(server) + ")", WarFeatures.phase(server) == WarState.Phase.IDLE);
-        check("war: back in the overworld near the original spot", p.level.dimension().equals(World.OVERWORLD)
+        check("war: back in the overworld near the original spot (" + p.position() + " vs " + homePos + ")", p.level.dimension().equals(World.OVERWORLD)
                 && p.position().distanceTo(homePos) < 3);
         check("war: own items restored exactly (7 diamonds, 33 torches, golden helmet, totem)", count(p, Items.DIAMOND) == 7
                 && count(p, Items.TORCH) == 33 && p.getItemBySlot(EquipmentSlotType.HEAD).getItem() == Items.GOLDEN_HELMET

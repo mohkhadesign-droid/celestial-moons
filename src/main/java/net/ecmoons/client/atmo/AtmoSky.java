@@ -117,7 +117,7 @@ public final class AtmoSky {
                 float base = (float) Math.toRadians(32 + 14 * i), az0 = (float) Math.toRadians(t * 1.6f * p.animation + i * 120);
                 float shimmer = 0.55f + 0.45f * (float) Math.sin(t * (0.37 + 0.11 * i) + i * 2.1) * (float) Math.sin(t * 0.13 + i);
                 ribbon(m, az0, (float) Math.toRadians(130), base, (float) Math.toRadians(9), t * (0.21f + 0.07f * i) * p.animation, 3.2f + i,
-                        i % 2 == 0 ? p.glow : p.accent, p.horizon, 0.32f * k * shimmer, i * 7.3f);
+                        i % 2 == 0 ? p.glow : p.accent, p.horizon, 0.7f * k * (0.35f + 0.65f * Math.abs(shimmer)), i * 7.3f);
             }
             lastLayers++;
         }
@@ -126,7 +126,7 @@ public final class AtmoSky {
             additive();
             for (int i = 0; i < 6; i++) {
                 float az0 = (float) Math.toRadians(i * 60 + t * 1.2f * p.animation), el = (float) Math.toRadians(52 + (i * 37) % 24);
-                ribbon(m, az0, (float) Math.toRadians(70), el, (float) Math.toRadians(1.5), t * 0.05f, 1.1f, p.accent, p.glow, 0.2f * k, i * 3.1f);
+                ribbon(m, az0, (float) Math.toRadians(70), el, (float) Math.toRadians(1.5), t * 0.05f, 1.1f, p.accent, p.glow, 0.3f * k, i * 3.1f);
             }
             lastLayers++;
         }
@@ -136,7 +136,7 @@ public final class AtmoSky {
             for (int i = 0; i < 3; i++) {
                 float az0 = (float) Math.toRadians(i * 120 + t * 0.6f * p.animation);
                 ribbon(m, az0, (float) Math.toRadians(80), (float) Math.toRadians(12 + 6 * i), (float) Math.toRadians(3), t * 0.04f, 7f,
-                        p.accent, p.horizon, 0.09f * k, i * 5f);
+                        p.accent, p.horizon, 0.16f * k, i * 5f);
             }
             lastLayers++;
         }
@@ -152,15 +152,15 @@ public final class AtmoSky {
             if (within < 1f || AtmoWar.summonFlash() > 0) {
                 float fa = Math.max(within < 1f ? (1f - within) : 0f, AtmoWar.summonFlash());
                 float az = r.nextFloat() * 6.28f, el = (float) Math.toRadians(8 + r.nextFloat() * 18);
-                glowSpot(m, az, el, 34f + 20 * AtmoWar.summonFlash(), p.accent, 0.5f * k * fa);
+                glowSpot(m, az, el, 34f + 20 * AtmoWar.summonFlash(), p.accent, 0.8f * k * fa);
             }
             // smoke bands
             RenderSystem.defaultBlendFunc();
             for (int i = 0; i < 4; i++) {
                 float az0 = (float) Math.toRadians(i * 90 + t * (0.9f + 3f * turb) * p.animation);
-                float[] smoke = {0.1f, 0.1f, 0.115f};
+                float[] smoke = {0.035f, 0.035f, 0.042f};
                 ribbon(m, az0, (float) Math.toRadians(110), (float) Math.toRadians(9 + 7 * i), (float) Math.toRadians(4 + 3 * turb),
-                        t * (0.05f + 0.1f * turb), 12f, smoke, p.sky, (0.42f + 0.25f * turb) * k, i * 4f);
+                        t * (0.05f + 0.1f * turb), 12f, smoke, smoke, Math.min(0.9f, (0.75f + 0.3f * turb) * k), i * 4f);
             }
             lastLayers++;
         }
@@ -176,7 +176,7 @@ public final class AtmoSky {
                 Random r = new Random(seed);
                 float az1 = r.nextFloat() * 6.28f, az2 = az1 + 0.9f + r.nextFloat() * 1.6f;
                 float el1 = (float) Math.toRadians(25 + r.nextFloat() * 50), el2 = (float) Math.toRadians(25 + r.nextFloat() * 50);
-                strand(m, az1, el1, az2, el2, 0.32f, p.accent, 0.5f * k * fade * (0.7f + 0.3f * (float) Math.sin(t * 1.3 + i)));
+                strand(m, az1, el1, az2, el2, 0.45f, p.accent, 0.85f * k * fade * (0.7f + 0.3f * (float) Math.sin(t * 1.3 + i)));
             }
             lastLayers++;
         }

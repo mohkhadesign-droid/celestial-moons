@@ -35,6 +35,7 @@ public final class Atmosphere {
     // per-tick cached light-map grading inputs
     static float gradeAmount, gradeBright = 1f, gradeDesat;
     static final float[] gradeTint = {1, 1, 1};
+    static final float[] gradeLight = {0, 0, 0};
     private static float pulse, pulseDecay;
     private static final float[] pulseColor = {1, 1, 1};
 
@@ -126,6 +127,8 @@ public final class Atmosphere {
     }
 
     private static float exposureTarget = 1f;
+    /** Night sky and horizon colours are drawn at this fraction of the profile colour (keeps the night dark). */
+    public static final float SKY_SCALE = 0.62f, HORIZON_SCALE = 0.36f;
 
     public static float weight(MoonType t, float pt) {
         if (t == MoonType.NONE) return 0f;
@@ -204,9 +207,9 @@ public final class Atmosphere {
             float a = Math.min(1f, k * night * rain);
             float[] c = p.sky;
             float lift = AtmoWar.skyDarken(t);
-            r = MathHelper.lerp(a, r, c[0] * 0.75f * lift);
-            g = MathHelper.lerp(a, g, c[1] * 0.75f * lift);
-            b = MathHelper.lerp(a, b, c[2] * 0.75f * lift);
+            r = MathHelper.lerp(a, r, c[0] * SKY_SCALE * lift);
+            g = MathHelper.lerp(a, g, c[1] * SKY_SCALE * lift);
+            b = MathHelper.lerp(a, b, c[2] * SKY_SCALE * lift);
         }
         return new Vector3d(r, g, b);
     }
@@ -223,9 +226,9 @@ public final class Atmosphere {
             AtmoProfile p = AtmoProfile.of(t);
             float a = Math.min(0.9f, k * night * 0.9f);
             float[] c = p.horizon;
-            r = MathHelper.lerp(a, r, c[0] * 0.42f);
-            g = MathHelper.lerp(a, g, c[1] * 0.42f);
-            b = MathHelper.lerp(a, b, c[2] * 0.42f);
+            r = MathHelper.lerp(a, r, c[0] * HORIZON_SCALE);
+            g = MathHelper.lerp(a, g, c[1] * HORIZON_SCALE);
+            b = MathHelper.lerp(a, b, c[2] * HORIZON_SCALE);
             changed = true;
         }
         return changed ? new float[]{r, g, b} : null;
@@ -253,6 +256,7 @@ public final class Atmosphere {
         gradeBright = 1f;
         gradeDesat = 0f;
         gradeTint[0] = gradeTint[1] = gradeTint[2] = 1f;
+        gradeLight[0] = gradeLight[1] = gradeLight[2] = 0f;
         if (level == null || !on("enableLightTint")) return;
         float night = night(level, 1f);
         if (night <= 0f && pulse <= 0f) return;
@@ -265,6 +269,9 @@ public final class Atmosphere {
             float[] c = p.light;
             float lum = 0.299f * c[0] + 0.587f * c[1] + 0.114f * c[2];
             lum = Math.max(lum, 0.05f);
+            gradeLight[0] += k * c[0];
+            gradeLight[1] += k * c[1];
+            gradeLight[2] += k * c[2];
             tr += k * Math.min(2f, c[0] / lum);
             tg += k * Math.min(2f, c[1] / lum);
             tb += k * Math.min(2f, c[2] / lum);
@@ -277,6 +284,9 @@ public final class Atmosphere {
             gradeTint[0] = tr / total;
             gradeTint[1] = tg / total;
             gradeTint[2] = tb / total;
+            gradeLight[0] /= total;
+            gradeLight[1] /= total;
+            gradeLight[2] /= total;
             gradeAmount = Math.min(1f, amount * night);
             gradeBright = 1f + bright * night;
             gradeDesat = Math.min(1f, desat * night);
@@ -307,6 +317,12 @@ public final class Atmosphere {
         r *= 1f + (gradeTint[0] - 1f) * a;
         g *= 1f + (gradeTint[1] - 1f) * a;
         b *= 1f + (gradeTint[2] - 1f) * a;
+        // coloured moonlight: a little of the moon's light colour added to sky-lit surfaces, so the landscape
+        // visibly takes on the moon's colour at night while block colours stay recognisable
+        float ml = gradeAmount * w * 0.14f;
+        r += gradeLight[0] * ml;
+        g += gradeLight[1] * ml;
+        b += gradeLight[2] * ml;
         float br = 1f + (gradeBright - 1f) * w;
         r *= br;
         g *= br;

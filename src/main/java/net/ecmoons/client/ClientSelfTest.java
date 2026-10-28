@@ -396,12 +396,15 @@ public final class ClientSelfTest {
             az = pz;
             int y = Minecraft.getInstance().level.getHeight(Heightmap.Type.MOTION_BLOCKING, ax, az);
             ay = y + 25;
+            player().abilities.flying = true;
+            player().onUpdateAbilities();
             cmd("tp @a " + ax + ".5 " + ay + " " + az + ".5 -90 -12");
             Minecraft.getInstance().options.hideGui = true;
         });
         then(60, () -> {
             player().abilities.flying = true;
             player().onUpdateAbilities();
+            cmd("tp @a " + ax + ".5 " + ay + " " + az + ".5 -90 -12");
             lookHorizon();
         });
         waitFor(300, () -> !net.ecmoons.client.atmo.Atmosphere.anyActive());
@@ -453,6 +456,7 @@ public final class ClientSelfTest {
                     check("atmosphere " + type.id() + ": sky layer drawn (" + net.ecmoons.client.atmo.AtmoSky.lastLayers + ")", net.ecmoons.client.atmo.AtmoSky.lastLayers > 0);
                 }
                 lookHorizon();
+                player().abilities.flying = true;
                 EcMoons.LOGGER.info(P + type.id() + " " + net.ecmoons.client.atmo.Atmosphere.describe());
             });
             then(3, () -> shot(name));
@@ -475,7 +479,7 @@ public final class ClientSelfTest {
         then(5, () -> {
             net.minecraft.util.math.vector.Vector3d sk = sky();
             check("atmosphere: nothing left after the fade-out (sky " + sk + " vs " + vanillaSky + ", grade " + net.ecmoons.client.atmo.Atmosphere.gradeAmount() + ")",
-                    !net.ecmoons.client.atmo.Atmosphere.anyActive() && dist(sk, new float[]{(float) vanillaSky.x, (float) vanillaSky.y, (float) vanillaSky.z}) < 0.02
+                    !net.ecmoons.client.atmo.Atmosphere.anyActive() && sk.distanceTo(vanillaSky) < 0.02
                             && net.ecmoons.client.atmo.Atmosphere.gradeAmount() == 0F);
         });
         // quality settings: OFF shows nothing; LOW and HIGH respect their caps
@@ -604,7 +608,8 @@ public final class ClientSelfTest {
     }
 
     private static double dist(net.minecraft.util.math.vector.Vector3d v, float[] c) {
-        double dx = v.x - c[0] * 0.75, dy = v.y - c[1] * 0.75, dz = v.z - c[2] * 0.75;
+        float k = net.ecmoons.client.atmo.Atmosphere.SKY_SCALE;
+        double dx = v.x - c[0] * k, dy = v.y - c[1] * k, dz = v.z - c[2] * k;
         return Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
 

@@ -109,11 +109,11 @@ public final class ThreadClient {
             if (drawn >= MAX_LINES || f[0] <= 0.01f) continue;
             Entity a = mc.level.getEntity((int) f[2]), b = mc.level.getEntity((int) f[3]);
             if (a == null || b == null) continue;
-            Vector3d pa = a.getPosition(pt).add(0, a.getBbHeight() * 0.55, 0), pb = b.getPosition(pt).add(0, b.getBbHeight() * 0.55, 0);
+            Vector3d pa = anchor(mc, a, pt), pb = anchor(mc, b, pt);
             double len = pa.distanceTo(pb);
             if (len < 0.5) continue;
             float closeness = (float) Math.max(0.35, 1.0 - len / Math.max(1.0, range) * 0.65);
-            float alpha = 0.42f * f[0] * closeness;
+            float alpha = 0.3f * f[0] * closeness;
             int n = 16;
             Vector3d prev = null;
             float prevA = 0;
@@ -138,6 +138,15 @@ public final class ThreadClient {
         RenderSystem.enableTexture();
         RenderSystem.disableBlend();
         mc.gameRenderer.lightTexture().turnOnLightLayer();
+    }
+
+    /** Where a thread attaches: chest height, or for yourself in first person just below and in front of the view. */
+    private static Vector3d anchor(Minecraft mc, Entity e, float pt) {
+        if (e == mc.player && mc.options.getCameraType().isFirstPerson()) {
+            Vector3d look = e.getViewVector(pt);
+            return mc.gameRenderer.getMainCamera().getPosition().add(look.x * 0.9, look.y * 0.9 - 0.45, look.z * 0.9);
+        }
+        return e.getPosition(pt).add(0, e.getBbHeight() * 0.55, 0);
     }
 
     /** A thin camera-facing quad between two points (camera at the origin). */

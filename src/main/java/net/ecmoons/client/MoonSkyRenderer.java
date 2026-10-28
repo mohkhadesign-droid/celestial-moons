@@ -30,6 +30,7 @@ public final class MoonSkyRenderer {
 
     static MoonType visibleMoon(ClientWorld level) {
         if (level == null || !ClientConfig.USE_ADDON_MOON_TEXTURES.get()) return MoonType.NONE;
+        if (net.ecmoons.client.atmo.Atmosphere.preview() != null) return net.ecmoons.client.atmo.Atmosphere.preview();
         LunarContext ctx = Moons.context(level);
         if (ctx == null) return MoonType.NONE;
         return MoonType.of(ctx.getCurrentEvent());
@@ -42,6 +43,12 @@ public final class MoonSkyRenderer {
         textures.bind(type == MoonType.REVEALING ? RevealClient.eyeTexture(partialTicks) : type.moonTexture());
         // Enhanced Celestials tints the moon with the event colour; our designs carry their own colours.
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F - level.getRainLevel(partialTicks));
+    }
+
+    /** Moon size used by Enhanced Celestials for the current event (Super variants are bigger). */
+    public static float moonSize(ClientWorld level) {
+        LunarEvent event = Moons.currentEvent(level);
+        return event != null && event.getClient() != null ? event.getClient().getMoonSize() : 20.0F;
     }
 
     /** Just before stars are drawn (moon already drawn, same celestial rotation): draw the detail layer. */
@@ -71,9 +78,12 @@ public final class MoonSkyRenderer {
             case GLUTTONY: // sesame seeds: part of the bun, no animation
                 alpha = 1.0F;
                 break;
+            case REVEALING:
+                alpha = animate ? (float) (0.55 + 0.45 * Math.sin(t * 1.3)) : 0.6F;
+                alpha = Math.max(alpha, RevealClient.irisBoost(partialTicks)); // the iris brightens before a scan
+                break;
             case BLOOD:
             case WAR:
-            case REVEALING:
                 alpha = animate ? (float) (0.55 + 0.45 * Math.sin(t * 1.3)) : 0.6F;
                 break;
             case ARCANE:

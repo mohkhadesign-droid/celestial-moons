@@ -38,10 +38,21 @@ public final class RevealClient {
     private static final ResourceLocation MARKER = new ResourceLocation(EcMoons.MOD_ID, "textures/gui/reveal_marker.png");
     private static final Random RANDOM = new Random();
 
-    private static final int NONE = 0, BLINK = 1, SCAN = 2;
+    private static final ResourceLocation[] LOOKS = {
+            MoonType.REVEALING.moonTexture(),
+            new ResourceLocation(EcMoons.MOD_ID, "textures/environment/revealing_moon_look_l.png"),
+            new ResourceLocation(EcMoons.MOD_ID, "textures/environment/revealing_moon_look_r.png"),
+            new ResourceLocation(EcMoons.MOD_ID, "textures/environment/revealing_moon_look_u.png")};
+
+    /** Eye phases: idle (with blinks and a slowly wandering pupil), warning (narrowing, iris brightening, halo),
+     *  open (fully open at the server's scan: ring + light pulse, held while markers show), recovery (slowly
+     *  closes, then reopens into idle). */
+    public static final int NONE = 0, BLINK = 1, WARN = 2, OPEN = 3, RECOVER = 4;
+    private static final int RECOVER_CLOSE = 30, RECOVER_HOLD = 16, RECOVER_OPEN = 20;
     private static int anim = NONE;
-    private static float animStart, closeStart, openStart = -1, scanTimeout;
-    private static float nextIdleBlink = -1;
+    private static float animStart, warnStart, scanAt, openStart, openUntil, ringStart = -1;
+    private static float nextIdleBlink = -1, nextLook = -1;
+    private static int look;
     private static long clientTicks;
     private static ClientWorld lastWorld;
 
@@ -61,23 +72,26 @@ public final class RevealClient {
 
     public static void onPacket(byte stage, int ticks, List<Vector3d> list) {
         float now = now(0);
-        int close = Settings.client().i("revealing.blinkCloseTicks");
         switch (stage) {
             case RevealPacket.WARN:
-                anim = SCAN;
-                closeStart = now + Math.max(0, ticks - close);
-                openStart = -1;
-                scanTimeout = now + ticks + 60;
+                anim = WARN;
+                warnStart = now;
+                scanAt = now + Math.max(1, ticks);
+                look = 0;
                 break;
             case RevealPacket.SCAN:
                 markers.clear();
                 markers.addAll(list);
                 markersFrom = now;
                 markersUntil = now + ticks;
-                if (anim == SCAN) {
-                    openStart = Math.max(now, closeStart + close);
-                } else {
-                    startBlink(now);
+                anim = OPEN; // the eye opens fully at the actual scan
+                openStart = now;
+                openUntil = now + Math.max(20, ticks);
+                ringStart = now;
+                look = 0;
+                if (net.ecmoons.client.atmo.Atmosphere.on("enableLightTint")
+                        && net.ecmoons.client.atmo.AtmoProfile.of(MoonType.REVEALING).flag("scanRing")) {
+                    net.ecmoons.client.atmo.Atmosphere.pulse(0.45f, 30, new float[]{1f, 0.86f, 0.55f});
                 }
                 break;
             case RevealPacket.BLINK:
@@ -89,6 +103,14 @@ public final class RevealClient {
         }
     }
 
+    /** Preview demo: a full warning + scan sequence with no markers (visual only, nothing is scanned). */
+    public static void demo(int warnTicks) {
+        onPacket(RevealPacket.WARN, warnTicks, java.util.Collections.emptyList());
+        demoScanAt = now(0) + warnTicks;
+    }
+
+    private static float demoScanAt = -1;
+
     private static void startBlink(float now) {
         anim = BLINK;
         animStart = now;
@@ -96,31 +118,49 @@ public final class RevealClient {
 
     public static void reset() {
         anim = NONE;
-        openStart = -1;
+        ringStart = -1;
         nextIdleBlink = -1;
+        demoScanAt = -1;
+        look = 0;
         markers.clear();
     }
 
+    public static int phase() {
+        return anim;
+    }
+
     // ---- eye --------------------------------------------------------------------------------------------------------
+
+    private static float warnProgress(float now) {
+        return Math.max(0f, Math.min(1f, (now - warnStart) / Math.max(1f, scanAt - warnStart)));
+    }
 
     /** 0 = fully open, 1 = fully shut. */
     public static float closedness(float partialTicks) {
         float now = now(partialTicks);
         float c = Settings.client().i("revealing.blinkCloseTicks");
         float h = Settings.client().i("revealing.blinkHoldTicks");
-        if (anim == BLINK) {
-            float t = now - animStart;
-            if (t < c) return t / c;
-            if (t < c + h) return 1f;
-            if (t < 2 * c + h) return 1f - (t - c - h) / c;
-            return 0f;
+        switch (anim) {
+            case BLINK: {
+                float t = now - animStart;
+                if (t < c) return t / c;
+                if (t < c + h) return 1f;
+                if (t < 2 * c + h) return 1f - (t - c - h) / c;
+                return 0f;
+            }
+            case WARN: {
+                float p = warnProgress(now);
+                return 0.42f * p * p * (3 - 2 * p); // the eyelids slowly narrow while it focuses
+            }
+            case RECOVER: {
+                float t = now - animStart;
+                if (t < RECOVER_CLOSE) return t / RECOVER_CLOSE;
+                if (t < RECOVER_CLOSE + RECOVER_HOLD) return 1f;
+                return Math.max(0f, 1f - (t - RECOVER_CLOSE - RECOVER_HOLD) / RECOVER_OPEN);
+            }
+            default:
+                return 0f;
         }
-        if (anim == SCAN) {
-            if (now < closeStart) return 0f;
-            if (openStart < 0 || now < openStart) return Math.min(1f, (now - closeStart) / c);
-            return Math.max(0f, 1f - (now - openStart) / c);
-        }
-        return 0f;
     }
 
     /** Which pre-drawn frame to show: 0 open, 1 and 2 partly closed, 3 shut. */
@@ -133,7 +173,31 @@ public final class RevealClient {
     }
 
     public static ResourceLocation eyeTexture(float partialTicks) {
-        return FRAMES[frame(partialTicks)];
+        int f = frame(partialTicks);
+        return f == 0 ? LOOKS[look] : FRAMES[f];
+    }
+
+    /** Amber halo strength around the eye (0..1): builds during the warning, fades after the scan. */
+    public static float haloAmount(float partialTicks) {
+        float now = now(partialTicks);
+        switch (anim) {
+            case WARN: return warnProgress(now);
+            case OPEN: return 1f - 0.5f * Math.min(1f, (now - openStart) / Math.max(1f, openUntil - openStart));
+            case RECOVER: return Math.max(0f, 0.5f - (now - animStart) / 60f);
+            default: return 0f;
+        }
+    }
+
+    /** Iris brightening for the detail layer (0..1). */
+    public static float irisBoost(float partialTicks) {
+        return anim == WARN || anim == OPEN ? haloAmount(partialTicks) : 0f;
+    }
+
+    /** Expanding scan ring: 0..1 while it travels across the sky, -1 when there is none. */
+    public static float ringProgress(float partialTicks) {
+        if (ringStart < 0) return -1f;
+        float p = (now(partialTicks) - ringStart) / 60f;
+        return p < 1f ? p : -1f;
     }
 
     @SubscribeEvent
@@ -149,14 +213,21 @@ public final class RevealClient {
         float now = clientTicks;
         float c = Settings.client().i("revealing.blinkCloseTicks");
         float h = Settings.client().i("revealing.blinkHoldTicks");
-        // finish animations
-        if (anim == BLINK && now - animStart > 2 * c + h) anim = NONE;
-        if (anim == SCAN) {
-            if (openStart < 0 && now > scanTimeout) openStart = now; // scan never came (moon ended / packet lost)
-            if (openStart >= 0 && now > openStart + c) anim = NONE;
+        if (demoScanAt >= 0 && now >= demoScanAt) {
+            demoScanAt = -1;
+            onPacket(RevealPacket.SCAN, 100, java.util.Collections.emptyList());
         }
+        // advance the eye
+        if (anim == BLINK && now - animStart > 2 * c + h) anim = NONE;
+        if (anim == WARN && now > scanAt + 60) startRecover(now); // the scan never came (moon ended / packet lost)
+        if (anim == OPEN && now >= openUntil) startRecover(now);
+        if (anim == RECOVER && now - animStart > RECOVER_CLOSE + RECOVER_HOLD + RECOVER_OPEN) {
+            anim = NONE;
+            nextIdleBlink = now + idleGap();
+        }
+        if (ringStart >= 0 && now - ringStart > 60) ringStart = -1;
         if (!markers.isEmpty() && now > markersUntil) markers.clear();
-        // idle blinks while the eye is in the sky
+        // idle behaviour while the eye is in the sky
         if (MoonSkyRenderer.visibleMoon(mc.level) != MoonType.REVEALING) {
             nextIdleBlink = -1;
             return;
@@ -166,6 +237,15 @@ public final class RevealClient {
             startBlink(now);
             nextIdleBlink = now + idleGap();
         }
+        if (anim == NONE && now >= nextLook) { // the pupil slowly wanders: it is watching
+            look = RANDOM.nextInt(5) == 0 ? 0 : RANDOM.nextInt(LOOKS.length);
+            nextLook = now + 100 + RANDOM.nextInt(140);
+        }
+    }
+
+    private static void startRecover(float now) {
+        anim = RECOVER;
+        animStart = now;
     }
 
     private static float idleGap() {
@@ -176,7 +256,7 @@ public final class RevealClient {
     // ---- markers ------------------------------------------------------------------------------------------------------
 
     public static boolean scanning() {
-        return anim == SCAN;
+        return anim == WARN || anim == OPEN;
     }
 
     public static int markerCount() {

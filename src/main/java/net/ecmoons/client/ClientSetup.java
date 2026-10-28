@@ -10,6 +10,7 @@ public final class ClientSetup {
         MinecraftForge.EVENT_BUS.register(ClientEvents.class);
         MinecraftForge.EVENT_BUS.register(RevealClient.class);
         MinecraftForge.EVENT_BUS.register(ThreadClient.class);
+        MinecraftForge.EVENT_BUS.register(net.ecmoons.client.atmo.AtmoEvents.class);
         if (Boolean.getBoolean("ecmoons.clienttest")) MinecraftForge.EVENT_BUS.register(ClientSelfTest.class);
     }
 }

@@ -150,6 +150,7 @@ public final class WarFeatures {
         st.phase = WarState.Phase.WARNING;
         st.setDirty();
         phaseEnd = ticks + seconds * 20L;
+        atmo(server, net.ecmoons.net.AtmoPacket.WAR_WARNING, seconds * 20, seconds * 20);
         lastAnnounced = -1;
         if (seconds < 5) return; // forced start without a warning
         broadcast(server, new StringTextComponent("WAR MOON APPROACHES \u2014 Arena battle begins in " + clock(seconds)
@@ -203,6 +204,7 @@ public final class WarFeatures {
             deferrals++;
             int min = Settings.server().i("war.deferMinutes");
             phaseEnd = ticks + min * 1200L;
+            atmo(server, net.ecmoons.net.AtmoPacket.WAR_WARNING, min * 1200, min * 1200);
             lastAnnounced = -1;
             broadcast(server, new StringTextComponent("A claim raid is in progress - the War Moon battle is postponed by " + min
                     + " minute(s).").withStyle(TextFormatting.GOLD));
@@ -268,6 +270,7 @@ public final class WarFeatures {
             return;
         }
         layout = WarArena.build(arena);
+        atmo(server, net.ecmoons.net.AtmoPacket.WAR_SUMMON, 0, 0);
         fighters.clear();
         watchers.clear();
         cellOf.clear();
@@ -379,6 +382,7 @@ public final class WarFeatures {
         if (ticks < phaseEnd) return;
         WarArena.openGates(WarArena.world(server), layout);
         st.phase = WarState.Phase.FIGHT;
+        atmo(server, net.ecmoons.net.AtmoPacket.WAR_FIGHT, 0, 0);
         st.setDirty();
         phaseEnd = ticks + Settings.server().i("war.matchSeconds") * 20L;
         safeHalf = layout.half;
@@ -455,7 +459,14 @@ public final class WarFeatures {
     }
 
     /** Restore everyone online, keep records for offline players, then remove the arena. */
+    /** Visual only: tell every client where the tournament is, for the War Moon atmosphere build-up. */
+    private static void atmo(MinecraftServer server, int phase, int ticksLeft, int total) {
+        net.ecmoons.net.Network.CHANNEL.send(net.minecraftforge.fml.network.PacketDistributor.ALL.noArg(),
+                new net.ecmoons.net.AtmoPacket(net.ecmoons.net.AtmoPacket.WAR, phase, ticksLeft, total));
+    }
+
     private static void finish(MinecraftServer server) {
+        atmo(server, net.ecmoons.net.AtmoPacket.WAR_IDLE, 0, 0);
         WarState st = state(server);
         Set<UUID> pending = new LinkedHashSet<>(st.involved);
         for (UUID id : pending) {

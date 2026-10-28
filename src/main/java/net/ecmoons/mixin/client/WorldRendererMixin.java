@@ -35,5 +35,14 @@ public abstract class WorldRendererMixin {
             require = 0)
     private void ecmoons$moonDetails(MatrixStack matrixStack, float partialTicks, CallbackInfo ci) {
         MoonSkyRenderer.renderDetails(matrixStack, textureManager, level, partialTicks);
+        net.ecmoons.client.atmo.AtmoSky.renderCelestial(matrixStack, level, partialTicks, MoonSkyRenderer.moonSize(level));
+    }
+
+    /** Atmosphere sky layers fixed to the horizon: after the sky dome, before sun, moon and stars. */
+    @Inject(method = "renderSky(Lcom/mojang/blaze3d/matrix/MatrixStack;F)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/DimensionRenderInfo;getSunriseColor(FF)[F"),
+            require = 0)
+    private void ecmoons$atmosphereSky(MatrixStack matrixStack, float partialTicks, CallbackInfo ci) {
+        net.ecmoons.client.atmo.AtmoSky.renderFixed(matrixStack, level, partialTicks);
     }
 }

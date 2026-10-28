@@ -238,6 +238,69 @@ public final class MoonConfig {
                 "Foods that never count (ids or #tags).");
         pop();
 
+        // ---- atmosphere (visual only; synced to clients, rendered by the client add-on) ----------------------------
+        push("atmosphere", "Atmosphere: how the world looks while each moon is up. Purely visual and rendered on each player's",
+                "client (clients need this add-on installed). Turning anything here off never changes a moon's gameplay.");
+        bool("enabled", true, "Master switch for all atmosphere rendering.");
+        intv("transitionSeconds", 8, 1, 60, "Fade between the normal night and a moon's atmosphere (both ways).");
+        dbl("masterIntensity", 1.0, 0.0, 2.0, "Multiplies every moon's atmosphere intensity.");
+        bool("enableSkyTint", true, "Sky and horizon colours.");
+        bool("enableFog", true, "Coloured distance haze (Mist Moon's gameplay fog is separate and always applies).");
+        bool("enableLightTint", true, "Environmental colour grading through the light map (outdoor light only; caves and torchlight keep their colour).");
+        bool("enableParticles", true, "Ambient atmosphere particles (crystals, embers, motes, runes, steam...).");
+        bool("enableSkyAnimations", true, "Sky layers: ribbons, constellations, cloud streaks, smoke bands, threads, scan ring, moon halos.");
+        bool("enableAmbientSounds", true, "Occasional quiet ambient sounds (vanilla sounds only).");
+        bool("respectDimensions", true, "Only show a moon's atmosphere where its add-on effects apply (the moon's 'dimensions' list).");
+        intv("maxParticlesLow", 8, 0, 64, "Most atmosphere particles alive at once per player on LOW quality (shared by all effects).");
+        intv("maxParticlesMedium", 20, 0, 64, "... on MEDIUM quality.");
+        intv("maxParticlesHigh", 35, 0, 64, "... on HIGH quality.");
+        dbl("particleRange", 24.0, 8.0, 64.0, "Particles further than this from the player are removed (distance culling).");
+        pop();
+        atmo("blood", "590d17", "7d2028", "a81722", "e63236", "e63236", 0.35, 0.25, 0.90, 0.0);
+        pop();
+        atmo("blue", "174b9b", "132c58", "8fc8ff", "236ce0", "8fc8ff", 0.35, 0.10, 1.05, 0.0);
+        pop();
+        atmo("harvest", "8a5a26", "9b542d", "ffe0a0", "ffc15a", "ffc15a", 0.35, 0.15, 1.04, 0.0);
+        bool("pollen", true, "Floating pollen-like motes near open vegetation.");
+        pop();
+        atmo("mist", "343948", "999da8", "d1d3db", "d1d3db", "a4a8b3", 0.25, 0.15, 0.97, 0.35);
+        pop();
+        atmo("frost", "617f9c", "b6ccd6", "e9f7ff", "a7dbed", "ddf4ff", 0.30, 0.20, 1.02, 0.25);
+        bool("coldBreath", true, "Intermittent cold-breath vapour in front of the player outdoors (MEDIUM and HIGH quality).");
+        bool("moonHalo", true, "Shimmering frost halo around the moon.");
+        pop();
+        atmo("arcane", "24123f", "7023b8", "d8a5ff", "b346e5", "ec77ff", 0.30, 0.10, 1.0, 0.0);
+        bool("runes", true, "Rune symbols that briefly appear and dissolve.");
+        bool("magicBlockSparkles", true, "Tiny sparkles near enchanting tables and bookshelves (bounded sampling, no area scans).");
+        pop();
+        atmo("prospector", "30221f", "8c512e", "d9a064", "b86632", "e7b46d", 0.30, 0.20, 0.98, 0.0);
+        bool("oreGlints", true, "Short sparkles on ore faces that are exposed to air and in the player's direct line of sight (never through walls).");
+        pop();
+        atmo("wisdom", "0c1433", "232c67", "e0e8ff", "cfd9ff", "cfd9ff", 0.20, 0.0, 1.06, 0.0);
+        bool("constellations", true, "Constellation lines that slowly appear, hold, fade and return at long intervals.");
+        pop();
+        atmo("quiet", "263c3a", "567b70", "d5f0e2", "91bdaa", "91bdaa", 0.25, 0.0, 1.0, 0.30);
+        dbl("ambientSoundReduction", 0.6, 0.0, 1.0, "Quieter ambient and weather sounds (0 = unchanged, 1 = silent). Players, mobs, combat, blocks and UI are never touched.");
+        pop();
+        atmo("drift", "45446d", "8d86cb", "d4caff", "b0a1e8", "e4dffc", 0.25, 0.15, 1.02, 0.0);
+        bool("reactToJumps", true, "Nearby drift motes are lifted when the player jumps.");
+        pop();
+        atmo("revealing", "29282d", "77716e", "e8dcc2", "d9ab54", "d9ab54", 0.30, 0.20, 0.96, 0.30);
+        bool("scanRing", true, "A pale-gold ring expands across the sky at each scan, with a brief light pulse.");
+        pop();
+        atmo("thread", "393043", "a66e91", "e7bfd4", "c88ba7", "f1c8da", 0.30, 0.15, 1.0, 0.0);
+        bool("skyStrands", true, "Thin glowing strands across the sky.");
+        bool("teamLines", true, "Thin threads between bonded teammates (only members of that team see them).");
+        pop();
+        atmo("war", "30303a", "53545d", "b5adb0", "e76a38", "e76a38", 0.30, 0.30, 0.88, 0.20);
+        dbl("arenaBoost", 1.3, 1.0, 2.0, "Atmosphere strength inside the War Moon arena (visibility for combat is always kept).");
+        bool("preBattleBuildup", true, "Turbulence and orange flashes build up during the battle warning, with one pulse when players are summoned.");
+        pop();
+        atmo("gluttony", "30242d", "742f42", "f3d6a0", "e8b65f", "e8b65f", 0.30, 0.15, 1.0, 0.0);
+        bool("steam", true, "Sparse steam above lit furnaces, smokers and campfires near the player (bounded sampling).");
+        bool("foodBursts", true, "Honey-gold burst when a player eats a new food (stronger ring for a new heart).");
+        pop();
+
         SPEC = B.build();
         B = null;
     }
@@ -249,6 +312,29 @@ public final class MoonConfig {
         list("dimensions", ImmutableList.of(),
                 "Dimension ids where this moon's add-on effects apply. Empty = every dimension with an Enhanced Celestials",
                 "lunar context (by default only overworld-like dimensions have one).");
+    }
+
+    /** One moon's atmosphere profile: [atmosphere_<moon>]. Leaves the section open for moon-specific extras. */
+    private static void atmo(String moon, String sky, String horizon, String light, String glow, String accent,
+                             double tint, double fog, double brightness, double desaturate) {
+        push("atmosphere_" + moon, "Atmosphere profile for the " + moon + " moon (colours are hex RRGGBB).");
+        bool("enabled", true, "Show this moon's atmosphere (the moon itself and its gameplay are unaffected).");
+        str("skyColor", sky, "Night sky colour.");
+        str("horizonColor", horizon, "Horizon / distance haze colour.");
+        str("lightColor", light, "Moonlight colour used for environmental tinting.");
+        str("glowColor", glow, "Moon halo / glow colour.");
+        str("accentColor", accent, "Particle and sky-animation accent colour.");
+        dbl("intensity", 0.65, 0.0, 1.0, "Overall strength of this atmosphere.");
+        dbl("tintStrength", tint, 0.0, 1.0, "Environmental tint strength (light map, outdoor light only).");
+        dbl("fogStrength", fog, 0.0, 1.0, "Coloured distance haze (0 = none).");
+        dbl("brightness", brightness, 0.7, 1.3, "Outdoor light brightness multiplier at full strength.");
+        dbl("desaturate", desaturate, 0.0, 1.0, "Pull outdoor light towards grey.");
+        dbl("moonGlow", 0.5, 0.0, 1.0, "Halo strength around the moon.");
+        dbl("particleDensity", 1.0, 0.0, 2.0, "Spawn rate multiplier for this moon's particles (always within the shared cap).");
+        dbl("animationIntensity", 1.0, 0.0, 2.0, "Strength / speed of this moon's sky animation.");
+        dbl("soundVolume", 0.35, 0.0, 1.0, "Volume of this moon's occasional ambient sounds (0 = none).");
+        bool("particles", true, "This moon's particles.");
+        bool("skyAnimation", true, "This moon's sky animation.");
     }
 
     private static void push(String name, String... comment) {

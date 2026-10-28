@@ -90,6 +90,10 @@ public final class GluttonyFeatures {
         }
         Set<String> eaten = eaten(p);
         if (eaten.size() >= max) {
+            if (!eaten.contains(cat)) { // a new food, but no heart left to give: the small burst only
+                net.ecmoons.net.Network.CHANNEL.send(net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> p),
+                        new net.ecmoons.net.AtmoPacket(net.ecmoons.net.AtmoPacket.GLUTTONY, p.getId(), 0, 0));
+            }
             p.displayClientMessage(new StringTextComponent("Gluttony: all " + max + " bonus hearts gained").withStyle(TextFormatting.GOLD), true);
             return;
         }
@@ -100,6 +104,9 @@ public final class GluttonyFeatures {
         }
         store(p, eaten);
         apply(p, Math.min(eaten.size(), max));
+        // visual only: nearby clients show a honey-gold burst (a stronger ring for a new heart)
+        net.ecmoons.net.Network.CHANNEL.send(net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> p),
+                new net.ecmoons.net.AtmoPacket(net.ecmoons.net.AtmoPacket.GLUTTONY, p.getId(), 1, 0));
         p.displayClientMessage(new StringTextComponent("Gluttony: " + Math.min(eaten.size(), max) + "/" + max + " bonus hearts")
                 .withStyle(TextFormatting.YELLOW), true);
     }

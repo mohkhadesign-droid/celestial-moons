@@ -85,15 +85,7 @@ public final class ClientEvents {
         }
         frostOverlay = approach(frostOverlay, frostTarget, 0.02F);
 
-        if (frost && ClientConfig.FROST_PARTICLES.get() && world.canSeeSky(mc.player.blockPosition().above())) {
-            for (int i = 0; i < 2; i++) {
-                if (RANDOM.nextInt(3) != 0) continue;
-                double x = mc.player.getX() + (RANDOM.nextDouble() - 0.5) * 16;
-                double y = mc.player.getY() + RANDOM.nextDouble() * 6;
-                double z = mc.player.getZ() + (RANDOM.nextDouble() - 0.5) * 16;
-                world.addParticle(ParticleTypes.WHITE_ASH, x, y, z, 0, -0.02, 0);
-            }
-        }
+        // Frost Moon ice crystals are part of the atmosphere particles (AtmoParticles), within the shared budget.
     }
 
     private static float approach(float value, float target, float step) {
@@ -106,7 +98,10 @@ public final class ClientEvents {
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onRenderFog(EntityViewRenderEvent.RenderFogEvent event) {
-        if (mist <= 0.001F || event.getType() != FogRenderer.FogType.FOG_TERRAIN) return;
+        if (event.getType() != FogRenderer.FogType.FOG_TERRAIN) return;
+        Minecraft mc = Minecraft.getInstance();
+        float haze = mc.level == null ? 0F : net.ecmoons.client.atmo.Atmosphere.haze(mc.level, (float) event.getRenderPartialTicks());
+        if (mist <= 0.001F && haze <= 0.001F) return;
         if (!event.getInfo().getFluidInCamera().isEmpty()) return; // keep vanilla water/lava fog
         Entity cam = event.getInfo().getEntity();
         if (cam instanceof LivingEntity && ((LivingEntity) cam).hasEffect(Effects.BLINDNESS)) return;
@@ -115,6 +110,14 @@ public final class ClientEvents {
         float vanillaStart = far * 0.75F;
         float start = MathHelper.lerp(mist, vanillaStart, (float) s.d("mist.fogStart"));
         float end = MathHelper.lerp(mist, far, (float) s.d("mist.fogEnd"));
+        // atmosphere haze: distant terrain fades into the moon's horizon colour; never closer than 48 blocks
+        // (the War arena stays fully visible for combat)
+        if (haze > 0F) {
+            float hazeEnd = Math.max(48F, far * (1F - 0.45F * haze));
+            float hazeStart = Math.max(8F, far * (0.75F - 0.6F * haze));
+            if (hazeEnd < end) end = hazeEnd;
+            if (hazeStart < start) start = hazeStart;
+        }
         end = Math.min(end, far);
         start = Math.min(start, end - 1F);
         RenderSystem.fogStart(start);

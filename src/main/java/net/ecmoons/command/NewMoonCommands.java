@@ -113,6 +113,21 @@ public final class NewMoonCommands {
                                 .then(Commands.literal("build").executes(c -> warArena(c, true)))
                                 .then(Commands.literal("clear").executes(c -> warArena(c, false))))));
 
+        d.register(Commands.literal("ecmoons").requires(s -> s.hasPermission(2))
+                .then(Commands.literal("atmosphere")
+                        .then(Commands.literal("preview")
+                                .then(Commands.argument("moon", StringArgumentType.word())
+                                        .suggests((c, sb) -> ISuggestionProvider.suggest(previewIds(), sb))
+                                        .executes(c -> preview(c, java.util.Collections.singletonList(c.getSource().getPlayerOrException())))
+                                        .then(Commands.argument("targets", EntityArgument.players())
+                                                .executes(c -> preview(c, EntityArgument.getPlayers(c, "targets"))))))
+                        .then(Commands.literal("demo")
+                                .then(Commands.argument("effect", StringArgumentType.word())
+                                        .suggests((c, sb) -> ISuggestionProvider.suggest(java.util.Arrays.asList("reveal", "war", "feast"), sb))
+                                        .executes(c -> demo(c, java.util.Collections.singletonList(c.getSource().getPlayerOrException())))
+                                        .then(Commands.argument("targets", EntityArgument.players())
+                                                .executes(c -> demo(c, EntityArgument.getPlayers(c, "targets"))))))));
+
         d.register(Commands.literal("moonteams").requires(s -> s.hasPermission(2))
                 .then(Commands.literal("create").then(Commands.argument("teamId", StringArgumentType.word())
                         .then(Commands.argument("displayName", StringArgumentType.greedyString()).executes(c -> {
@@ -194,6 +209,39 @@ public final class NewMoonCommands {
     private static java.util.concurrent.CompletableFuture<com.mojang.brigadier.suggestion.Suggestions> teamIds(
             CommandContext<CommandSource> c, com.mojang.brigadier.suggestion.SuggestionsBuilder sb) {
         return ISuggestionProvider.suggest(MoonTeams.get(c.getSource().getServer()).teams().keySet(), sb);
+    }
+
+    // ---- Atmosphere preview (visual only) -------------------------------------------------------------------
+
+    private static java.util.List<String> previewIds() {
+        java.util.List<String> out = new java.util.ArrayList<>();
+        for (net.ecmoons.MoonType t : net.ecmoons.MoonType.MOONS) out.add(t.id());
+        out.add("off");
+        return out;
+    }
+
+    private static int preview(CommandContext<CommandSource> c, Collection<ServerPlayerEntity> targets) {
+        String id = StringArgumentType.getString(c, "moon");
+        net.ecmoons.MoonType type = id.equals("off") ? null : net.ecmoons.MoonType.byId(id);
+        if (!id.equals("off") && (type == null || type == net.ecmoons.MoonType.NONE)) return fail(c.getSource(), "Unknown moon " + id);
+        for (ServerPlayerEntity p : targets) {
+            net.ecmoons.net.Network.send(p, new net.ecmoons.net.AtmoPacket(net.ecmoons.net.AtmoPacket.PREVIEW, type == null ? -1 : type.ordinal(), 0, 0));
+        }
+        ok(c.getSource(), type == null ? "Atmosphere preview off (the real moon's atmosphere returns)"
+                : "Previewing the " + type.id() + " atmosphere for " + targets.size() + " player(s). Visual only: the actual lunar event,"
+                + " its gameplay and the forecast are unchanged. Best seen at night (/time set 18000). /ecmoons atmosphere preview off to stop.");
+        return targets.size();
+    }
+
+    private static int demo(CommandContext<CommandSource> c, Collection<ServerPlayerEntity> targets) {
+        String e = StringArgumentType.getString(c, "effect");
+        int kind = e.equals("reveal") ? net.ecmoons.net.AtmoPacket.DEMO_REVEAL : e.equals("war") ? net.ecmoons.net.AtmoPacket.DEMO_WAR
+                : e.equals("feast") ? net.ecmoons.net.AtmoPacket.DEMO_FEAST : -1;
+        if (kind < 0) return fail(c.getSource(), "Unknown demo " + e + " (reveal, war, feast)");
+        for (ServerPlayerEntity p : targets) net.ecmoons.net.Network.send(p, new net.ecmoons.net.AtmoPacket(net.ecmoons.net.AtmoPacket.DEMO, kind, 0, 0));
+        ok(c.getSource(), "Playing the " + e + " atmosphere animation for " + targets.size() + " player(s) (visual only, nothing is scanned,"
+                + " summoned or counted)");
+        return targets.size();
     }
 
     // ---- Revealing --------------------------------------------------------------------------------------------

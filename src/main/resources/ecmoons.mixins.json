@@ -19,7 +19,10 @@
     "ServerWorldMixin"
   ],
   "client": [
+    "client.ClientWorldMixin",
     "client.EnchantmentScreenMixin",
+    "client.LightTextureMixin",
+    "client.LocatableSoundAccess",
     "client.WorldRendererMixin"
   ],
   "injectors": { "defaultRequire": 1 }

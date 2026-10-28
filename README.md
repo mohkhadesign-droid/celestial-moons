@@ -478,8 +478,8 @@ To build locally: `./gradlew build` produces `build/libs/ecmoons-<version>.jar`.
 ## 9. Tests
 
 Every push runs two automated suites:
-- a **dedicated server** self test: 273 checks;
-- a **real Minecraft client** test: 178 checks (including the atmosphere of all 14 moons). It takes screenshots of all fourteen moons in the sky, the Revealing eye blinking and a reveal marker, the Thread HUD, Gluttony hearts and a solo War Moon match; it measures Mist fog, the Frost overlay, Drift movement and the Arcane tooltip, and runs the ore, XP, rare-drop, Gluttony and War Moon save/strip/restore rules with a real player.
+- a **dedicated server** self test: 318 checks (build 44), including Shell Moon projectiles of every vanilla kind in both directions;
+- a **real Minecraft client** test: 216 checks (build 44), including the atmosphere of every moon, Frame Step distances and timing with a real player, the Shell charge, collapse and TNT reduction, and the Lunar Field Guide. It takes screenshots of every moon in the sky, the Revealing eye blinking and a reveal marker, the Thread HUD, Gluttony hearts, a solo War Moon match, the abilities and the book; it measures Mist fog, the Frost overlay, Drift movement and the Arcane tooltip, and runs the ore, XP, rare-drop, Gluttony and War Moon save/strip/restore rules with a real player.
 
 See [TESTING.md](TESTING.md) for exactly what is verified and what still needs checking with the full modpack. The latest screenshots are on the `ci-client` branch.
 

@@ -48,6 +48,35 @@ Two automated suites run on every push (GitHub Actions, Forge 36.2.39, Enhanced 
 
 Bugs these suites found and that are fixed: a client-only `BlockPos` method used by `/ecmoons inspect block` (would have crashed a dedicated server), an enchanting-screen mixin that failed to apply (would have crashed the client when opening an enchanting table), Drift's landing grace not recognising airborne players on the server, and (in this update) a War Moon return that would have sent a player saved mid-air to world spawn instead of the ground below.
 
+## Afterimage Moon, Shell Moon and the Lunar Field Guide (build 44, automated)
+
+**Dedicated server** (318 checks, 0 failures), with real projectile entities against a test shell floating in the air, NoAI husks and a pig on both sides:
+- An arrow fired from outside never reaches the husk inside; one fired from inside never reaches the husk outside.
+- An arrow moving 24 blocks per tick (it would jump across the whole shell in one tick) is stopped.
+- An arrow flying entirely outside the shell, away from it, is untouched.
+- An intercepted ender pearl teleports nobody (its owner stays put); an intercepted splash potion of Harming hurts nothing on the far side; an intercepted small fireball burns and explodes nothing inside.
+- Each pick-up-able arrow comes back as exactly one arrow item, and the trident as exactly one trident item (no duplicates, nothing lost, no projectile left flying).
+- 7 projectiles intercepted; durability 1000 − 6×10 − 30 (the fireball counts as explosive) = 910.
+- A shell with 15 durability stops the arrow that empties it, collapses, and the next arrow hits the husk.
+- The field guide recipe is loaded when Patchouli is present, and its result is `patchouli:guide_book` with `patchouli:book = ecmoons:field_guide`.
+
+**Real client, real player** (216 checks, 0 failures; screenshots `afterimage_*`, `shell_*`, `guide_*` on `ci-client`):
+- Frame Step: three presses of the Moon Ability key (sent through the real key handler) move the player exactly 2.00, 3.00 and 4.00 blocks (9.00 in total) in the look direction; the input window and the final attack window show on the HUD; afterimages are received and drawn.
+- The first real melee hit (`gameMode.attack`) after step 3 gets knockback 0.64 instead of 0.4 (+60%), once; the next hit is a normal 0.4.
+- On cooldown the key does nothing; a second press while the first step is still moving breaks the sequence, applies the slowdown and starts the cooldown; the slowdown wears off after 10 ticks.
+- A wall 1.5 blocks ahead stops the step before it (the player ends at the wall face minus half their width, never inside).
+- Shell: pressing the key without crouching does nothing; crouch + hold shows the charge, the shell deploys after the charge, is drawn, and exists on the server; releasing the key collapses it, starts the 20 s cooldown and the shell fades on the client.
+- Primed TNT 2.5 blocks away: 9.2 damage without a shell, 2.3 with one (exactly 75% less), same player, same armour/effects.
+- The Patchouli book loads with 3 categories and 21 entries, opens, and the Moon Ability, Frame Step, Shell, Revealing and War pages were rendered (screenshots `guide_*`).
+
+**Bugs these tests found and that are fixed in b44:** the step teleport reset the server's idea of where the player looks, so steps 2 and 3 veered south; the field guide pages were in the wrong folder for Patchouli 1.16 (book opened empty); the guide recipe used a recipe type that only exists in Patchouli 1.17+.
+
+**Still needs checking on your server (Afterimage/Shell):**
+- Shell placement in a Flan claim and a World Protector/YAWP area where you have no build permission (must say it can't be raised there). The check posts Forge's block-place event; only a stand-in protection listener was tested.
+- Modded projectiles from the pack (guns, magic): anything that isn't a projectile entity can't be stopped; add entity ids to `extraProjectileEntities` for modded projectiles that don't extend vanilla's class.
+- Frame Step with real latency (players far from the server): the input window is 5 server ticks after a step ends.
+- Two players: Shell blocking each other's arrows both ways, melee inside the shell, the afterimages seen by the other player.
+
 ## Verified by source review (not executed)
 
 - **Lootr 1.16** passes the opening player's Luck into each per-player loot context (`LootrChestTileEntity`/`LootrBarrelTileEntity`/`LootrShulkerTileEntity`/`LootrChestMinecartEntity.fillWithLoot`: `builder.withLuck(player.getLuck()).withParameter(LootParameters.THIS_ENTITY, player)`), generates a player's inventory only once (`DataStorage.getInventory` → `ChestData.getInventory(player)` → `createInventory` only when absent) and stores it per player UUID. Present since Lootr's first 1.16 version.

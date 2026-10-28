@@ -32,6 +32,7 @@ minecraft {
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             // The automated client test only runs when this property is set (CI sets it).
             property 'ecmoons.clienttest', System.getenv('ECMOONS_CLIENTTEST') ?: 'false'
+            property 'ecmoons.debug', System.getenv('ECMOONS_CLIENTTEST') ?: 'false'
             mods {
                 ecmoons {
                     source sourceSets.main

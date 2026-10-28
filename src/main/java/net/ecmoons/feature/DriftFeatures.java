@@ -1,5 +1,6 @@
 package net.ecmoons.feature;
 
+import net.ecmoons.EcMoons;
 import net.ecmoons.MoonType;
 import net.ecmoons.Moons;
 import net.ecmoons.config.Settings;
@@ -23,15 +24,18 @@ import java.util.UUID;
  */
 public final class DriftFeatures {
     private static final Set<UUID> AIRBORNE_GRACE = new HashSet<>();
+    private static final boolean DEBUG = Boolean.getBoolean("ecmoons.debug");
 
     private DriftFeatures() {}
 
     /** Called every tick per player on the server. */
     public static void tick(ServerPlayerEntity player, MoonType active) {
+        // The server's fallDistance is what fall damage is computed from, so it is the reliable "in the air" signal.
+        boolean airborne = player.fallDistance > 0 || !player.isOnGround();
         if (active == MoonType.DRIFT) {
-            if (!player.isOnGround()) AIRBORNE_GRACE.add(player.getUUID());
+            if (airborne) AIRBORNE_GRACE.add(player.getUUID());
             else AIRBORNE_GRACE.remove(player.getUUID());
-        } else if (player.isOnGround() || player.isInWater()) {
+        } else if (!airborne || player.isInWater()) {
             AIRBORNE_GRACE.remove(player.getUUID());
         }
     }
@@ -45,8 +49,14 @@ public final class DriftFeatures {
         LivingEntity entity = event.getEntityLiving();
         if (entity.level.isClientSide || !(entity instanceof PlayerEntity)) return;
         PlayerEntity player = (PlayerEntity) entity;
-        if (Moons.is(player.level, MoonType.DRIFT) || hasGrace(player)) {
+        boolean active = Moons.is(player.level, MoonType.DRIFT);
+        boolean grace = hasGrace(player);
+        if (active || grace) {
             event.setDamageMultiplier(event.getDamageMultiplier() * (float) Settings.server().d("drift.fallDamageMultiplier"));
+        }
+        if (DEBUG && event.getDistance() > 3) {
+            EcMoons.LOGGER.info("Drift fall: {} distance {} active {} grace {} multiplier {}", player.getScoreboardName(),
+                    event.getDistance(), active, grace, event.getDamageMultiplier());
         }
         AIRBORNE_GRACE.remove(player.getUUID());
     }

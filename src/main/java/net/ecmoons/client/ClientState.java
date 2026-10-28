@@ -10,6 +10,8 @@ import java.util.Map;
  * code may reference it without loading anything client-only on a dedicated server.
  */
 public final class ClientState {
+    /** Levels shown by the last enchanting tooltip "N Enchantment Levels" line (diagnostics / client test). */
+    public static volatile int lastTooltipLevels = -1;
     private static byte frostState;
     private static float frostProgress;
     private static final Map<BlockPos, Boolean> NATURAL = new LinkedHashMap<BlockPos, Boolean>(16, 0.75f, true) {

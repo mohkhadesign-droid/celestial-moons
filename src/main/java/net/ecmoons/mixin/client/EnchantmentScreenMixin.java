@@ -1,5 +1,6 @@
 package net.ecmoons.mixin.client;
 
+import net.ecmoons.client.ClientState;
 import net.ecmoons.config.Settings;
 import net.ecmoons.feature.ArcaneCosts;
 import net.ecmoons.feature.ArcaneLock;
@@ -30,8 +31,12 @@ public abstract class EnchantmentScreenMixin extends ContainerScreen<Enchantment
         if ("container.enchant.level.many".equals(key) && args.length == 1 && args[0] instanceof Integer
                 && ((ArcaneLock) this.menu).ecmoons$arcane() == 1) {
             int levels = ArcaneCosts.discount(Settings.client(), (Integer) args[0]);
+            ClientState.lastTooltipLevels = levels;
             return levels == 1 ? new TranslationTextComponent("container.enchant.level.one")
                     : new TranslationTextComponent(key, levels);
+        }
+        if ("container.enchant.level.many".equals(key) && args.length == 1 && args[0] instanceof Integer) {
+            ClientState.lastTooltipLevels = (Integer) args[0];
         }
         return new TranslationTextComponent(key, args);
     }

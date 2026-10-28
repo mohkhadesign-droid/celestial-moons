@@ -5,7 +5,13 @@ import net.ecmoons.MoonType;
 import net.ecmoons.Moons;
 import net.ecmoons.feature.FrostFeatures;
 import net.ecmoons.net.FrostStatePacket;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.EnchantmentScreen;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.inventory.container.EnchantmentContainer;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.MainMenuScreen;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -212,6 +218,8 @@ public final class ClientSelfTest {
             cmd("tp @a " + px + " " + y + " " + pz);
             cmd("gamemode survival @a");
             cmd("effect clear @a");
+            cmd("difficulty easy");
+            cmd("gamerule naturalRegeneration false");
             cmd("ecmoons start ecmoons-frost_moon");
             Minecraft.getInstance().options.hideGui = false;
         });
@@ -230,6 +238,12 @@ public final class ClientSelfTest {
             check("frost: modifier removed when the moon ended",
                     player().getAttribute(Attributes.MOVEMENT_SPEED).getModifier(FrostFeatures.SLOW_MODIFIER) == null);
             check("frost: client state cleared", ClientState.frostState() == FrostStatePacket.NONE);
+        });
+
+        // ---- Arcane: the real enchanting screen renders the tooltip for the third slot (survival mode, 40 levels)
+        then(5, () -> {
+            check("arcane tooltip: 3 levels without the lock", enchantTooltip(false) == 3);
+            check("arcane tooltip: 2 levels with the server's Arcane lock", enchantTooltip(true) == 2);
         });
 
         // ---- Drift: jump height and fall damage, vanilla first
@@ -301,6 +315,30 @@ public final class ClientSelfTest {
             EcMoons.LOGGER.info(P + "CLIENTTEST COMPLETE passed=" + passed + " failed=" + failed);
             Minecraft.getInstance().stop();
         });
+    }
+
+    private static int enchantTooltip(boolean arcane) {
+        Minecraft mc = Minecraft.getInstance();
+        ClientPlayerEntity p = player();
+        EnchantmentContainer menu = new EnchantmentContainer(0, p.inventory);
+        menu.costs[2] = 30;
+        menu.enchantClue[2] = Registry.ENCHANTMENT.getId(Enchantments.SHARPNESS);
+        menu.levelClue[2] = 3;
+        menu.setData(10, arcane ? 1 : 0); // the add-on's data slot follows vanilla's ten
+        int oldLevel = p.experienceLevel;
+        p.experienceLevel = 40;
+        try {
+            EnchantmentScreen screen = new EnchantmentScreen(menu, p.inventory, new StringTextComponent("test"));
+            screen.init(mc, mc.getWindow().getGuiScaledWidth(), mc.getWindow().getGuiScaledHeight());
+            int left = (screen.width - 176) / 2;
+            int top = (screen.height - 166) / 2;
+            ClientState.lastTooltipLevels = -1;
+            screen.render(new MatrixStack(), left + 70, top + 14 + 19 * 2 + 5, 0F);
+            EcMoons.LOGGER.info(P + "tooltip levels (arcane=" + arcane + "): " + ClientState.lastTooltipLevels);
+            return ClientState.lastTooltipLevels;
+        } finally {
+            p.experienceLevel = oldLevel;
+        }
     }
 
     private static void startJump() {

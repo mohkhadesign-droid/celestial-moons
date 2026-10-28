@@ -268,6 +268,20 @@ public final class MoonConfig {
         bool("respectProtection", true, "Only allow a shell where the caster could place a block (claims, protected areas).");
         pop();
 
+        moon("wisp", "Wisp Moon - pilot a small scouting wisp and place up to three soul observers (Moon Ability key).", false);
+        dbl("pilotSpeed", 0.35, 0.05, 1.5, "Wisp flight speed in blocks per tick (0.35 = 7 blocks/s).");
+        dbl("pilotRange", 48.0, 4.0, 128.0, "The wisp can't go further than this from your body (blocks).");
+        intv("maxPilotSeconds", 90, 5, 600, "Piloting ends after this long.");
+        intv("pilotCooldownSeconds", 10, 0, 600, "Cooldown after piloting ends.");
+        intv("maxObservers", 3, 1, 8, "Observers per player. At the limit, dismiss one before placing another.");
+        dbl("placeReach", 4.5, 1.0, 8.0, "How far from the wisp an observer can be placed (on a block face the wisp looks at).");
+        dbl("viewRange", 48.0, 4.0, 128.0, "Observers further than this from your body can't be viewed.");
+        dbl("viewYawRange", 60.0, 0.0, 180.0, "While viewing, how far you can turn left/right from the observer's direction (degrees).");
+        dbl("viewPitchRange", 45.0, 0.0, 90.0, "While viewing, how far you can look up/down from the observer's direction (degrees).");
+        dbl("bodyMoveTolerance", 0.5, 0.1, 3.0, "If your body is moved further than this while piloting or viewing, you return to it.");
+        bool("respectProtection", true, "Only allow observers where the owner could place a block (claims, protected areas).");
+        pop();
+
         // ---- atmosphere (visual only; synced to clients, rendered by the client add-on) ----------------------------
         push("atmosphere", "Atmosphere: how the world looks while each moon is up. Purely visual and rendered on each player's",
                 "client (clients need this add-on installed). Turning anything here off never changes a moon's gameplay.");
@@ -329,6 +343,7 @@ public final class MoonConfig {
         atmo("afterimage", "2a2540", "6f6699", "d8ccf5", "c8b8f0", "e0d8ff", 0.25, 0.10, 1.0, 0.15);
         pop();
         atmo("shell", "26302a", "7d8a72", "e6eedc", "bfe3cf", "d8e8d0", 0.25, 0.10, 1.0, 0.1);
+        atmo("wisp", "141e30", "3a5878", "b8e4ff", "8fe0ff", "c8f4ff", 0.30, 0.12, 0.95, 0.15);
         pop();
         atmo("gluttony", "30242d", "742f42", "f3d6a0", "e8b65f", "e8b65f", 0.30, 0.15, 1.0, 0.0);
         bool("steam", true, "Sparse steam above lit furnaces, smokers and campfires near the player (bounded sampling).");

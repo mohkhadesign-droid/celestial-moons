@@ -116,6 +116,16 @@ public final class SelfTest {
         step("shell verify", 25, w -> ShellChecks.verify(w, SelfTest::check));
         step("shell exhaust", 25, w -> ShellChecks.verifyExhaust(w, SelfTest::check));
         step("shell after collapse", 25, w -> ShellChecks.verifyAfterCollapse(w, SelfTest::check));
+        step("wisp moon start", 1, w -> check("/ecmoons start ecmoons-wisp_moon", cmd("ecmoons start ecmoons-wisp_moon") == 1));
+        step("wisp pilot", 5, w -> WispChecks.setup(w, SelfTest::check));
+        step("wisp flight", 25, w -> WispChecks.afterFlight(w, SelfTest::check));
+        step("wisp place", 4, w -> WispChecks.place(w, SelfTest::check));
+        step("wisp arrow", 10, w -> WispChecks.afterArrow(w, SelfTest::check));
+        step("wisp range", 180, w -> WispChecks.afterRange(w, SelfTest::check));
+        step("wisp body moved", 3, w -> WispChecks.afterBodyMoved(w, SelfTest::check));
+        step("wisp before end", 25, w -> WispChecks.beforeMoonEnd(w, SelfTest::check));
+        step("wisp moon end", 1, w -> check("/ecmoons end (wisp)", cmd("ecmoons end") == 1));
+        step("wisp after end", 5, w -> WispChecks.afterMoonEnd(w, SelfTest::check));
         for (MoonType type : MoonType.MOONS) {
             step("start " + type.id(), 2, w -> check("/ecmoons start " + type.defaultKey, cmd("ecmoons start " + type.defaultKey) == 1));
             step("verify " + type.id(), 5, w -> {

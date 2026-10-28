@@ -144,6 +144,10 @@ public final class NewMoonCommands {
                             info(c.getSource(), "Shell: " + (net.ecmoons.feature.ability.ShellAbility.hasShell(p) ? "active"
                                     : net.ecmoons.feature.ability.ShellAbility.charging(p) ? "charging" : "none") + ", cooldown "
                                     + (net.ecmoons.feature.ability.MoonAbilities.cooldownLeft(p, net.ecmoons.MoonType.SHELL) + 19) / 20 + "s");
+                            info(c.getSource(), "Wisp: " + (net.ecmoons.feature.ability.WispAbility.piloting(p) ? "piloting"
+                                    : net.ecmoons.feature.ability.WispAbility.viewing(p) ? "viewing an observer" : "in body") + ", "
+                                    + net.ecmoons.feature.ability.WispAbility.observers(p).size() + " observer(s), cooldown "
+                                    + (net.ecmoons.feature.ability.MoonAbilities.cooldownLeft(p, net.ecmoons.MoonType.WISP) + 19) / 20 + "s");
                             return 1;
                         }))))
                 .then(Commands.literal("shell")
@@ -156,6 +160,18 @@ public final class NewMoonCommands {
                         .then(Commands.literal("clear").executes(c -> {
                             int n = net.ecmoons.feature.ability.ShellAbility.clearAll();
                             ok(c.getSource(), "Removed " + n + " shell(s).");
+                            return n;
+                        })))
+                .then(Commands.literal("wisp")
+                        .then(Commands.literal("list").executes(c -> {
+                            java.util.List<String> l = net.ecmoons.feature.ability.WispAbility.describe(c.getSource().getServer());
+                            if (l.isEmpty()) info(c.getSource(), "No wisps or observers.");
+                            for (String line : l) info(c.getSource(), line);
+                            return l.size();
+                        }))
+                        .then(Commands.literal("clear").executes(c -> {
+                            int n = net.ecmoons.feature.ability.WispAbility.clearAll();
+                            ok(c.getSource(), "Removed " + n + " wisp(s) and observer(s); everyone is back in their body.");
                             return n;
                         }))));
 

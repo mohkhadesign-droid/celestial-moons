@@ -114,6 +114,9 @@ moon("afterimage", "Afterimage Moon", "minecraft:phantom_membrane", "A lavender 
 moon("shell", "Shell Moon", "minecraft:turtle_helmet", "A pale green moon with a shell-plate pattern.",
      "Gives the $(l)Moon Ability$() key the $(l)Shell$(): crouch and hold to raise a dome that stops every projectile. See the $(o)Moon Abilities$() chapter.")
 
+moon("wisp", "Wisp Moon", "minecraft:soul_lantern", "A slate moon holding a pale blue soul flame.",
+     "Gives the $(l)Moon Ability$() key the $(l)Soul Observers$(): pilot a small blue wisp to scout, place up to three observers and look through them later. See the $(o)Moon Abilities$() chapter.")
+
 for i, (mid, name, icon, caption, pages) in enumerate(M):
     ps = [image(mid, name, caption)] + [text(p) for p in pages]
     entry("moons", mid + "_moon", name, icon, ps, i)
@@ -131,5 +134,14 @@ entry("abilities", "shell", "Shell", "minecraft:turtle_helmet", [
     text("$(l)Projectiles$() can't cross it in either direction: arrows, tridents, potions, pearls, fireballs, snowballs and fireworks. Arrows and tridents drop as items at the edge. Nothing splashes, teleports or explodes past it.$(br2)$(l)Durability:$() 100. Each projectile costs 10, explosive ones 30."),
     text("Players inside take $(l)75% less$() explosion damage.$(br2)$(l)Not blocked:$() people and mobs can walk in and out, and melee works as normal. Shells can't overlap.$(br2)$(l)Cooldown:$() 20 seconds after it collapses. You can't raise one where you aren't allowed to build (claims and protected areas).$(br2)$(l)Counterplay:$() walk in and fight up close, or wait it out."),
 ], 1)
+
+entry("abilities", "soul_observers", "Soul Observers (Wisp)", "minecraft:soul_lantern", [
+    image("wisp", "Soul Observers", "Wisp Moon only. Scout with a wisp; watch through observers."),
+    text("Press $(k:ecmoons.moon_ability) to open the Wisp menu. $(l)Pilot Wisp$() sends a small blue wisp out from your eyes and you see through it. Fly with your movement keys; jump and sneak go up and down. It can't pass walls or closed doors and stays within $(l)48 blocks$() of your body.", "Piloting"),
+    text("Your body stays behind, visible and vulnerable: it can't move, attack, use items or interact. $(l)Any damage$() to your body brings you straight back, and so does moving it.$(br2)Press $(k:ecmoons.moon_ability) or Esc to return. Piloting lasts up to 90 seconds; then a 10-second cooldown."),
+    text("While piloting, press $(l)Use$() (right-click) to place a $(l)soul observer$() on the block face the wisp looks at (within 4.5 blocks). Up to $(l)3$(); at the limit, dismiss one from the menu first. Not where you're not allowed to build (claims, protected areas)."),
+    text("From your body, the menu lists your observers by number. $(l)View$() one to look through it; you can only turn about 60 degrees from where it faces. Observers more than 48 blocks away show as out of range.$(br2)Damage, moving, $(k:ecmoons.moon_ability) or Esc return you to your body."),
+    text("$(l)Counterplay:$() observers and wisps glow and drift soul sparks, so they're easy to spot; any hit destroys one. A player watching through one is standing still somewhere with their guard down.$(br2)Observers vanish when the moon sets or their owner leaves. No x-ray, no markers: an observer only sees what's in front of it."),
+], 2)
 
 print("entries:", len(ENTRIES))

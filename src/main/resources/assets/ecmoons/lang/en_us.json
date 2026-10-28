@@ -38,6 +38,11 @@
   "ecmoons.name.shell_moon": "Shell Moon",
   "ecmoons.notification.shell_moon.rise": "The \"Shell Moon\" rises... Plates of light await a steady hand.",
   "ecmoons.notification.shell_moon.set": "The \"Shell Moon\" sets... The shells crack and fall away.",
+  "ecmoons.name.wisp_moon": "Wisp Moon",
+  "ecmoons.notification.wisp_moon.rise": "The \"Wisp Moon\" rises... Small blue spirits answer your call.",
+  "ecmoons.notification.wisp_moon.set": "The \"Wisp Moon\" sets... The soul lights gutter out.",
+  "entity.ecmoons.wisp": "Scouting Wisp",
+  "entity.ecmoons.soul_observer": "Soul Observer",
   "key.ecmoons.moon_ability": "Moon Ability",
   "key.categories.ecmoons": "Enhanced Celestials Moons"
 }

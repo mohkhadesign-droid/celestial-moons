@@ -52,6 +52,7 @@ public class EcMoons {
         modBus.addListener(this::commonSetup);
         modBus.addListener(this::onConfig);
         modBus.addGenericListener(GlobalLootModifierSerializer.class, this::registerLootModifiers);
+        net.ecmoons.feature.ability.wisp.ModEntities.ENTITIES.register(modBus);
 
         IEventBus forge = MinecraftForge.EVENT_BUS;
         forge.register(SpawnOrigins.class);
@@ -64,6 +65,7 @@ public class EcMoons {
         forge.register(net.ecmoons.feature.ability.MoonAbilities.class);
         forge.register(net.ecmoons.feature.ability.AfterimageAbility.class);
         forge.register(net.ecmoons.feature.ability.ShellAbility.class);
+        forge.register(net.ecmoons.feature.ability.WispAbility.class);
         forge.register(net.ecmoons.feature.ThreadFeatures.class);
         forge.register(net.ecmoons.feature.war.WarFeatures.class);
         forge.addListener(net.ecmoons.feature.war.WarFeatures::onServerStarted);

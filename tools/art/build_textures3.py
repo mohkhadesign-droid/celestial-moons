@@ -75,7 +75,11 @@ save(base,OUT+'/shell_moon_phases.png'); save(over*0.6,OUT+'/shell_moon_details.
 # Wisp (second build): slate moon, the soul flame glows/flickers
 m=sample('wisp')
 r,g,b=m[...,0],m[...,1],m[...,2]
-flame=(b>170)&(g>170)
+L=(r+g+b)/3
+yy,xx=np.mgrid[0:N,0:N]
+# the soul flame (bright, centred, with its upward tail) and the few sparks around it; the pale plates at the
+# moon's edge are just as bright, so the mask is limited to the inner area
+flame=(L>175)&(np.abs(xx-16)<=7)&(yy>=6)&(yy<=26)
 base,over=sheet(m,glow=flame)
 save(base,OUT+'/wisp_moon_phases.png'); save(over,OUT+'/wisp_moon_details.png')
 print('ok')

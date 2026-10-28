@@ -1,0 +1,21 @@
+{
+  "name": "Wisp Moon",
+  "icon": "minecraft:soul_lantern",
+  "category": "ecmoons:moons",
+  "sortnum": 16,
+  "pages": [
+    {
+      "type": "patchouli:image",
+      "images": [
+        "ecmoons:textures/gui/book/wisp.png"
+      ],
+      "title": "Wisp Moon",
+      "border": true,
+      "text": "A slate moon holding a pale blue soul flame."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Gives the $(l)Moon Ability$() key the $(l)Soul Observers$(): pilot a small blue wisp to scout, place up to three observers and look through them later. See the $(o)Moon Abilities$() chapter."
+    }
+  ]
+}

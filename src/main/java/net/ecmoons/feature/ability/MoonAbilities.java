@@ -28,7 +28,7 @@ import java.util.UUID;
  * Abilities never work inside the War Moon arena or for players taking part in a War Moon tournament.
  */
 public final class MoonAbilities {
-    private static final Map<UUID, Long> COOLDOWN_AFTERIMAGE = new HashMap<>(), COOLDOWN_SHELL = new HashMap<>();
+    private static final Map<UUID, Long> COOLDOWN_AFTERIMAGE = new HashMap<>(), COOLDOWN_SHELL = new HashMap<>(), COOLDOWN_WISP = new HashMap<>();
 
     private MoonAbilities() {}
 
@@ -49,6 +49,10 @@ public final class MoonAbilities {
     }
 
     public static void onKey(ServerPlayerEntity p, byte action, float dirX, float dirZ) {
+        if (WispAbility.inControl(p)) { // piloting or viewing: the key always returns you to your body
+            if (action == AbilityPacket.PRESS) WispAbility.end(p, null, true);
+            return;
+        }
         MoonType type = Moons.active(p.level);
         if (action == AbilityPacket.RELEASE) {
             ShellAbility.onRelease(p);
@@ -56,13 +60,30 @@ public final class MoonAbilities {
         }
         if (type == MoonType.AFTERIMAGE) AfterimageAbility.onPress(p, dirX, dirZ);
         else if (type == MoonType.SHELL) ShellAbility.onPress(p);
+        else if (type == MoonType.WISP) WispAbility.onPress(p);
         else fail(p, "No moon ability tonight");
+    }
+
+    /**
+     * Could this player place a block at pos? Asks Flan, World Protector/YAWP and any other protection mod through
+     * Forge's own block-place event (a synthetic event: nothing is placed, and the add-on's own placement records
+     * ignore it).
+     */
+    public static boolean canPlace(ServerPlayerEntity p, net.minecraft.util.math.BlockPos pos) {
+        net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent probe = new net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent(
+                net.minecraftforge.common.util.BlockSnapshot.create(p.level.dimension(), p.level, pos), p.level.getBlockState(pos.below()), p);
+        net.ecmoons.feature.PlacedBlocks.probing = true;
+        try {
+            return !net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(probe);
+        } finally {
+            net.ecmoons.feature.PlacedBlocks.probing = false;
+        }
     }
 
     // ---- cooldowns ----------------------------------------------------------------------------------------------
 
     private static Map<UUID, Long> map(MoonType t) {
-        return t == MoonType.SHELL ? COOLDOWN_SHELL : COOLDOWN_AFTERIMAGE;
+        return t == MoonType.SHELL ? COOLDOWN_SHELL : t == MoonType.WISP ? COOLDOWN_WISP : COOLDOWN_AFTERIMAGE;
     }
 
     public static int cooldownLeft(PlayerEntity p, MoonType t) {
@@ -82,6 +103,8 @@ public final class MoonAbilities {
     public static void reset(ServerPlayerEntity p) {
         COOLDOWN_AFTERIMAGE.remove(p.getUUID());
         COOLDOWN_SHELL.remove(p.getUUID());
+        COOLDOWN_WISP.remove(p.getUUID());
+        WispAbility.end(p, null, false);
         AfterimageAbility.cancel(p, false);
         ShellAbility.collapseOwned(p, "reset");
         sendIdle(p);
@@ -98,6 +121,7 @@ public final class MoonAbilities {
         if (event.phase != TickEvent.Phase.END) return;
         AfterimageAbility.tick();
         ShellAbility.tickEnd();
+        WispAbility.tickEnd();
     }
 
     @SubscribeEvent
@@ -110,6 +134,7 @@ public final class MoonAbilities {
         ServerPlayerEntity p = (ServerPlayerEntity) player;
         AfterimageAbility.cancel(p, false);
         ShellAbility.collapseOwned(p, why);
+        WispAbility.cleanup(p, why);
     }
 
     @SubscribeEvent
@@ -135,6 +160,8 @@ public final class MoonAbilities {
     public static void onServerStopped() {
         COOLDOWN_AFTERIMAGE.clear();
         COOLDOWN_SHELL.clear();
+        COOLDOWN_WISP.clear();
+        WispAbility.clearAll();
         AfterimageAbility.clearAll();
         ShellAbility.clearAll();
     }

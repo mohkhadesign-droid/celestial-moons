@@ -80,6 +80,10 @@ public final class MoonSkyRenderer {
                 dx = size * 0.13F + (animate ? (float) Math.sin(t * 0.5) * size * 0.015F : 0F);
                 dz = -size * 0.06F;
                 break;
+            case WISP: // the soul flame flickers (two uneven rhythms) and rises a hair, then settles
+                alpha = animate ? (float) (0.62 + 0.22 * Math.sin(t * 5.3) * Math.sin(t * 2.1) + 0.12 * Math.sin(t * 9.7)) : 0.7F;
+                if (animate) dz = (float) (-Math.abs(Math.sin(t * 0.8)) * size * 0.012);
+                break;
             case SHELL: // the mint central plate breathes slowly
                 alpha = animate ? (float) (0.45 + 0.35 * Math.sin(t * 0.6)) : 0.6F;
                 break;

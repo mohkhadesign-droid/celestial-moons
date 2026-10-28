@@ -166,15 +166,7 @@ public final class ShellAbility {
 
     /** Could this player place a block here? Asks the protection mods through Forge's own placement event. */
     static boolean allowedHere(ServerPlayerEntity p, BlockPos pos) {
-        if (!s().b("shell.respectProtection")) return true;
-        BlockEvent.EntityPlaceEvent probe = new BlockEvent.EntityPlaceEvent(BlockSnapshot.create(p.level.dimension(), p.level, pos),
-                p.level.getBlockState(pos.below()), p);
-        PlacedBlocks.probing = true;
-        try {
-            return !MinecraftForge.EVENT_BUS.post(probe);
-        } finally {
-            PlacedBlocks.probing = false;
-        }
+        return !s().b("shell.respectProtection") || MoonAbilities.canPlace(p, pos);
     }
 
     // ---- per tick (server tick end) ---------------------------------------------------------------------------------

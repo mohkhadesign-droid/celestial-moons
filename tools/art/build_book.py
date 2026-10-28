@@ -6,7 +6,7 @@ from PIL import Image, ImageChops, ImageDraw, ImageFilter
 ENV, OUT = sys.argv[1], sys.argv[2]
 os.makedirs(OUT, exist_ok=True)
 MOONS = ["blood", "blue", "harvest", "mist", "frost", "arcane", "prospector", "wisdom", "quiet", "drift", "revealing",
-         "thread", "war", "gluttony", "afterimage", "shell"]
+         "thread", "war", "gluttony", "afterimage", "shell", "wisp"]
 
 def frame(name):
     im = Image.open(os.path.join(ENV, name)).convert("RGB")

@@ -1,0 +1,38 @@
+{
+  "name": "Soul Observers (Wisp)",
+  "icon": "minecraft:soul_lantern",
+  "category": "ecmoons:abilities",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:image",
+      "images": [
+        "ecmoons:textures/gui/book/wisp.png"
+      ],
+      "title": "Soul Observers",
+      "border": true,
+      "text": "Wisp Moon only. Scout with a wisp; watch through observers."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Press $(k:ecmoons.moon_ability) to open the Wisp menu. $(l)Pilot Wisp$() sends a small blue wisp out from your eyes and you see through it. Fly with your movement keys; jump and sneak go up and down. It can't pass walls or closed doors and stays within $(l)48 blocks$() of your body.",
+      "title": "Piloting"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Your body stays behind, visible and vulnerable: it can't move, attack, use items or interact. $(l)Any damage$() to your body brings you straight back, and so does moving it.$(br2)Press $(k:ecmoons.moon_ability) or Esc to return. Piloting lasts up to 90 seconds; then a 10-second cooldown."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "While piloting, press $(l)Use$() (right-click) to place a $(l)soul observer$() on the block face the wisp looks at (within 4.5 blocks). Up to $(l)3$(); at the limit, dismiss one from the menu first. Not where you're not allowed to build (claims, protected areas)."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "From your body, the menu lists your observers by number. $(l)View$() one to look through it; you can only turn about 60 degrees from where it faces. Observers more than 48 blocks away show as out of range.$(br2)Damage, moving, $(k:ecmoons.moon_ability) or Esc return you to your body."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Counterplay:$() observers and wisps glow and drift soul sparks, so they're easy to spot; any hit destroys one. A player watching through one is standing still somewhere with their guard down.$(br2)Observers vanish when the moon sets or their owner leaves. No x-ray, no markers: an observer only sees what's in front of it."
+    }
+  ]
+}

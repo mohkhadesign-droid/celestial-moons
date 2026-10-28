@@ -1001,6 +1001,7 @@ public final class ClientSelfTest {
             net.ecmoons.client.ability.AbilityClient.testKey(false);
             Minecraft.getInstance().options.keyShift.setDown(false);
         });
+        wispTests();
         then(5, () -> {
             cmd("ecmoons ability reset @p");
             cmd("ecmoons end");
@@ -1014,6 +1015,134 @@ public final class ClientSelfTest {
             Minecraft.getInstance().options.setCameraType(net.minecraft.client.settings.PointOfView.FIRST_PERSON);
         });
         waitFor(200, () -> Moons.reported(Minecraft.getInstance().level) == MoonType.NONE);
+    }
+
+    private static double wispStartX;
+    private static net.minecraft.entity.Entity wispCam;
+
+    private static net.ecmoons.client.ability.WispMenuScreen menu() {
+        net.minecraft.client.gui.screen.Screen sc = Minecraft.getInstance().screen;
+        return sc instanceof net.ecmoons.client.ability.WispMenuScreen ? (net.ecmoons.client.ability.WispMenuScreen) sc : null;
+    }
+
+    /** Wisp Moon with a real client: menu, camera on the wisp, flight, wall, observer placement, viewing, exits. */
+    private static void wispTests() {
+        then(5, () -> {
+            net.ecmoons.client.ability.AbilityClient.testKey(false);
+            Minecraft.getInstance().options.keyShift.setDown(false);
+            cmd("ecmoons ability reset @p");
+            cmd("effect clear @a");
+            cmd("fill " + (ax + 9) + " " + ay + " " + (az - 3) + " " + (ax + 9) + " " + (ay + 4) + " " + (az + 3) + " air");
+            cmd("fill " + (ax + 6) + " " + ay + " " + (az - 3) + " " + (ax + 6) + " " + (ay + 4) + " " + (az + 3) + " stone");
+            cmd(tpStart());
+            cmd("ecmoons start ecmoons-wisp_moon");
+            Minecraft.getInstance().options.setCameraType(net.minecraft.client.settings.PointOfView.FIRST_PERSON);
+        });
+        waitFor(200, () -> Moons.is(Minecraft.getInstance().level, MoonType.WISP));
+        waitFor(100, () -> player().isOnGround());
+        then(10, () -> {
+            faceEast();
+            tap();
+        });
+        waitFor(40, () -> menu() != null);
+        then(2, () -> {
+            check("wisp: the Moon Ability key opens the Wisp menu", menu() != null);
+            Minecraft.getInstance().gui.getChat().clearMessages(false);
+            shot("wisp_0_menu");
+            wispStartX = player().getX();
+            net.ecmoons.client.ability.WispClient.send(net.ecmoons.feature.ability.WispAbility.PILOT, 0);
+        });
+        waitFor(40, () -> Minecraft.getInstance().getCameraEntity() instanceof net.ecmoons.feature.ability.wisp.WispEntity);
+        then(2, () -> {
+            wispCam = Minecraft.getInstance().getCameraEntity();
+            check("wisp: piloting switches the camera to the wisp (" + wispCam + ")", wispCam instanceof net.ecmoons.feature.ability.wisp.WispEntity);
+            check("wisp: the menu closed and the game mode is unchanged", menu() == null
+                    && Minecraft.getInstance().gameMode.getPlayerMode() == net.minecraft.world.GameType.SURVIVAL);
+            faceEast();
+            net.ecmoons.client.ability.WispClient.testInput = new float[]{1, 0, 0};
+        });
+        then(12, () -> {
+            net.ecmoons.client.ability.WispClient.testInput = new float[]{0, 0, 0};
+            double moved = wispCam.getX() - wispStartX;
+            check(String.format("wisp: the wisp flies with the movement keys (%.2f blocks east)", moved), moved > 2.5);
+            check(String.format("wisp: the body stays where it was (%.3f)", player().getX() - wispStartX), Math.abs(player().getX() - wispStartX) < 0.01);
+            net.ecmoons.client.ability.WispClient.testInput = new float[]{1, 0, 0};
+        });
+        then(20, () -> {
+            net.ecmoons.client.ability.WispClient.testInput = new float[]{0, 0, 0};
+            check(String.format("wisp: a wall stops the wisp (x %.2f, wall face %d)", wispCam.getX() - ax, 6),
+                    wispCam.getX() + wispCam.getBbWidth() / 2 <= ax + 6 + 0.02);
+            net.minecraft.client.settings.KeyBinding.click(Minecraft.getInstance().options.keyUse.getKey()); // explicit placement input
+        });
+        waitFor(40, () -> net.ecmoons.client.ability.WispClient.count == 1);
+        then(5, () -> {
+            check("wisp: the Use key places a soul observer on the wall (" + net.ecmoons.client.ability.WispClient.count + ")",
+                    net.ecmoons.client.ability.WispClient.count == 1);
+            Minecraft.getInstance().gui.getChat().clearMessages(false);
+            shot("wisp_1_observer_placed");
+            ClientPlayerEntity p = player();
+            p.yRot = 90F; // look back west at the body
+            p.yRotO = 90F;
+            p.xRot = 15F;
+            p.xRotO = 15F;
+        });
+        then(5, () -> {
+            check("wisp: the body is drawn while the camera is on the wisp (" + net.ecmoons.client.ability.WispClient.lastBodyDrawn + ")",
+                    net.ecmoons.client.ability.WispClient.lastBodyDrawn == 1);
+            Minecraft.getInstance().gui.getChat().clearMessages(false);
+            shot("wisp_2_body_seen_from_wisp");
+            tap(); // the Moon Ability key returns to the body
+        });
+        waitFor(40, () -> Minecraft.getInstance().getCameraEntity() == player());
+        then(5, () -> {
+            check("wisp: the Moon Ability key returns the camera to the body and removes the wisp",
+                    Minecraft.getInstance().getCameraEntity() == player() && (wispCam.removed || Minecraft.getInstance().level.getEntity(wispCam.getId()) == null));
+            tap(); // open the menu again
+        });
+        waitFor(40, () -> menu() != null);
+        then(2, () -> {
+            net.ecmoons.client.ability.WispMenuScreen m = menu();
+            check("wisp: the menu lists observer 1 in range", m != null && m.data.numbers.length == 1 && m.data.inRange[0]);
+            check("wisp: Pilot Wisp is not offered during the cooldown", m != null && m.data.cooldown > 0);
+            Minecraft.getInstance().gui.getChat().clearMessages(false);
+            shot("wisp_3_menu_observer");
+            net.ecmoons.client.ability.WispClient.send(net.ecmoons.feature.ability.WispAbility.VIEW, 1);
+        });
+        waitFor(40, () -> Minecraft.getInstance().getCameraEntity() instanceof net.ecmoons.feature.ability.wisp.ObserverEntity);
+        then(2, () -> {
+            net.minecraft.entity.Entity cam = Minecraft.getInstance().getCameraEntity();
+            check("wisp: viewing switches the camera to the observer", cam instanceof net.ecmoons.feature.ability.wisp.ObserverEntity);
+            ClientPlayerEntity p = player();
+            p.yRot = (cam == null ? 0 : cam.yRot) + 150F; // try to turn far away
+            p.yRotO = p.yRot;
+        });
+        then(2, () -> {
+            net.minecraft.entity.Entity cam = Minecraft.getInstance().getCameraEntity();
+            float d = cam == null ? 999 : net.minecraft.util.math.MathHelper.wrapDegrees(player().yRot - cam.yRot);
+            check(String.format("wisp: the observer view only turns a limited amount (%.0f degrees)", d), Math.abs(d) <= 60.01F);
+            Minecraft.getInstance().gui.getChat().clearMessages(false);
+            shot("wisp_4_observer_view");
+            onServer(server -> server.getPlayerList().getPlayers().get(0).hurt(net.minecraft.util.DamageSource.GENERIC, 1F));
+        });
+        waitFor(40, () -> Minecraft.getInstance().getCameraEntity() == player());
+        then(2, () -> {
+            check("wisp: damage returns the camera to the body at once", Minecraft.getInstance().getCameraEntity() == player()
+                    && !net.ecmoons.client.ability.WispClient.away());
+            cmd("ecmoons ability reset @p");
+            tap();
+        });
+        waitFor(40, () -> menu() != null);
+        then(2, () -> net.ecmoons.client.ability.WispClient.send(net.ecmoons.feature.ability.WispAbility.PILOT, 0));
+        waitFor(40, () -> Minecraft.getInstance().getCameraEntity() instanceof net.ecmoons.feature.ability.wisp.WispEntity);
+        then(5, () -> cmd("ecmoons end"));
+        waitFor(100, () -> Minecraft.getInstance().getCameraEntity() == player());
+        then(10, () -> {
+            boolean left = !Minecraft.getInstance().level.getEntitiesOfClass(net.minecraft.entity.Entity.class, player().getBoundingBox().inflate(60),
+                    e -> e instanceof net.ecmoons.feature.ability.wisp.WispEntity || e instanceof net.ecmoons.feature.ability.wisp.ObserverEntity).isEmpty();
+            check("wisp: when the moon ends the camera returns and no wisp or observer is left", Minecraft.getInstance().getCameraEntity() == player()
+                    && !net.ecmoons.client.ability.WispClient.away() && !left);
+            cmd("fill " + (ax + 6) + " " + ay + " " + (az - 3) + " " + (ax + 6) + " " + (ay + 4) + " " + (az + 3) + " air");
+        });
     }
 
     private static Object patchouli() throws ReflectiveOperationException {
@@ -1048,7 +1177,7 @@ public final class ClientSelfTest {
                 Object contents = book.getClass().getField("contents").get(book);
                 java.util.Map<?, ?> entries = (java.util.Map<?, ?>) contents.getClass().getField("entries").get(contents);
                 java.util.Map<?, ?> cats = (java.util.Map<?, ?>) contents.getClass().getField("categories").get(contents);
-                check("field guide: 3 categories and 21 entries loaded (" + cats.size() + ", " + entries.size() + ")", cats.size() == 3 && entries.size() == 21);
+                check("field guide: 3 categories and 23 entries loaded (" + cats.size() + ", " + entries.size() + ")", cats.size() == 3 && entries.size() == 23);
             } catch (Throwable t) {
                 check("field guide: reading the book contents (" + t + ")", false);
             }

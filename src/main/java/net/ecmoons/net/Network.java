@@ -14,7 +14,7 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
  * different protocol) is refused at login with a clear message instead of failing later.
  */
 public final class Network {
-    public static final String PROTOCOL = "4";
+    public static final String PROTOCOL = "5";
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
             new ResourceLocation(EcMoons.MOD_ID, "main"), () -> PROTOCOL, PROTOCOL::equals, PROTOCOL::equals);
 
@@ -31,6 +31,10 @@ public final class Network {
         CHANNEL.registerMessage(id++, AbilityStatePacket.class, AbilityStatePacket::encode, AbilityStatePacket::decode, AbilityStatePacket::handle);
         CHANNEL.registerMessage(id++, AbilityFxPacket.class, AbilityFxPacket::encode, AbilityFxPacket::decode, AbilityFxPacket::handle);
         CHANNEL.registerMessage(id++, ThreadPacket.class, ThreadPacket::encode, ThreadPacket::decode, ThreadPacket::handle);
+        CHANNEL.registerMessage(id++, WispInputPacket.class, WispInputPacket::encode, WispInputPacket::decode, WispInputPacket::handle);
+        CHANNEL.registerMessage(id++, WispActionPacket.class, WispActionPacket::encode, WispActionPacket::decode, WispActionPacket::handle);
+        CHANNEL.registerMessage(id++, WispStatePacket.class, WispStatePacket::encode, WispStatePacket::decode, WispStatePacket::handle);
+        CHANNEL.registerMessage(id++, WispMenuPacket.class, WispMenuPacket::encode, WispMenuPacket::decode, WispMenuPacket::handle);
     }
 
     public static void send(ServerPlayerEntity player, Object packet) {

@@ -65,7 +65,7 @@ public final class AbilityClient {
         boolean down = (KEY.isDown() && mc.screen == null) || forced;
         if (down && !wasDown) {
             MoonType m = Moons.active(mc.level);
-            if (m == MoonType.AFTERIMAGE || m == MoonType.SHELL) {
+            if (m == MoonType.AFTERIMAGE || m == MoonType.SHELL || m == MoonType.WISP || WispClient.away()) {
                 float yaw = (float) Math.toRadians(mc.player.yRot);
                 float fwd = mc.player.input.forwardImpulse, strafe = mc.player.input.leftImpulse;
                 float dx = -(float) Math.sin(yaw) * fwd + (float) Math.cos(yaw) * strafe;

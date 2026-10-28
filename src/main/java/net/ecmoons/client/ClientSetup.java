@@ -13,8 +13,17 @@ public final class ClientSetup {
         MinecraftForge.EVENT_BUS.register(net.ecmoons.client.atmo.AtmoEvents.class);
         MinecraftForge.EVENT_BUS.register(net.ecmoons.client.ability.AbilityClient.class);
         MinecraftForge.EVENT_BUS.register(net.ecmoons.client.ability.AbilityFx.class);
+        MinecraftForge.EVENT_BUS.register(net.ecmoons.client.ability.WispClient.class);
         net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext.get().getModEventBus().addListener(
-                (net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent e) -> net.ecmoons.client.ability.AbilityClient.register());
+                (net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent e) -> {
+                    net.ecmoons.client.ability.AbilityClient.register();
+                    net.minecraftforge.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(
+                            net.ecmoons.feature.ability.wisp.ModEntities.WISP.get(),
+                            m -> new net.ecmoons.client.ability.SoulSpriteRenderer<>(m, "wisp", 0.6F));
+                    net.minecraftforge.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(
+                            net.ecmoons.feature.ability.wisp.ModEntities.OBSERVER.get(),
+                            m -> new net.ecmoons.client.ability.SoulSpriteRenderer<>(m, "soul_observer", 0.45F));
+                });
         if (Boolean.getBoolean("ecmoons.clienttest")) MinecraftForge.EVENT_BUS.register(ClientSelfTest.class);
     }
 }

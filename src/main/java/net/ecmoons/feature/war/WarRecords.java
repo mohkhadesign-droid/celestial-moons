@@ -349,12 +349,18 @@ public final class WarRecords {
         player.teleportTo(world, x, safe.getY(), z, tag.getFloat("yRot"), tag.getFloat("xRot"));
     }
 
-    /** The original spot if the player fits there, else the nearest spot above with two free blocks and a floor. */
+    /** The original spot if the player fits there, else the nearest spot above (or, in the air, below) with two free blocks and a floor. */
     @Nullable
     static BlockPos safeSpot(ServerWorld world, BlockPos pos) {
         for (int dy = 0; dy <= 24; dy++) {
             BlockPos p = pos.above(dy);
             if (p.getY() > world.getMaxBuildHeight() - 2) break;
+            if (fits(world, p)) return p;
+        }
+        // in the air (flying, falling, elytra): the first standing spot below
+        for (int dy = 1; dy <= 128; dy++) {
+            BlockPos p = pos.below(dy);
+            if (p.getY() < 1) break;
             if (fits(world, p)) return p;
         }
         return null;

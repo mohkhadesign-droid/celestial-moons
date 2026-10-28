@@ -798,6 +798,7 @@ public final class ClientSelfTest {
         then(40, () -> {
             cmd("gamerule doMobSpawning false");
             cmd("gamerule naturalRegeneration false");
+            cmd("gamerule doMobLoot false");
             cmd("kill @e[type=!player]");
             cmd("effect clear @a");
             cmd("gamemode survival @a");
@@ -1006,6 +1007,7 @@ public final class ClientSelfTest {
             cmd("effect clear @a");
             cmd("gamerule doMobSpawning true");
             cmd("gamerule naturalRegeneration true");
+            cmd("gamerule doMobLoot true");
             cmd("gamemode creative @a");
             cmd("fill " + (ax - 20) + " " + (ay - 1) + " " + (az - 15) + " " + (ax + 24) + " " + (ay + 5) + " " + (az + 15) + " air");
             cmd("tp @a " + px + " 150 " + pz); // back near the start so the next tests find loaded terrain

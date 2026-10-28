@@ -105,11 +105,15 @@ public final class WarPlayerChecks {
         check("war: player is fighting", WarFeatures.isFighting(p));
         // item transfers: tossing the selected stack returns it, nothing lands in the arena
         int swords = count(p, Items.IRON_SWORD);
-        p.inventory.selected = p.inventory.findSlotMatchingItem(new ItemStack(Items.IRON_SWORD));
+        int slot = -1;
+        for (int i = 0; i < 9; i++) if (p.inventory.getItem(i).getItem() == Items.IRON_SWORD) slot = i;
+        check("war: the kit sword is in the hotbar (slot " + slot + ")", slot >= 0);
+        p.inventory.selected = Math.max(0, slot);
+        boolean holding = p.getMainHandItem().getItem() == Items.IRON_SWORD;
         p.drop(true);
         World w = p.level;
         boolean items = !w.getEntitiesOfClass(ItemEntity.class, new AxisAlignedBB(p.blockPosition()).inflate(8)).isEmpty();
-        check("war: tossed items stay in the inventory and no item entity appears", count(p, Items.IRON_SWORD) == swords && !items);
+        check("war: tossed items stay in the inventory and no item entity appears", holding && count(p, Items.IRON_SWORD) == swords && !items);
         // block protection
         check("war: arena blocks cannot be broken", !p.gameMode.destroyBlock(p.blockPosition().below()));
     }

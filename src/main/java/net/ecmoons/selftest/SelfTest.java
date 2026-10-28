@@ -100,6 +100,7 @@ public final class SelfTest {
         server = event.getServer();
         EcMoons.LOGGER.info(P + "starting");
         step("static checks", 1, SelfTest::staticChecks);
+        step("new moon static checks", 1, w -> NewMoonChecks.staticChecks(w, SelfTest::check));
         for (MoonType type : MoonType.MOONS) {
             step("start " + type.id(), 2, w -> check("/ecmoons start " + type.defaultKey, cmd("ecmoons start " + type.defaultKey) == 1));
             step("verify " + type.id(), 5, w -> {
@@ -107,6 +108,7 @@ public final class SelfTest {
                 check(type.id() + " add-on effects active", Moons.active(w) == type);
                 check("/ecmoons active during " + type.id(), cmd("ecmoons active") == 1);
                 moonChecks(w, type);
+                NewMoonChecks.gluttony(w, type, SelfTest::check);
             });
         }
         step("super variant", 2, w -> check("start super blood", cmd("ecmoons start enhancedcelestials-super_blood_moon") == 1));
@@ -114,6 +116,23 @@ public final class SelfTest {
                 && MoonType.isSuperVariant(Moons.currentEvent(w))));
         step("end", 2, w -> check("/ecmoons end", cmd("ecmoons end") == 1));
         step("after end", 5, w -> check("ordinary moon after /ecmoons end", Moons.active(w) == MoonType.NONE));
+        step("gluttony after end", 1, w -> NewMoonChecks.gluttonyEnded(w, SelfTest::check));
+        step("new moon commands", 1, w -> {
+            check("/moonteams create", cmd("moonteams create red Red Kingdom") == 1);
+            check("/moonteams create duplicate fails", cmd("moonteams create red Again") == 0);
+            check("/moonteams list", cmd("moonteams list") == 1);
+            check("/moonteams info", cmd("moonteams info red") == 0);
+            check("/moonteams delete", cmd("moonteams delete red") == 1);
+            check("/ecmoons war status", cmd("ecmoons war status") == 1);
+            check("/ecmoons war records", cmd("ecmoons war records") == 0);
+            check("/ecmoons war arena build", cmd("ecmoons war arena build") == 1);
+            check("/ecmoons war arena clear", cmd("ecmoons war arena clear") == 1);
+            check("/ecmoons reveal status", cmd("ecmoons reveal status") == 1);
+            check("/ecmoons reveal scan (no players)", cmd("ecmoons reveal scan") == 0);
+            check("/ecmoons war start now with nobody online is cancelled safely", cmd("ecmoons war start now") == 1);
+        });
+        step("war cancelled", 5, w -> check("war tournament cancelled for lack of players (" + net.ecmoons.feature.war.WarFeatures.describe(server) + ")",
+                net.ecmoons.feature.war.WarFeatures.phase(server) == net.ecmoons.feature.war.WarState.Phase.IDLE));
         step("commands", 1, w -> {
             check("/ecmoons list", cmd("ecmoons list") > 0);
             check("/ecmoons settings mist", cmd("ecmoons settings mist") > 0);

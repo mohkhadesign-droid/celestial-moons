@@ -205,6 +205,9 @@ public final class MoonConfig {
         list("accessoryCapabilities", ImmutableList.of("curios:inventory"),
                 "Player capabilities that hold equipment (accessory mods). Their items are saved, emptied for the match and restored.",
                 "If such a capability cannot be saved, that player is not enrolled and told why.");
+        list("ignoredCapabilities", ImmutableList.of(),
+                "Player capabilities that contain item data but are NOT usable equipment (left untouched during the match).",
+                "Any other capability that holds items blocks that player from enrolling, so nothing can be lost or duplicated.");
         intv("arenaFloorSize", 48, 24, 96, "Fighting floor size (blocks, square).");
         intv("arenaWallHeight", 12, 6, 32, "Outer wall height.");
         str("arenaTemplate", "", "Optional structure template (namespace:path, e.g. from a structure block) to place instead of the",

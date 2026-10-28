@@ -112,7 +112,7 @@ public final class DefaultEvents {
      * pre-release build or a hand-made copy), it becomes the Gluttony Moon file so there are never two scheduled
      * food moons. Its chance/phases/text are kept; only the event type is changed to gluttony.
      */
-    private static void migrateFeastMoon(Path eventsDir) {
+    public static void migrateFeastMoon(Path eventsDir) {
         Path feast = eventsDir.resolve("ecmoons-feast_moon.json");
         Path gluttony = eventsDir.resolve("ecmoons-gluttony_moon.json");
         if (!Files.exists(feast)) return;

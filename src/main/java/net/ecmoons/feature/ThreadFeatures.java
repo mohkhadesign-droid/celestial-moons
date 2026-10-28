@@ -76,19 +76,8 @@ public final class ThreadFeatures {
         Map<String, List<Integer>> linksByTeam = new HashMap<>();
         Map<UUID, Integer> counts = new HashMap<>();
         for (Map.Entry<String, List<ServerPlayerEntity>> e : byTeam.entrySet()) {
-            List<ServerPlayerEntity> list = e.getValue();
             List<Integer> links = new ArrayList<>();
-            for (int i = 0; i < list.size(); i++) {
-                for (int j = i + 1; j < list.size(); j++) {
-                    ServerPlayerEntity a = list.get(i), b = list.get(j);
-                    if (a.distanceToSqr(b) > range * range) continue;
-                    if (los && !lineOfSight(world, a, b)) continue;
-                    counts.merge(a.getUUID(), 1, Integer::sum);
-                    counts.merge(b.getUUID(), 1, Integer::sum);
-                    links.add(a.getId());
-                    links.add(b.getId());
-                }
-            }
+            bond(world, e.getValue(), range, los, counts, links);
             linksByTeam.put(e.getKey(), links);
         }
         for (ServerPlayerEntity p : world.players()) {
@@ -112,6 +101,36 @@ public final class ThreadFeatures {
         }
     }
 
+    /**
+     * Bond the members of one team: every pair within range (and in line of sight when required) is a link and
+     * counts one teammate for each of the two players.
+     */
+    public static void bond(ServerWorld world, List<ServerPlayerEntity> members, double range, boolean los,
+                            Map<UUID, Integer> counts, List<Integer> links) {
+        for (int i = 0; i < members.size(); i++) {
+            for (int j = i + 1; j < members.size(); j++) {
+                ServerPlayerEntity a = members.get(i), b = members.get(j);
+                if (a.distanceToSqr(b) > range * range) continue;
+                if (los && !lineOfSight(world, a, b)) continue;
+                counts.merge(a.getUUID(), 1, Integer::sum);
+                counts.merge(b.getUUID(), 1, Integer::sum);
+                links.add(a.getId());
+                links.add(b.getId());
+            }
+        }
+    }
+
+    /** Reduction for this many bonded teammates. */
+    public static float target(int teammates) {
+        Settings s = Settings.server();
+        return Math.min((float) s.d("thread.maxReduction"), teammates * (float) s.d("thread.reductionPerTeammate"));
+    }
+
+    /** Damage after the bond reduction (excluded damage types are never reduced). */
+    public static float reduce(float amount, float reduction, DamageSource source) {
+        return reduction <= 0f || excluded(source) ? amount : amount * (1f - reduction);
+    }
+
     public static boolean excluded(DamageSource source) {
         return Settings.server().list("thread.excludedDamageTypes").contains(source.getMsgId());
     }
@@ -122,8 +141,8 @@ public final class ThreadFeatures {
         if (!(event.getEntityLiving() instanceof ServerPlayerEntity)) return;
         ServerPlayerEntity p = (ServerPlayerEntity) event.getEntityLiving();
         float r = reduction(p);
-        if (r <= 0f || !Moons.is(p.level, MoonType.THREAD) || !canBond(p) || excluded(event.getSource())) return;
-        event.setAmount(event.getAmount() * (1f - r));
+        if (r <= 0f || !Moons.is(p.level, MoonType.THREAD) || !canBond(p)) return;
+        event.setAmount(reduce(event.getAmount(), r, event.getSource()));
     }
 
     public static void forget(UUID id) {

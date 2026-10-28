@@ -172,8 +172,16 @@ public final class RevealClient {
 
     // ---- markers ------------------------------------------------------------------------------------------------------
 
+    public static boolean scanning() {
+        return anim == SCAN;
+    }
+
     public static int markerCount() {
         return markers.size();
+    }
+
+    public static List<Vector3d> markers() {
+        return new ArrayList<>(markers);
     }
 
     static String direction(double dx, double dz) {

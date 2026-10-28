@@ -174,6 +174,8 @@ public final class WarRecords {
         CompoundNBT caps;
         try {
             caps = accessoryCaps(player);
+            String gap = unsupportedItemStorage(player);
+            if (gap != null) return gap;
         } catch (RuntimeException e) {
             return "accessory slots could not be saved (" + e.getClass().getSimpleName() + ")";
         }
@@ -199,6 +201,36 @@ public final class WarRecords {
         tag.putFloat("xRot", player.xRot);
         if (!write(server, player.getUUID(), tag)) return "the recovery record could not be written and verified";
         return null;
+    }
+
+    /**
+     * Any other player capability that holds items is equipment the add-on does not know how to store safely
+     * (e.g. an accessory mod not listed in war.accessoryCapabilities). Such players are not enrolled.
+     */
+    @Nullable
+    private static String unsupportedItemStorage(ServerPlayerEntity player) {
+        CompoundNBT all = Caps.serialize(player);
+        if (all == null) return null;
+        List<String> known = Settings.server().list("war.accessoryCapabilities");
+        List<String> ignored = Settings.server().list("war.ignoredCapabilities");
+        for (String key : all.getAllKeys()) {
+            if (known.contains(key) || ignored.contains(key)) continue;
+            if (containsItems(all.get(key))) {
+                EcMoons.LOGGER.warn("War Moon: {} has items in capability '{}' which is not in war.accessoryCapabilities", player.getScoreboardName(), key);
+                return "your items in '" + key + "' cannot be stored safely (an admin can add it to war.accessoryCapabilities)";
+            }
+        }
+        return null;
+    }
+
+    static boolean containsItems(INBT nbt) {
+        if (isItem(nbt)) return !"minecraft:air".equals(((CompoundNBT) nbt).getString("id"));
+        if (nbt instanceof CompoundNBT) {
+            for (String k : ((CompoundNBT) nbt).getAllKeys()) if (containsItems(((CompoundNBT) nbt).get(k))) return true;
+        } else if (nbt instanceof ListNBT) {
+            for (INBT child : (ListNBT) nbt) if (containsItems(child)) return true;
+        }
+        return false;
     }
 
     /** Remove everything the player brought; only called after save() confirmed the record. */

@@ -1,6 +1,6 @@
-# Enhanced Celestials: Ten Moons (`ecmoons`)
+# Enhanced Celestials: Fourteen Moons (`ecmoons`)
 
-A Forge **1.16.5** add-on for **Enhanced Celestials 2.0.9**. It turns Enhanced Celestials' three lunar events into a ten-moon lineup:
+A Forge **1.16.5** add-on for **Enhanced Celestials 2.0.9**. It turns Enhanced Celestials' three lunar events into a fourteen-moon lineup:
 
 | # | Moon | Theme | Event key |
 |---|------|-------|-----------|
@@ -14,6 +14,10 @@ A Forge **1.16.5** add-on for **Enhanced Celestials 2.0.9**. It turns Enhanced C
 | 8 | Wisdom Moon | experience | `ecmoons-wisdom_moon` |
 | 9 | Quiet Moon | recovery | `ecmoons-quiet_moon` |
 | 10 | Drift Moon | movement | `ecmoons-drift_moon` |
+| 11 | Revealing Moon | an eye that reveals where players stand | `ecmoons-revealing_moon` |
+| 12 | Thread Moon | team bonds (admin-assigned moon teams) | `ecmoons-thread_moon` |
+| 13 | War Moon | a temporary equal-kit arena tournament | `ecmoons-war_moon` |
+| 14 | Gluttony Moon | variety of food = temporary hearts | `ecmoons-gluttony_moon` |
 
 The original Enhanced Celestials jar is **not modified**. The add-on depends on it and plugs into its systems.
 
@@ -32,8 +36,10 @@ The original Enhanced Celestials jar is **not modified**. The add-on depends on 
 Steps:
 1. Stop the server and put `ecmoons-…jar` in `mods/`.
 2. Put the same jar in every player's `mods/` folder. Clients need it for the moon textures, fog, Drift movement, the frost overlay and the Arcane tooltip. A client without it is refused at login with a version-mismatch message, so nobody can join without it by accident.
-3. Start the server once. It creates `config/ecmoons-common.toml` and `config/ecmoons/blue_moon_bonus_loot.json`. It also adds the seven new event files to every world's Enhanced Celestials folder (see §3).
+3. Start the server once. It creates `config/ecmoons-common.toml` and `config/ecmoons/blue_moon_bonus_loot.json`. It also adds the eleven new event files to every world's Enhanced Celestials folder (see §3).
 4. Optionally restart after editing the config.
+
+The War Moon arena is a separate dimension, `ecmoons:war_arena`, defined in the add-on's built-in data pack (`data/ecmoons/dimension*/war_arena.json`). Nothing in your normal worlds is touched. The War Moon also checks **Flan Warfare** (if installed) so it never starts during an active flag capture.
 
 Optional mods it integrates with: **Lootr** (per-player chest loot gets Blue Moon bonus rolls) and **IDAS** (`idas:chests/pillager_fortress/pillager_basic` is a pre-configured Blue Moon table). Neither is required.
 
@@ -59,6 +65,9 @@ The add-on decides **what** each moon does.
 | `WorldRendererMixin` (sky) | Binds the add-on moon texture right after EC binds and tints the moon, then draws the animated detail layer. Both injections are optional, so another sky mod can't crash the game. |
 | `LootTableManagerMixin` | Appends Blue Moon pools the same way EC appends its own pools. Unlike Forge's `LootTableLoadEvent` in 1.16, this works for modded tables such as IDAS. |
 | Global loot modifiers `ecmoons:blood_moon_rare_drops` and `ecmoons:prospector_bonus` | Add items without re-rolling or replacing the original loot. |
+| `ServerPlayerEntityMixin` (`canHarmPlayer`) | War Moon only: two fighters can always hurt each other during the match, and nobody else involved can hurt or be hurt by players. Returns vanilla behaviour for everyone not in a tournament. |
+| Data-pack dimension `ecmoons:war_arena` (end-style sky, fixed night, void biome, no Enhanced Celestials lunar context) | The War Moon arena never touches the main worlds and has no moon effects inside. |
+| Persisted world data: `ecmoons_teams.dat`, `ecmoons_war_session.dat`, `ecmoons_war/<uuid>.dat` | Moon teams; the War Moon phase and involved players; one recovery record per player during a match. |
 | Vanilla mixins: `PlayerEntity`, `FishingBobberEntity`, `RepairContainer`, `EnchantmentContainer`, `Block`, `AbstractBlockState`, `MobEntity`, `ServerWorld`; client: `EnchantmentScreen` | Exhaustion, fishing timers, anvil/enchanting costs, drop context, crop random ticks, spawn origin and footstep radius. Each targets one call site, checked against the 1.16.5 bytecode. |
 
 **Gameplay decisions are made on the server.** Clients receive the server's settings and Enhanced Celestials' current event. They only render: fog, moon textures, the frost overlay and tooltips. The one exception is player movement (Drift Moon jump height and fall speed), because Minecraft 1.16 simulates player movement on the player's own client. Fall damage, which is what matters, is still decided on the server.
@@ -137,6 +146,35 @@ Main values (defaults shown):
 | | `gravityMultiplier` | 0.6 | Applies while falling. |
 | | `fallDamageMultiplier` | 0.5 | |
 | | `jumpExhaustionMultiplier` | 0.5 | |
+| Revealing | `scanIntervalSeconds` | 60 | One "The eye is searching…" warning per interval. |
+| | `countdownSeconds` | 5 | Countdown between the warning and the scan. |
+| | `markerSeconds` | 8 | How long the eye markers stay visible. |
+| | `revealRadius` | 256 | Viewers only get markers within this horizontal distance. |
+| | `includeCreative` | false | Spectators are never revealed. |
+| | `protectedAreas` | (none) | `dimension\|x1,z1\|x2,z2`. Claims are **not** protected automatically. Tag `ecmoons_reveal_exempt` also hides a player. |
+| | `blinkCloseTicks` / `blinkHoldTicks` | 6 / 4 | Eyelid timing. |
+| | `idleBlinkMinSeconds` / `idleBlinkMaxSeconds` | 6 / 14 | Random gap between idle blinks. |
+| Thread | `bondRange` | 12 | Blocks. |
+| | `reductionPerTeammate` / `maxReduction` | 0.05 / 0.15 | 5% per bonded teammate, at most 15%. |
+| | `fadeSeconds` | 3 | The bonus fades to zero over this time after separating. |
+| | `requireLineOfSight` | true | A clear line between the two players' eyes. |
+| | `excludedDamageTypes` | starve, drown, outOfWorld, inWall, cramming, fall, lava, inFire, onFire, hotFloor, magic, wither | Damage-source ids never reduced. |
+| War | `warningSeconds` | 120 | Reminders at 1:00, 0:30 and 0:10. |
+| | `minParticipants` / `maxParticipants` | 2 / 16 | |
+| | `prepSeconds` / `matchSeconds` | 10 / 360 | Cell countdown; time limit before sudden death. |
+| | `suddenDeathShrinkSeconds` | 8 | The safe square shrinks by 2 blocks this often (arena only, never the world border). |
+| | `celebrationSeconds` | 10 | Winner announcement before everyone returns. |
+| | `deferMinutes` / `maxDeferrals` | 2 / 5 | Postpone while a Flan Warfare capture runs; cancel after 5 postponements. |
+| | `excludedPlayers` | (none) | Names or UUIDs; tag `ecmoons_war_exempt` does the same. |
+| | `kit` | iron armour, shield, iron sword, bow, 16 arrows, 16 cooked beef | `slot=item` or `item*count`. |
+| | `accessoryCapabilities` | `curios:inventory` | Equipment capabilities that are saved, emptied and restored. |
+| | `ignoredCapabilities` | (none) | Item-holding capabilities that are not equipment. Any other item-holding capability blocks that player. |
+| | `arenaFloorSize` / `arenaWallHeight` | 48 / 12 | Built-in arena. |
+| | `arenaTemplate`, `arenaCells`, `arenaSpectatorPos` | empty | Replace the built-in arena with a structure template. |
+| | `championMinutes` | 30 | Minutes of online time. |
+| Gluttony | `maxBonusHearts` | 4 | |
+| | `foodCategories` | 20 vanilla groups (beef, pork, fish, …) | `name=item,item,#tag`. Unlisted foods (including modded) count as their own category. |
+| | `excludedFoods` | rotten flesh, spider eye, poisonous potato, pufferfish | |
 
 The file reloads automatically when edited; `/ecmoons reload` forces a re-read and re-sends settings to all players. **Exceptions:** `enabled`, `superVariantEnabled` and `disabledEventKeys` need a restart, and Blue Moon loot needs `/reload`.
 
@@ -185,6 +223,30 @@ All commands act on the dimension the command runs in. Use `/execute in <dim> ru
 | `/ecmoons inspect entity <target>` | 2 | Recorded spawn origin, plus Wisdom and Blood eligibility. |
 | `/ecmoons inspect loot` | 2 | Which loot tables received Blue Moon bonus pools. |
 | `/ecmoons reload` | 3 | Re-read `ecmoons-common.toml` and re-sync it to all players. |
+| `/ecmoons reveal warn` | 2 | Revealing Moon: start the next search now (warning, countdown, eye shuts, scan). |
+| `/ecmoons reveal scan` / `scan self` | 2 | Scan immediately in this dimension. `self` also shows you your own marker (testing). |
+| `/ecmoons reveal blink` | 2 | Play one eyelid blink for you (the eye must be in your sky). |
+| `/ecmoons reveal status` | 2 | Time to the next warning or scan. |
+| `/ecmoons thread status [player]` | 2 | Moon team and current bond reduction. |
+| `/ecmoons gluttony status [player]` | 2 | Counted food categories, bonus hearts, max health. |
+| `/ecmoons gluttony reset <player>` | 2 | Clear Gluttony progress (hearts removed, health clamped). |
+| `/ecmoons war status` | 2 | Phase, fighters, watchers, pending recovery records, arena dimension and Flan Warfare state. |
+| `/ecmoons war start` / `start now` / `start solo` | 3 | Start a tournament with the full warning, without it, or in solo test mode (1 player is enough). Works without the moon. |
+| `/ecmoons war cancel` | 3 | Emergency stop: everyone is restored at once, the arena removed. |
+| `/ecmoons war records` | 2 | Pending recovery records (players who were offline when a match ended, or after a crash). |
+| `/ecmoons war recover <player>` | 3 | Apply a pending record now (otherwise it is applied at the player's next login). |
+| `/ecmoons war exclude <players>` / `include <players>` | 2 | Never enrol / enrol again (scoreboard tag `ecmoons_war_exempt`). |
+| `/ecmoons war spectate <players> [true\|false]` | 2 | Watch from the gallery instead of fighting. |
+| `/ecmoons war champion <player>` / `… clear` | 3 | Grant or remove the War Champion reward (testing). |
+| `/ecmoons war arena build` / `arena clear` | 3 | Build the arena to look at it (`/execute in ecmoons:war_arena run tp @s 0 125 0`), then remove it. |
+| `/moonteams create <teamId> <displayName>` | 2 | New moon team. |
+| `/moonteams assign <player> <teamId>` | 2 | Put a player in a team (moves them out of any other; offline players by name work if the server knows them). |
+| `/moonteams remove <player>` | 2 | Remove from their team. |
+| `/moonteams list` / `info <teamId>` / `delete <teamId>` | 2 | |
+| `/warmoon spectate` | 0 | Any player: toggle watching the next War Moon battle instead of fighting. |
+| `/warmoon status` | 0 | Tournament phase and your remaining War Champion time. |
+
+Start or stop any moon with `/ecmoons start ecmoons-revealing_moon now` (or `-thread_moon`, `-war_moon`, `-gluttony_moon`) and `/ecmoons end`.
 
 Enhanced Celestials' own `/ec setLunarEvent <key>` and `/ec lunarForecast [recompute]` keep working and include the new moons.
 
@@ -260,20 +322,56 @@ Enhanced Celestials' own `/ec setLunarEvent <key>` and `/ec lunarForecast [recom
 - Sprint speed, attack speed and projectiles are untouched.
 - Transitions: a player still airborne when the moon ends keeps the fall-damage reduction until landing. The gravity modifier is removed on landing or as soon as the moon ends.
 
+**Revealing Moon.** The server owns the timing; clients only animate.
+- Every `scanIntervalSeconds` (60) every player in that dimension gets "The eye is searching…" in chat, then a 5-second action-bar countdown. The eye on the moon closes so it is shut at the moment of the scan, then reopens.
+- At the scan the server records where every eligible player is. Each viewer receives spectral eye markers for the players within `revealRadius` (256) of them, never their own. Markers show for 8 s, are drawn through terrain, and carry an approximate distance and compass direction ("~120 m NE"). No coordinates are ever printed in chat.
+- Markers are placed at the player's position, lifted to the surface if the player is below it: an underground player only gives away their horizontal position. A roof does not protect.
+- Never revealed: spectators, creative players (unless `includeCreative`), players tagged `ecmoons_reveal_exempt`, players inside a configured protected area and War Moon participants. Claims are not automatically protected.
+- The eye blinks on its own every 6–14 s (open → half → closed → reopening). The four frames are separate pre-drawn textures with the iris in the same place. Because it is driven by Enhanced Celestials' synced event, players who join mid-moon see the eye and its blinks straight away; they simply wait for the next server scan.
+
+**Thread Moon.** Teams are only what admins set with `/moonteams`: stored by UUID in `world/data/ecmoons_teams.dat`, one team per player. Nothing is inferred from chat colours, name prefixes, scoreboard teams or claim trust.
+- Every half second, players of the same team in the same dimension within 12 blocks, with a clear line of sight between their eyes, are bonded.
+- Each bonded teammate gives 5% damage reduction, capped at 15%. When teammates separate the bonus fades to zero over 3 s.
+- The reduction is applied once per damage event (`LivingHurtEvent`), on the damaged player only. No damage is moved to teammates.
+- Never bonded: spectators, dead players, players without a team, War Moon participants. Pets and other mobs are not players and never take part. Excluded damage types (starvation, drowning, the void, suffocation, fall, fire/lava, magic, wither by default) are never reduced.
+- Team members (and only they) receive the links and see rose-coloured thread particles between bonded teammates. A small "Thread bond -10%" indicator appears next to the hotbar.
+
+**War Moon.** A last-player-standing tournament in the separate `ecmoons:war_arena` dimension. The main world's PvP, raid windows and claims are never changed.
+- **Warning:** when the War Moon rises (once per War Moon night) everyone sees "WAR MOON APPROACHES — Arena battle begins in 2:00. Your equipment will be stored safely. Everyone fights with the same loadout.", with reminders at 1:00, 0:30 and 0:10. If the moon sets during the warning, it is cancelled.
+- **Flan Warfare:** if a flag capture is running when the warning ends, the battle is postponed by 2 minutes (up to 5 times, then cancelled for the night). Raids are never interrupted.
+- **Enrolment:** every eligible online player (alive, not spectator/creative, not excluded) is enrolled, up to 16, chosen at random if more. Players who opted to spectate go to the gallery. Too few players cancels the tournament.
+- **Safety order for each player:** (1) inventory, armour, offhand, accessory capabilities, XP, health, food, air, effects, game mode, flight and position are written to `world/data/ecmoons_war/<uuid>.dat` with an atomic write, (2) the file is read back and compared, and only then (3) the player is stripped, given the kit and moved. If any step fails, or the player has items in an equipment system the add-on does not know (an item-holding capability not in `accessoryCapabilities`), that player is **not enrolled** and is told why. Restoring always replaces the inventory with the saved one, so applying a record twice cannot duplicate anything.
+- **Arena:** a fresh copy is built for each tournament and removed afterwards: a 48×48 floor with sea-lantern lighting, 12-block walls, 16 separate 3×3 starting cells with iron-bar gates, symmetric pillars and low walls, and a sealed glass-floored viewing gallery above. A structure template can replace it (`arenaTemplate`).
+- **Preparation:** 10-second countdown in the cells; nobody can attack. Then all gates open together.
+- **Rules during the match:** adventure mode, no flight, all effects removed (including Gluttony hearts and the Champion's Haste). Only fighters can hurt fighters, and only in the arena. Breaking, placing, explosions, buckets, block interaction, item tossing (the item stays in your inventory), ender pearls/chorus fruit, mobs, summons and dropped items are blocked. Teleports out are undone within half a second.
+- **Time limit:** after 6 minutes, sudden death: a red particle line marks a safe square that shrinks by 2 blocks every 8 s; outside it you take damage. If sudden death lasts 3 minutes there is no winner.
+- **Knockouts instead of deaths:** lethal damage is cancelled; the player is moved to the gallery with full health and an empty inventory. No death, no drops, no graves, no XP loss. Spectators cannot be hurt and cannot hurt anyone.
+- **Winner:** "WAR CHAMPION: <name> of <moon team>!" The winner gets **War Champion**: Haste I and a gold/crimson particle aura for 30 minutes of online time (the timer only runs while they are online and not in a match). Winning again resets it to 30 minutes; it never stacks. `/warmoon status` shows the remaining time.
+- **Return:** after 10 s everyone is restored and sent back to where they were. If that spot is no longer safe, the nearest safe spot above it is used, otherwise world spawn.
+- **Disconnects, crashes and restarts:** a fighter who logs out forfeits; their record stays on disk and is applied the next time they log in, wherever they appear. After a crash or restart the interrupted tournament is closed, the arena cleared, and every player is restored at their next login. `/ecmoons war records` lists pending records.
+
+**Gluttony Moon.** (Earlier drafts called it Feast Moon: an existing `ecmoons-feast_moon.json` event file is converted to `ecmoons-gluttony_moon.json` automatically, keeping its chance and phases.)
+- Each different food category actually eaten (`LivingEntityUseItemEvent.Finish`, so only completed eating counts) gives +1 max heart, up to 4. Raw and cooked versions of the same food are one category. Repeats don't count, and the action bar says so ("Gluttony: beef already counted (2/4 bonus hearts)").
+- New hearts are empty: there is no instant heal.
+- Excluded foods never count. Foods not in any category (including modded foods) count as their own category.
+- The hearts are one event-owned max-health modifier, never saved into the player file. Progress is stored per night, so relogging during the same Gluttony night keeps it. It resets on death.
+- When the moon ends, when you leave its dimension or enter a War Moon match, the hearts are removed and health is clamped to the new maximum.
+
 ---
 
 ## 6. Moon designs
 
-All ten designs come from the reference sheet. They are packaged in the jar under `assets/ecmoons/textures/environment/`.
+All fourteen designs come from the reference sheets. They are packaged in the jar under `assets/ecmoons/textures/environment/`.
 - `<moon>_moon_phases.png` is 512×256, the **same 4×2 phase layout as vanilla `moon_phases.png`** (phase *p* at column *p*%4, row *p*/4).
   - Each moon is 32×32 pixel art centred in a 128×128 cell, the same proportion as vanilla's 8-pixel moon in a 32-pixel cell. A halo fades out before the cell edge.
   - Phases shade the surface like vanilla: waning from the right, waxing from the left, with a faint rim at new moon.
   - The comparison sheet's labels, stars and background are not in any texture.
-- `<moon>_moon_details.png` is an additive animated detail layer on the same quad. Quiet Moon has none by design.
+- `<moon>_moon_details.png` is an additive animated detail layer on the same quad. Quiet Moon and Thread Moon have none by design.
+- Revealing Moon has four eye frames: `revealing_moon_phases.png` (open) and `revealing_moon_blink1/2/3.png` (partly closed, nearly closed, shut), all with the iris in the same position, plus glowing veins on the open eye.
 
 | Static (always) | Animated (client option `animateMoonDetails`) |
 |---|---|
-| Surface, craters, colours, phases, halo, Frost's ice spikes | Blood fissure glow pulse; Blue, Harvest and Prospector glints and Frost cracks twinkling; Arcane rune pulse; Wisdom constellation twinkle; Mist wisps drifting sideways; Drift fragments bobbing |
+| Surface, craters, colours, phases, halo, Frost's ice spikes, Thread's loose thread, Gluttony's sesame seeds | Revealing eyelid blinks and vein pulse; War gouge and ember glow; Blood fissure glow pulse; Blue, Harvest and Prospector glints and Frost cracks twinkling; Arcane rune pulse; Wisdom constellation twinkle; Mist wisps drifting sideways; Drift fragments bobbing |
 
 Which design to draw comes from Enhanced Celestials' current event, which EC re-sends when a player joins or changes dimension. So players who join during an event see the right moon. Super variants use their base moon's design at EC's larger size.
 

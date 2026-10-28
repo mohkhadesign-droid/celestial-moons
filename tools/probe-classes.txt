@@ -61,3 +61,12 @@ net.minecraft.client.renderer.ActiveRenderInfo
 net.minecraftforge.event.entity.living.LivingDamageEvent
 net.minecraftforge.common.util.ITeleporter
 net.minecraft.world.gen.feature.template.Template
+net.minecraft.client.renderer.LightTexture
+net.minecraft.client.world.ClientWorld
+net.minecraft.client.world.DimensionRenderInfo
+net.minecraft.client.renderer.GameRenderer
+net.minecraftforge.client.event.sound.PlaySoundEvent
+net.minecraft.client.audio.SimpleSound
+net.minecraft.client.renderer.texture.NativeImage
+net.minecraft.client.renderer.ActiveRenderInfo
+net.minecraft.client.particle.ParticleManager

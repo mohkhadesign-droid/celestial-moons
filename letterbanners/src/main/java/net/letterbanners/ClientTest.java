@@ -317,10 +317,13 @@ public final class ClientTest {
                 }
             }
             check("every block state and item has its model and textures (" + states + " states, " + items + " items, " + bad + " missing)", bad == 0);
-            // the gallery, in open ground east of the other tests: market + SHOPS in each colour hanging from a beam
-            // (z = SZ + 10), and the same on a wall (z = SZ + 38, wall at SZ + 39)
+            // the gallery, in open ground east of the other tests: go there first so its chunks are loaded
             SX = X + 70;
             SZ = Z;
+            view(SX + 0.5, Y + 6.5, SZ - 17, 0, 0);
+        });
+        then(60, () -> {
+            // market + SHOPS in each colour hanging from a beam (z = SZ + 10), and the same on a wall (z = SZ + 38)
             cmd("fill " + (SX - 24) + " " + (Y - 1) + " " + (SZ - 20) + " " + (SX + 24) + " " + (Y - 1) + " " + (SZ + 39) + " minecraft:stone_bricks");
             cmd("fill " + (SX - 24) + " " + Y + " " + (SZ - 20) + " " + (SX + 24) + " " + (Y + 14) + " " + (SZ + 38) + " minecraft:air");
             cmd("fill " + (SX - 24) + " " + Y + " " + (SZ + 39) + " " + (SX + 24) + " " + (Y + 12) + " " + (SZ + 39) + " minecraft:polished_blackstone_bricks");

@@ -355,6 +355,15 @@ public final class ClientTest {
         then(30, () -> shot("17_shop_wall_royal"));
         then(2, () -> view(SX + 4 - 2.5, Y + 3.5, SZ + 32, 0, 5));
         then(30, () -> shot("18_shop_wall_crimson"));
+        // very close: the hanging royal market banner and the first S (rod, frame detail, tassel)
+        then(2, () -> view(SX + 19.5, Y + 6.9, SZ + 6.6, 0, 8));
+        then(30, () -> shot("19_close_market_royal"));
+        then(2, () -> view(SX + 17.5, Y + 6.9, SZ + 7.6, 0, 8));
+        then(30, () -> shot("20_close_s_royal"));
+        then(2, () -> view(SX + 4.5 - 0.0, Y + 6.9, SZ + 6.6, 0, 8));
+        then(30, () -> shot("21_close_market_crimson"));
+        then(2, () -> view(SX - 11 + 0.5, Y + 6.9, SZ + 6.6, 0, 8));
+        then(30, () -> shot("22_close_market_azure"));
         // real placement of a shop banner: on the wall and under a beam it works, on the floor it is refused
         then(2, () -> {
             Minecraft.getInstance().options.hideGui = false;

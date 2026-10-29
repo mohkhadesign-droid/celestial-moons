@@ -101,6 +101,9 @@ public final class SelfTest {
         EcMoons.LOGGER.info(P + "starting");
         step("static checks", 1, SelfTest::staticChecks);
         step("new moon static checks", 1, w -> NewMoonChecks.staticChecks(w, SelfTest::check));
+        step("revealing static checks", 1, w -> RevealChecks.staticChecks(w, SelfTest::check));
+        step("revealing investigations", 1, w -> RevealChecks.investigateSetup(w, SelfTest::check));
+        step("revealing investigations walk", 50, w -> RevealChecks.investigateWalk(w, SelfTest::check));
         step("field guide recipe", 1, w -> {
             boolean patchouli = net.minecraftforge.fml.ModList.get().isLoaded("patchouli");
             boolean recipe = w.getServer().getRecipeManager().byKey(new net.minecraft.util.ResourceLocation("ecmoons", "field_guide")).isPresent();
@@ -137,6 +140,16 @@ public final class SelfTest {
                 NewMoonChecks.gluttony(w, type, SelfTest::check);
             });
         }
+        step("revealing cycle start", 2, w -> check("start revealing for the cycle test", cmd("ecmoons start ecmoons-revealing_moon") == 1));
+        step("revealing cycle warn", 5, w -> {
+            RevealChecks.cycleWarn(w, SelfTest::check);
+            check("/ecmoons reveal warn", cmd("ecmoons reveal warn") == 1);
+        });
+        step("revealing cycle opening", 20, w -> RevealChecks.cycleOpening(w, SelfTest::check));
+        step("revealing cycle active", 40, w -> RevealChecks.cycleActive(w, SelfTest::check));
+        step("revealing cycle complete", 45, w -> RevealChecks.cycleComplete(w, SelfTest::check));
+        step("revealing cycle end", 1, w -> check("/ecmoons end (revealing)", cmd("ecmoons end") == 1));
+        step("revealing cycle ended", 5, w -> RevealChecks.cycleEnded(w, SelfTest::check));
         step("super variant", 2, w -> check("start super blood", cmd("ecmoons start enhancedcelestials-super_blood_moon") == 1));
         step("super variant verify", 5, w -> check("super blood moon inherits Blood features", Moons.active(w) == MoonType.BLOOD
                 && MoonType.isSuperVariant(Moons.currentEvent(w))));

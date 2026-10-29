@@ -15,11 +15,27 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Every 60 seconds you see \"The eye is searching...\" and a 5-second countdown. When it ends, the eye opens fully and everyone within 256 blocks of you is marked for 8 seconds with a spectral eye, an approximate distance and a direction (never coordinates)."
+      "text": "Every 60 seconds: \"The eye is searching...\" and a 5-second countdown. The eye narrows, then opens wide, and for the last 3 seconds it stares fully open.$(br2)When the countdown ends it has seen: one golden ripple crosses the sky and everyone within 256 blocks of you is marked for 8 seconds."
     },
     {
       "type": "patchouli:text",
-      "text": "Underground players are marked at the surface above them: only their horizontal position shows.$(br2)$(l)Never revealed:$() spectators, creative players, War Moon fighters and areas the server protects. Claims are not hidden automatically.$(br2)$(l)Counterplay:$() keep moving between scans."
+      "text": "Each mark is a spectral eye with a rough distance and direction, never coordinates. Underground players are marked at the surface above them.$(br2)$(l)Never revealed:$() spectators, creative players, War Moon fighters and areas the server protects. Claims and roofs don't hide you."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Binding Gaze:$() don't stare into the open eye. Two seconds looking straight at it, with open sky between you, and you can't walk, sprint or jump. You can still look around, fight, block and use items.$(br2)Look away to break free. It also ends when the scan does. A roof or cave ceiling protects you."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Once you are seen$() (8 s, your own timer) the screen edges glow amber and the world's colours drain, coming back as your time runs out.$(br2)$(l)True Exposure:$() Invisibility can't hide you. The potion keeps counting down and hides you again afterwards if it hasn't run out."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Read Your Enemy:$() while you are seen, hold your aim on another player within 32 blocks for one second (clear view) to read their health, absorption and effects.$(br2)$(l)The world notices:$() nearby monsters walk to where you stood when the eye saw you, search, then give up after about 10 seconds."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Counterplay:$() keep moving between scans, don't look up when the eye opens wide, and leave the spot where you were seen. Monsters only know that old spot."
     }
   ]
 }

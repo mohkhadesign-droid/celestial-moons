@@ -10,6 +10,7 @@
     "BlockMixin",
     "EnchantmentContainerMixin",
     "FishingBobberEntityMixin",
+    "LivingEntityExposureMixin",
     "HarvestMoonMixin",
     "LootTableManagerMixin",
     "LunarContextMixin",
@@ -22,6 +23,7 @@
   "client": [
     "client.ClientWorldMixin",
     "client.EnchantmentScreenMixin",
+    "client.GameRendererMixin",
     "client.LightTextureMixin",
     "client.LocatableSoundAccess",
     "client.WorldRendererMixin"

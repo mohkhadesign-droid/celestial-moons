@@ -67,6 +67,17 @@ public final class ClientSelfTest {
         }
     }
 
+    /** A check evaluated on the server thread (counted with the real-player server checks). */
+    private static void checkServer(String what, boolean ok) {
+        if (ok) {
+            RealPlayerChecks.PASSED.incrementAndGet();
+            EcMoons.LOGGER.info(P + "PASS (server): " + what);
+        } else {
+            RealPlayerChecks.FAILED.incrementAndGet();
+            EcMoons.LOGGER.error(P + "FAIL (server): " + what);
+        }
+    }
+
     private static void cmd(String command) {
         MinecraftServer server = Minecraft.getInstance().getSingleplayerServer();
         if (server == null) return;
@@ -368,6 +379,8 @@ public final class ClientSelfTest {
     }
 
     private static boolean sawClosed;
+    private static int ripplesBefore, edgesAfter, colourAfter;
+    private static double bindX, bindZ;
     private static net.minecraft.util.math.vector.Vector3d vanillaSky;
     private static long gradeBefore;
     private static int maxSeen, ax, ay, az, standId;
@@ -650,28 +663,127 @@ public final class ClientSelfTest {
         });
         waitFor(60, () -> RevealClient.frame(0) == 0);
         then(1, () -> check("revealing: eye opens again after the blink", RevealClient.frame(0) == 0));
-        // server-timed scan: warning (eye narrows, halo builds) -> scan (opens fully, ring, light pulse) -> recovery
+        // server-timed cycle with a real survival player standing on a glass platform under the moon (midnight):
+        // opening (narrow, then open wide) -> active scan (fully open, Binding Gaze) -> completion (ONE ripple, the
+        // reveal, closing, binds released) -> this player's own reveal (True Exposure, amber edges, colour loss)
         then(5, () -> {
-            sawClosed = false;
+            cmd("fill " + (px - 2) + " 218 " + (pz - 2) + " " + (px + 2) + " 218 " + (pz + 2) + " minecraft:glass");
+            cmd("tp @a " + px + ".5 219 " + pz + ".5");
+            cmd("gamemode survival @a");
+            cmd("effect give @a minecraft:invisibility 120 0 true");
+            ripplesBefore = RevealClient.ripplesStarted;
+        });
+        then(20, () -> {
+            lookUp();
             cmd("ecmoons reveal warn");
         });
         waitFor(120, () -> RevealClient.phase() == RevealClient.WARN && RevealClient.frame(0) == 1);
         then(0, () -> {
-            check("revealing: during the warning countdown the eyelids narrow (frame " + RevealClient.frame(0) + ") and the halo builds ("
-                    + RevealClient.haloAmount(0) + ")", RevealClient.phase() == RevealClient.WARN && RevealClient.frame(0) == 1 && RevealClient.haloAmount(0) > 0.3f);
+            check("revealing: while the eye opens the eyelids first narrow (frame " + RevealClient.frame(0) + ") and the glow builds ("
+                    + RevealClient.haloAmount(0) + ")", RevealClient.phase() == RevealClient.WARN && RevealClient.frame(0) == 1 && RevealClient.haloAmount(0) > 0.2f);
+            check("revealing: no ripple when the eye starts opening", RevealClient.ringProgress(0) < 0);
             lookUp();
             shot("reveal_4_warning");
         });
         waitFor(120, () -> RevealClient.phase() == RevealClient.OPEN);
         then(2, () -> {
-            check("revealing: at the scan the eye opens fully, the ring expands and the light pulses (frame " + RevealClient.frame(0)
-                    + ", ring " + RevealClient.ringProgress(0) + ", pulse " + net.ecmoons.client.atmo.Atmosphere.pulseAmount() + ")",
-                    RevealClient.frame(0) == 0 && RevealClient.ringProgress(0) >= 0 && net.ecmoons.client.atmo.Atmosphere.pulseAmount() > 0f);
+            check("revealing: active scanning - the eye is fully open with its strong glow (frame " + RevealClient.frame(0) + ", glow "
+                    + RevealClient.haloAmount(0) + ") and still no ripple", RevealClient.frame(0) == 0 && RevealClient.haloAmount(0) >= 0.99f
+                    && RevealClient.ringProgress(0) < 0);
+            lookUp();
+            shot("reveal_5_active_open");
+        });
+        waitFor(60, RevealClient::bound);
+        then(0, () -> {
+            check("binding gaze: two seconds of staring at the open eye binds (client)", RevealClient.bound());
+            onServer(s -> {
+                net.minecraft.entity.player.ServerPlayerEntity sp = s.getPlayerList().getPlayers().get(0);
+                checkServer("binding gaze: the server bound the player", net.ecmoons.feature.reveal.BindingGaze.isBound(sp));
+            });
+            bindX = player().getX();
+            bindZ = player().getZ();
+            Minecraft.getInstance().options.keyUp.setDown(true);
+        });
+        then(6, () -> {
+            check("binding gaze: holding the forward key does not walk (moved " + String.format("%.3f", Math.abs(player().getX() - bindX)
+                    + Math.abs(player().getZ() - bindZ)) + ")", Math.abs(player().getX() - bindX) + Math.abs(player().getZ() - bindZ) < 0.01);
+            Minecraft.getInstance().options.keyUp.setDown(false);
+            player().xRot = 0F; // look away
+            player().xRotO = 0F;
+        });
+        then(2, () -> {
+            check("binding gaze: looking away releases at once", !RevealClient.bound());
+            onServer(s -> checkServer("binding gaze: the server released it too",
+                    !net.ecmoons.feature.reveal.BindingGaze.isBound(s.getPlayerList().getPlayers().get(0))));
             lookUp();
         });
-        then(8, () -> shot("reveal_5_scan_ring"));
-        waitFor(300, () -> RevealClient.phase() == RevealClient.RECOVER && RevealClient.frame(0) == 3);
-        then(0, () -> check("revealing: after the reveal the eye slowly closes (recovery)", RevealClient.phase() == RevealClient.RECOVER && RevealClient.frame(0) == 3));
+        waitFor(80, () -> RevealClient.ringProgress(0) >= 0);
+        then(0, () -> {
+            check("revealing: ONE golden ripple starts at scan completion (ripples " + (RevealClient.ripplesStarted - ripplesBefore)
+                    + "), the eye begins to close and the light pulses", RevealClient.ripplesStarted - ripplesBefore == 1
+                    && RevealClient.phase() == RevealClient.RECOVER && net.ecmoons.client.atmo.Atmosphere.pulseAmount() > 0f);
+            check("revealing: completion releases binds and starts YOUR reveal", !RevealClient.bound() && RevealClient.revealed());
+            lookUp();
+        });
+        then(10, () -> {
+            lookUp();
+            shot("reveal_6_ripple_moon");
+            check("revealing: the reveal effects eased in (intensity " + RevealClient.revealIntensity(0) + ")", RevealClient.revealIntensity(0) > 0.8f);
+        });
+        then(14, () -> {
+            ClientPlayerEntity p = player();
+            p.yRot = 0F; // face south, away from the moon overhead: the same wave is crossing this part of the sky
+            p.yRotO = 0F;
+            p.xRot = -20F;
+            p.xRotO = -20F;
+        });
+        then(2, () -> {
+            shot("reveal_7_ripple_sky");
+            check("revealing: the ripple is drawn across the sky (progress " + net.ecmoons.client.atmo.AtmoSky.lastRipple + ")",
+                    net.ecmoons.client.atmo.AtmoSky.lastRipple > 0.2f);
+            onServer(s -> net.ecmoons.feature.RevealingFeatures.sync(s.getPlayerList().getPlayers().get(0))); // a late packet
+        });
+        then(4, () -> check("revealing: a late sync joins the same wave instead of starting another (ripples "
+                + (RevealClient.ripplesStarted - ripplesBefore) + ")", RevealClient.ripplesStarted - ripplesBefore == 1 && RevealClient.ringProgress(0) > 0.3f));
+        then(1, () -> {
+            Minecraft.getInstance().options.hideGui = false;
+            lookAhead();
+        });
+        then(3, () -> {
+            shot("reveal_8_seen");
+            check("revealing: amber edges and colour loss are drawn for the revealed player (edges " + RevealHud.edgesDrawn + ", colour pass "
+                    + RevealGrade.applied + ", saturation " + RevealGrade.lastSaturation + ")", RevealHud.edgesDrawn > 0
+                    && (RevealGrade.applied > 0 || RevealGrade.usingWash()) && RevealGrade.lastSaturation < 0.6f);
+            check("true exposure: your invisibility is suppressed while revealed, the potion still there",
+                    !player().isInvisible() && player().hasEffect(net.minecraft.potion.Effects.INVISIBILITY));
+            onServer(s -> {
+                net.minecraft.entity.player.ServerPlayerEntity sp = s.getPlayerList().getPlayers().get(0);
+                checkServer("true exposure: the server agrees (visible, effect kept, revealed)", !sp.isInvisible()
+                        && sp.hasEffect(net.minecraft.potion.Effects.INVISIBILITY) && net.ecmoons.feature.reveal.RevealState.isRevealed(sp));
+            });
+        });
+        then(40, () -> check("revealing: the amber/colour strength follows your own timer (" + RevealClient.revealIntensity(0) + " vs "
+                + RevealClient.revealRemaining(0) / 160f + " remaining)", Math.abs(RevealClient.revealIntensity(0) - RevealClient.revealRemaining(0) / 160f) < 0.03f
+                && RevealClient.revealIntensity(0) > 0.2f && RevealClient.revealIntensity(0) < 0.8f));
+        then(0, () -> shot("reveal_9_fading"));
+        waitFor(200, () -> !RevealClient.revealed());
+        then(3, () -> {
+            check("revealing: at zero the amber edges and colour loss are gone", RevealClient.revealIntensity(0) == 0f);
+            check("true exposure: invisibility resumes afterwards because the potion still runs", player().isInvisible()
+                    && player().hasEffect(net.minecraft.potion.Effects.INVISIBILITY));
+            edgesAfter = RevealHud.edgesDrawn;
+            colourAfter = RevealGrade.applied;
+            onServer(s -> net.ecmoons.feature.RevealingFeatures.sync(s.getPlayerList().getPlayers().get(0))); // after the wave
+        });
+        then(5, () -> {
+            check("revealing: nothing is drawn after the timer (edges " + (RevealHud.edgesDrawn - edgesAfter) + ", colour " + (RevealGrade.applied - colourAfter) + ")",
+                    RevealHud.edgesDrawn == edgesAfter && RevealGrade.applied == colourAfter);
+            check("revealing: a finished ripple is never replayed by a later sync", RevealClient.ripplesStarted - ripplesBefore == 1 && RevealClient.ringProgress(0) < 0);
+            shot("reveal_10_after");
+            cmd("effect clear @a");
+            cmd("gamemode creative @a");
+            Minecraft.getInstance().options.hideGui = true;
+        });
         waitFor(120, () -> RevealClient.phase() == RevealClient.NONE || RevealClient.phase() == RevealClient.BLINK);
         then(1, () -> check("revealing: the eye reopens and returns to idle", RevealClient.frame(0) == 0 || RevealClient.phase() == RevealClient.BLINK));
         // markers: scan including yourself, then step away and look at your own recorded position

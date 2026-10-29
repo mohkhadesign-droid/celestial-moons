@@ -37,6 +37,8 @@ public final class Atmosphere {
     static final float[] gradeTint = {1, 1, 1};
     static final float[] gradeLight = {0, 0, 0};
     private static float pulse, pulseDecay;
+    /** Revealing Moon "you have been seen" light-map wash (WASH colour mode only; 0 = none). */
+    static float revealWash;
     private static final float[] pulseColor = {1, 1, 1};
 
     private Atmosphere() {}
@@ -257,6 +259,7 @@ public final class Atmosphere {
         gradeDesat = 0f;
         gradeTint[0] = gradeTint[1] = gradeTint[2] = 1f;
         gradeLight[0] = gradeLight[1] = gradeLight[2] = 0f;
+        revealWash = net.ecmoons.client.RevealGrade.washAmount(1f);
         if (level == null || !on("enableLightTint")) return;
         float night = night(level, 1f);
         if (night <= 0f && pulse <= 0f) return;
@@ -300,7 +303,7 @@ public final class Atmosphere {
     /** Called by the light-map hook once per light-map update (also counts calls, proving the hook is applied). */
     public static boolean gradingNeeded() {
         gradeCalls++;
-        return gradeAmount > 0f || gradeBright != 1f || gradeDesat > 0f || pulse > 0f;
+        return gradeAmount > 0f || gradeBright != 1f || gradeDesat > 0f || pulse > 0f || revealWash > 0f;
     }
 
     public static float gradeAmount() {
@@ -308,10 +311,11 @@ public final class Atmosphere {
     }
 
     public static int gradeLightmap(int blockLevel, int skyLevel, int abgr) {
-        if (gradeAmount <= 0f && gradeBright == 1f && gradeDesat <= 0f && pulse <= 0f) return abgr;
+        if (gradeAmount <= 0f && gradeBright == 1f && gradeDesat <= 0f && pulse <= 0f && revealWash <= 0f) return abgr;
+        if (revealWash > 0f && gradeAmount <= 0f && gradeBright == 1f && gradeDesat <= 0f && pulse <= 0f) return washOnly(blockLevel, skyLevel, abgr);
         float sky = skyLevel / 15f;
         float w = sky * sky * (1f - blockLevel / 15f * 0.75f);
-        if (w <= 0.001f) return abgr;
+        if (w <= 0.001f) return washOnly(blockLevel, skyLevel, abgr);
         float r = (abgr & 255) / 255f, g = ((abgr >> 8) & 255) / 255f, b = ((abgr >> 16) & 255) / 255f;
         float a = gradeAmount * w;
         r *= 1f + (gradeTint[0] - 1f) * a;
@@ -340,6 +344,23 @@ public final class Atmosphere {
             g += pulseColor[1] * p;
             b += pulseColor[2] * p;
         }
+        int ri = MathHelper.clamp((int) (r * 255f), 0, 255), gi = MathHelper.clamp((int) (g * 255f), 0, 255),
+                bi = MathHelper.clamp((int) (b * 255f), 0, 255);
+        return washOnly(blockLevel, skyLevel, (abgr & 0xFF000000) | bi << 16 | gi << 8 | ri);
+    }
+
+    /**
+     * Revealing Moon WASH mode: a restrained pale-gold, lower-saturation light for the world while you are revealed.
+     * The (15,15) entry is left alone: it is the full-bright light used for GUI items and the HUD.
+     */
+    private static int washOnly(int blockLevel, int skyLevel, int abgr) {
+        if (revealWash <= 0f || (blockLevel == 15 && skyLevel == 15)) return abgr;
+        float r = (abgr & 255) / 255f, g = ((abgr >> 8) & 255) / 255f, b = ((abgr >> 16) & 255) / 255f;
+        float grey = 0.299f * r + 0.587f * g + 0.114f * b;
+        float k = revealWash;
+        r += (grey * 1.06f - r) * k;
+        g += (grey * 0.98f - g) * k;
+        b += (grey * 0.78f - b) * k;
         int ri = MathHelper.clamp((int) (r * 255f), 0, 255), gi = MathHelper.clamp((int) (g * 255f), 0, 255),
                 bi = MathHelper.clamp((int) (b * 255f), 0, 255);
         return (abgr & 0xFF000000) | bi << 16 | gi << 8 | ri;

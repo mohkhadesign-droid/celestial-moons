@@ -279,6 +279,7 @@ public final class AtmoSky {
      * the stack and the blend mode is additive. Leaves texturing disabled, as vanilla expects.
      */
     public static void renderCelestial(MatrixStack ms, ClientWorld level, float pt, float moonSize) {
+        lastRipple = -1f;
         if (!Atmosphere.anyActive() && RevealClient.ringProgress(pt) < 0) return;
         float rain = 1f - level.getRainLevel(pt);
         if (rain <= 0.01f) return;
@@ -306,13 +307,15 @@ public final class AtmoSky {
             halo(m, moonSize * scale, p.glow, a * rain);
         }
         RenderSystem.disableTexture();
-        // Revealing scan ring expanding from the moon
+        // Revealing: ONE golden ripple from the moon across the whole sky dome at scan completion (shared game-time
+        // progress; sky layer, so terrain and roofs hide it like the sky itself)
         float ring = RevealClient.ringProgress(pt);
         AtmoProfile rp = AtmoProfile.of(MoonType.REVEALING);
-        if (ring >= 0 && anim && rp.flag("scanRing")) {
-            float theta = (float) Math.toRadians(4 + 86 * ring), w = (float) Math.toRadians(1.2 + 2.0 * ring);
-            ringAroundMoon(m, theta, w, rp.light, 0.55f * (1f - ring) * rain);
+        float rippleK = net.ecmoons.config.ClientConfig.REVEAL_RIPPLE.get().floatValue();
+        if (ring >= 0 && anim && rp.flag("scanRing") && rippleK > 0.001f) {
+            ripple(m, ring, level.getTimeOfDay(pt), 0.42f * rippleK * rain);
             lastLayers++;
+            lastRipple = ring;
         }
         // brighter stars (Blue, Wisdom) and constellations (Wisdom)
         float star = level.getStarBrightness(pt) * rain;
@@ -349,46 +352,65 @@ public final class AtmoSky {
         WorldVertexBufferUploader.end(buf);
     }
 
-    /** Ring at angular distance theta from the moon (the moon sits at -Y in the celestial frame). */
-    private static void ringAroundMoon(Matrix4f m, float theta, float w, float[] c, float a) {
-        if (a <= 0.005f) return;
+    /** Last drawn ripple progress (client test / diagnostics), -1 when none was drawn. */
+    public static volatile float lastRipple = -1f;
+
+    /**
+     * The scan-completion ripple: a thin translucent golden ring at angular distance theta from the moon (which sits
+     * at -Y in this celestial frame), travelling from the moon to the opposite side of the sky over the ripple's
+     * duration. Soft leading edge, a faint fading trail behind it; it fades out well before it converges on the
+     * antipode, so there is never a second flash there, and it fades below the horizon (world "up" is worked out
+     * with the same rotation the sky renderer applied).
+     */
+    private static void ripple(Matrix4f m, float p, float timeOfDay, float strength) {
+        if (strength <= 0.003f) return;
+        float ease = 1f - (1f - p) * (1f - p) * 0.35f - 0.65f * (1f - p); // gently decelerating
+        float theta = (float) Math.toRadians(3 + 174 * ease);
+        float fadeIn = Math.min(1f, p / 0.06f);
+        float fadeOut = p < 0.62f ? 1f : Math.max(0f, 1f - (p - 0.62f) / 0.33f);
+        fadeOut = fadeOut * fadeOut * (3 - 2 * fadeOut);
+        float a = strength * fadeIn * fadeOut;
+        if (a <= 0.003f) return;
+        // world "up" component of the celestial frame's axes (sky rotation: X by timeOfDay*360, then Y by -90)
+        net.minecraft.util.math.vector.Quaternion q = net.minecraft.util.math.vector.Vector3f.XP.rotationDegrees(timeOfDay * 360f);
+        net.minecraft.util.math.vector.Vector3f ax = new net.minecraft.util.math.vector.Vector3f(1, 0, 0), ay = new net.minecraft.util.math.vector.Vector3f(0, 1, 0),
+                az = new net.minecraft.util.math.vector.Vector3f(0, 0, 1);
+        ax.transform(q);
+        ay.transform(q);
+        az.transform(q);
+        float[] up = {ax.y(), ay.y(), az.y()};
+        float lead = (float) Math.toRadians(0.9 + 1.1 * p), core = (float) Math.toRadians(0.45 + 0.5 * p), trail = (float) Math.toRadians(5 + 9 * p);
+        float r = 1f, g = 0.80f, b = 0.38f; // translucent gold
         BufferBuilder buf = Tessellator.getInstance().getBuilder();
         buf.begin(7, DefaultVertexFormats.POSITION_COLOR);
-        int n = segments() * 2;
-        for (int i = 0; i < n; i++) {
-            for (int e = 0; e < 2; e++) {
-                double phi = (i + e) * Math.PI * 2 / n;
-                float t0 = theta - w, t1 = theta + w;
-                float x0 = (float) (Math.sin(t0) * Math.cos(phi)) * 100, y0 = (float) -Math.cos(t0) * 100, z0 = (float) (Math.sin(t0) * Math.sin(phi)) * 100;
-                float x1 = (float) (Math.sin(t1) * Math.cos(phi)) * 100, y1 = (float) -Math.cos(t1) * 100, z1 = (float) (Math.sin(t1) * Math.sin(phi)) * 100;
-                float xm = (float) (Math.sin(theta) * Math.cos(phi)) * 100, ym = (float) -Math.cos(theta) * 100, zm = (float) (Math.sin(theta) * Math.sin(phi)) * 100;
-                if (e == 0) {
-                    buf.vertex(m, x0, y0, z0).color(c[0], c[1], c[2], 0f).endVertex();
-                    buf.vertex(m, xm, ym, zm).color(c[0], c[1], c[2], a).endVertex();
-                } else {
-                    buf.vertex(m, xm, ym, zm).color(c[0], c[1], c[2], a).endVertex();
-                    buf.vertex(m, x0, y0, z0).color(c[0], c[1], c[2], 0f).endVertex();
-                }
-                // outer half
-            }
-        }
-        for (int i = 0; i < n; i++) {
-            for (int e = 0; e < 2; e++) {
-                double phi = (i + e) * Math.PI * 2 / n;
-                float t1 = theta + w;
-                float x1 = (float) (Math.sin(t1) * Math.cos(phi)) * 100, y1 = (float) -Math.cos(t1) * 100, z1 = (float) (Math.sin(t1) * Math.sin(phi)) * 100;
-                float xm = (float) (Math.sin(theta) * Math.cos(phi)) * 100, ym = (float) -Math.cos(theta) * 100, zm = (float) (Math.sin(theta) * Math.sin(phi)) * 100;
-                if (e == 0) {
-                    buf.vertex(m, xm, ym, zm).color(c[0], c[1], c[2], a).endVertex();
-                    buf.vertex(m, x1, y1, z1).color(c[0], c[1], c[2], 0f).endVertex();
-                } else {
-                    buf.vertex(m, x1, y1, z1).color(c[0], c[1], c[2], 0f).endVertex();
-                    buf.vertex(m, xm, ym, zm).color(c[0], c[1], c[2], a).endVertex();
-                }
-            }
-        }
+        int n = Math.max(64, segments() * 3);
+        band(buf, m, n, theta - core - trail, 0f, theta - core, a * 0.32f, up, r, g, b); // faint trail
+        band(buf, m, n, theta - core, a * 0.32f, theta, a, up, r, g, b);                  // rising to the crest
+        band(buf, m, n, theta, a, theta + core, a * 0.55f, up, r, g, b);                  // crest
+        band(buf, m, n, theta + core, a * 0.55f, theta + core + lead, 0f, up, r, g, b);   // soft leading edge
         buf.end();
         WorldVertexBufferUploader.end(buf);
+    }
+
+    /** One band of the ripple between angular distances t0 and t1 from the moon, alpha a0 -> a1. */
+    private static void band(BufferBuilder buf, Matrix4f m, int n, float t0, float a0, float t1, float a1, float[] up, float r, float g, float b) {
+        t0 = Math.max(0.001f, t0);
+        t1 = Math.min((float) Math.PI - 0.001f, t1);
+        if (t1 <= t0) return;
+        for (int i = 0; i < n; i++) {
+            double p0 = i * Math.PI * 2 / n, p1 = (i + 1) * Math.PI * 2 / n;
+            vertex(buf, m, t0, p0, a0, up, r, g, b);
+            vertex(buf, m, t1, p0, a1, up, r, g, b);
+            vertex(buf, m, t1, p1, a1, up, r, g, b);
+            vertex(buf, m, t0, p1, a0, up, r, g, b);
+        }
+    }
+
+    private static void vertex(BufferBuilder buf, Matrix4f m, float theta, double phi, float a, float[] up, float r, float g, float b) {
+        float x = (float) (Math.sin(theta) * Math.cos(phi)), y = (float) -Math.cos(theta), z = (float) (Math.sin(theta) * Math.sin(phi));
+        float worldUp = x * up[0] + y * up[1] + z * up[2];
+        float horizon = Math.max(0f, Math.min(1f, (worldUp + 0.03f) / 0.15f)); // gone below the horizon
+        buf.vertex(m, x * 100, y * 100, z * 100).color(r, g, b, a * horizon).endVertex();
     }
 
     private static void starQuad(BufferBuilder buf, Matrix4f m, float dx, float dy, float dz, float s, float r, float g, float b, float a) {

@@ -44,17 +44,27 @@ public final class RevealClient {
             new ResourceLocation(EcMoons.MOD_ID, "textures/environment/revealing_moon_look_r.png"),
             new ResourceLocation(EcMoons.MOD_ID, "textures/environment/revealing_moon_look_u.png")};
 
-    /** Eye phases: idle (with blinks and a slowly wandering pupil), warning (narrowing, iris brightening, halo),
-     *  open (fully open at the server's scan: ring + light pulse, held while markers show), recovery (slowly
-     *  closes, then reopens into idle). */
+    /** Eye phases: idle (with blinks and a slowly wandering pupil), warning/opening (the eyelids narrow while it
+     *  focuses, then open wide, glow building), open (fully open with its strong glow: the active scan, when Binding
+     *  Gaze can happen), recovery (at scan completion it slowly closes, then reopens into idle). */
     public static final int NONE = 0, BLINK = 1, WARN = 2, OPEN = 3, RECOVER = 4;
     private static final int RECOVER_CLOSE = 30, RECOVER_HOLD = 16, RECOVER_OPEN = 20;
     private static int anim = NONE;
-    private static float animStart, warnStart, scanAt, openStart, openUntil, ringStart = -1;
+    private static float animStart, warnStart, activeAt, scanAt, openStart;
     private static float nextIdleBlink = -1, nextLook = -1;
     private static int look;
     private static long clientTicks;
     private static ClientWorld lastWorld;
+    private static int scanId = -1;
+    /** Game time (shared by every client of the dimension) at which the current ripple started, or -1. */
+    private static long rippleStart = -1;
+    /** Ripples started on this client since launch (tests: one per scan, never per player or on a late join). */
+    public static int ripplesStarted;
+
+    // your own reveal (from the server's authoritative timer)
+    private static float revealFrom = -1, revealUntil = -1, revealTotal = 1;
+    // Binding Gaze
+    private static boolean bound;
 
     private static final List<Vector3d> markers = new ArrayList<>();
     private static float markersUntil, markersFrom;
@@ -68,31 +78,57 @@ public final class RevealClient {
         return clientTicks + partialTicks;
     }
 
+    private static long gameTime() {
+        ClientWorld level = Minecraft.getInstance().level;
+        return level == null ? 0 : level.getGameTime();
+    }
+
     // ---- packets ------------------------------------------------------------------------------------------------
 
-    public static void onPacket(byte stage, int ticks, List<Vector3d> list) {
+    public static void onPacket(RevealPacket p) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.level != lastWorld) { // a packet for a new world/dimension may arrive before the next client tick
+            lastWorld = mc.level;
+            reset();
+        }
         float now = now(0);
-        switch (stage) {
+        long gt = gameTime();
+        switch (p.stage) {
             case RevealPacket.WARN:
-                anim = WARN;
-                warnStart = now;
-                scanAt = now + Math.max(1, ticks);
-                look = 0;
+                startWarn(now - Math.max(0, gt - p.time), p.a, p.b, p.scanId);
                 break;
-            case RevealPacket.SCAN:
+            case RevealPacket.SCAN: {
+                scanId = p.scanId;
                 markers.clear();
-                markers.addAll(list);
+                markers.addAll(p.markers);
                 markersFrom = now;
-                markersUntil = now + ticks;
-                anim = OPEN; // the eye opens fully at the actual scan
-                openStart = now;
-                openUntil = now + Math.max(20, ticks);
-                ringStart = now;
+                markersUntil = now + p.ticks;
                 look = 0;
-                if (net.ecmoons.client.atmo.Atmosphere.on("enableLightTint")
+                if (anim != BLINK) startRecover(now); // the scan is complete: the eye begins to close
+                long age = Math.max(0, gt - p.time);
+                startRipple(p.time, age);
+                if (age < 10 && net.ecmoons.client.atmo.Atmosphere.on("enableLightTint")
                         && net.ecmoons.client.atmo.AtmoProfile.of(MoonType.REVEALING).flag("scanRing")) {
                     net.ecmoons.client.atmo.Atmosphere.pulse(0.45f, 30, new float[]{1f, 0.86f, 0.55f});
                 }
+                break;
+            }
+            case RevealPacket.SYNC:
+                scanId = p.scanId;
+                if (p.time >= 0 && gt < p.time + p.b) startWarn(now - Math.max(0, gt - p.time), p.a, p.b, p.scanId);
+                if (p.time2 >= 0) startRipple(p.time2, Math.max(0, gt - p.time2)); // caught up, or nothing if over
+                break;
+            case RevealPacket.REVEALED:
+                if (p.a <= 0) {
+                    endReveal();
+                } else {
+                    if (revealUntil < 0 || now >= revealUntil) revealFrom = now; // a refresh never restarts the ease-in
+                    revealUntil = now + p.a;
+                    revealTotal = Math.max(1, p.b);
+                }
+                break;
+            case RevealPacket.BIND:
+                bound = p.a == 1;
                 break;
             case RevealPacket.BLINK:
                 startBlink(now);
@@ -103,9 +139,31 @@ public final class RevealClient {
         }
     }
 
+    private static void startWarn(float start, int opening, int countdown, int id) {
+        scanId = id;
+        warnStart = start;
+        activeAt = start + Math.max(1, opening);
+        scanAt = start + Math.max(1, countdown);
+        anim = now(0) >= activeAt ? OPEN : WARN;
+        openStart = activeAt;
+        look = 0;
+    }
+
+    /** Start (or catch up with) the ripple that began at this game time; a finished ripple is never replayed. */
+    private static void startRipple(long start, long age) {
+        if (age >= rippleTicks() || start == rippleStart) return;
+        rippleStart = start;
+        ripplesStarted++;
+    }
+
+    private static float rippleTicks() {
+        return (float) Math.max(10.0, Settings.client().d("revealing.rippleSeconds") * 20.0);
+    }
+
     /** Preview demo: a full warning + scan sequence with no markers (visual only, nothing is scanned). */
     public static void demo(int warnTicks) {
-        onPacket(RevealPacket.WARN, warnTicks, java.util.Collections.emptyList());
+        int opening = Math.max(10, warnTicks - 60);
+        onPacket(RevealPacket.warn(-1, gameTime(), opening, warnTicks));
         demoScanAt = now(0) + warnTicks;
     }
 
@@ -118,21 +176,69 @@ public final class RevealClient {
 
     public static void reset() {
         anim = NONE;
-        ringStart = -1;
+        rippleStart = -1;
         nextIdleBlink = -1;
         demoScanAt = -1;
         look = 0;
         markers.clear();
+        endReveal();
+        bound = false;
+        RevealHud.reset();
+    }
+
+    private static void endReveal() {
+        revealFrom = revealUntil = -1;
+        RevealHud.hidePanel();
     }
 
     public static int phase() {
         return anim;
     }
 
+    public static int scanId() {
+        return scanId;
+    }
+
+    // ---- your own reveal and Binding Gaze -------------------------------------------------------------------------
+
+    /** True while you are revealed (your own server timer is running). */
+    public static boolean revealed() {
+        return revealUntil >= 0 && now(0) < revealUntil;
+    }
+
+    /** Ticks left of your reveal (0 = not revealed). */
+    public static float revealRemaining(float partialTicks) {
+        return revealUntil < 0 ? 0f : Math.max(0f, revealUntil - now(partialTicks));
+    }
+
+    /**
+     * Strength of "you have been seen" (amber edges, colour loss): eases in over about 0.15 s, then follows the
+     * remaining fraction of your own timer smoothly down to exactly 0 when it ends.
+     */
+    public static float revealIntensity(float partialTicks) {
+        if (revealUntil < 0) return 0f;
+        float now = now(partialTicks);
+        float left = revealUntil - now;
+        if (left <= 0f) return 0f;
+        float ease = Math.min(1f, (now - revealFrom) / 3f);
+        ease = ease * ease * (3 - 2 * ease);
+        return ease * Math.min(1f, left / revealTotal);
+    }
+
+    /** Binding Gaze: movement is held (until you look away; released at once locally, confirmed by the server). */
+    public static boolean bound() {
+        return bound;
+    }
+
     // ---- eye --------------------------------------------------------------------------------------------------------
 
     private static float warnProgress(float now) {
-        return Math.max(0f, Math.min(1f, (now - warnStart) / Math.max(1f, scanAt - warnStart)));
+        return Math.max(0f, Math.min(1f, (now - warnStart) / Math.max(1f, activeAt - warnStart)));
+    }
+
+    private static float smooth(float x) {
+        x = Math.max(0f, Math.min(1f, x));
+        return x * x * (3 - 2 * x);
     }
 
     /** 0 = fully open, 1 = fully shut. */
@@ -149,8 +255,9 @@ public final class RevealClient {
                 return 0f;
             }
             case WARN: {
+                // the eyelids narrow while it focuses, then open wide for the active scan
                 float p = warnProgress(now);
-                return 0.42f * p * p * (3 - 2 * p); // the eyelids slowly narrow while it focuses
+                return 0.42f * (p < 0.5f ? smooth(p / 0.5f) : 1f - smooth((p - 0.5f) / 0.5f));
             }
             case RECOVER: {
                 float t = now - animStart;
@@ -177,13 +284,13 @@ public final class RevealClient {
         return f == 0 ? LOOKS[look] : FRAMES[f];
     }
 
-    /** Amber halo strength around the eye (0..1): builds during the warning, fades after the scan. */
+    /** Amber halo strength around the eye (0..1): builds while it opens, full while scanning, fades as it closes. */
     public static float haloAmount(float partialTicks) {
         float now = now(partialTicks);
         switch (anim) {
             case WARN: return warnProgress(now);
-            case OPEN: return 1f - 0.5f * Math.min(1f, (now - openStart) / Math.max(1f, openUntil - openStart));
-            case RECOVER: return Math.max(0f, 0.5f - (now - animStart) / 60f);
+            case OPEN: return 1f;
+            case RECOVER: return Math.max(0f, 1f - (now - animStart) / 50f);
             default: return 0f;
         }
     }
@@ -193,10 +300,16 @@ public final class RevealClient {
         return anim == WARN || anim == OPEN ? haloAmount(partialTicks) : 0f;
     }
 
-    /** Expanding scan ring: 0..1 while it travels across the sky, -1 when there is none. */
+    /**
+     * The golden ripple: 0..1 while it crosses the sky, -1 when there is none. Computed from the dimension's game
+     * time, so every client shows the same progress and a late client joins it part-way.
+     */
     public static float ringProgress(float partialTicks) {
-        if (ringStart < 0) return -1f;
-        float p = (now(partialTicks) - ringStart) / 60f;
+        if (rippleStart < 0) return -1f;
+        ClientWorld level = Minecraft.getInstance().level;
+        if (level == null) return -1f;
+        float p = (level.getGameTime() - rippleStart + partialTicks) / rippleTicks();
+        if (p < 0f) p = 0f; // the packet arrived a tick before this client's clock: start now
         return p < 1f ? p : -1f;
     }
 
@@ -215,18 +328,30 @@ public final class RevealClient {
         float h = Settings.client().i("revealing.blinkHoldTicks");
         if (demoScanAt >= 0 && now >= demoScanAt) {
             demoScanAt = -1;
-            onPacket(RevealPacket.SCAN, 100, java.util.Collections.emptyList());
+            onPacket(RevealPacket.scan(-1, gameTime(), 100, java.util.Collections.emptyList()));
         }
         // advance the eye
         if (anim == BLINK && now - animStart > 2 * c + h) anim = NONE;
-        if (anim == WARN && now > scanAt + 60) startRecover(now); // the scan never came (moon ended / packet lost)
-        if (anim == OPEN && now >= openUntil) startRecover(now);
+        if (anim == WARN && now >= activeAt) {
+            anim = OPEN; // fully open: the active scan
+            openStart = now;
+        }
+        if ((anim == WARN || anim == OPEN) && now > scanAt + 60) startRecover(now); // the completion never came
         if (anim == RECOVER && now - animStart > RECOVER_CLOSE + RECOVER_HOLD + RECOVER_OPEN) {
             anim = NONE;
             nextIdleBlink = now + idleGap();
         }
-        if (ringStart >= 0 && now - ringStart > 60) ringStart = -1;
+        if (rippleStart >= 0 && mc.level.getGameTime() - rippleStart > rippleTicks()) rippleStart = -1;
         if (!markers.isEmpty() && now > markersUntil) markers.clear();
+        // your own reveal ends on its own timer (the server also says so); death clears it at once
+        if (revealUntil >= 0 && (now >= revealUntil || mc.player == null || !mc.player.isAlive())) endReveal();
+        // Binding Gaze: looking away releases at once (the server confirms a moment later)
+        if (bound && mc.player != null) {
+            double cone = Settings.client().d("revealing_binding.coneDegrees") + 1.0;
+            if (!net.ecmoons.feature.reveal.MoonGaze.lookingAtMoon(mc.player, net.ecmoons.feature.reveal.MoonGaze.moonDirection(mc.level, 1f), cone)
+                    || !mc.player.isAlive()) bound = false;
+        }
+        RevealHud.tick(mc);
         // idle behaviour while the eye is in the sky
         if (MoonSkyRenderer.visibleMoon(mc.level) != MoonType.REVEALING) {
             nextIdleBlink = -1;

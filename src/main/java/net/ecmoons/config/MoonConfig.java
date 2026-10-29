@@ -175,6 +175,53 @@ public final class MoonConfig {
         intv("blinkHoldTicks", 4, 0, 40, "Ticks the eye stays shut in an idle blink.");
         intv("idleBlinkMinSeconds", 6, 1, 600, "Shortest gap between idle blinks.");
         intv("idleBlinkMaxSeconds", 14, 1, 600, "Longest gap between idle blinks.");
+        dbl("activeScanSeconds", 3.0, 0.0, 60.0,
+                "The last part of each countdown during which the eye is fully open and actively scanning (Binding Gaze",
+                "works only then). It is carved out of countdownSeconds, so the cadence and the moment of completion are",
+                "unchanged; it is capped at countdownSeconds - 1 so the eye always has at least a second to open.");
+        intv("revealSeconds", 0, 0, 120,
+                "Each revealed player's own reveal timer (True Exposure, Read Your Enemy, amber edges and colour loss).",
+                "0 = the same as markerSeconds.");
+        dbl("rippleSeconds", 3.0, 0.5, 10.0, "How long the single golden sky ripple takes to cross the sky after each scan completion.");
+        pop();
+
+        push("revealing_binding", "Revealing Moon - Binding Gaze: staring into the fully open eye roots you in place.");
+        bool("enabled", true, "Enable Binding Gaze.");
+        dbl("coneDegrees", 5.0, 0.5, 30.0, "How close to the centre of the moon your view must be (degrees from its centre).");
+        dbl("stareSeconds", 2.0, 0.25, 10.0, "Uninterrupted staring (with open sky towards the moon) needed to be bound. Looking away resets it.");
+        str("message", "The eye holds you. Look away.", "Shown once (action bar) when a bind begins.");
+        pop();
+
+        push("revealing_exposure", "Revealing Moon - True Exposure: revealed players cannot hide with the Invisibility effect.");
+        bool("enabled", true, "Enable True Exposure. The potion is never removed or shortened; invisibility resumes afterwards if it is still running.");
+        pop();
+
+        push("revealing_inspect", "Revealing Moon - Read Your Enemy: revealed players can read another player's health and effects.");
+        bool("enabled", true, "Enable Read Your Enemy.");
+        dbl("range", 32.0, 4.0, 128.0, "Maximum distance to the inspected player (blocks).");
+        dbl("aimSeconds", 1.0, 0.1, 10.0, "Uninterrupted aim with line of sight needed before the panel appears.");
+        intv("updatesPerSecond", 4, 1, 10, "How often an acquired target's information is refreshed.");
+        intv("maxEffectsShown", 6, 1, 16, "Effects listed on the panel (longest first); the rest are shown as \"+N more\".");
+        dbl("aimTolerance", 0.5, 0.0, 2.0, "Extra margin (blocks) around the target's hitbox for the server's aim check (network latency).");
+        pop();
+
+        push("revealing_investigate", "Revealing Moon - The World Notices You: nearby hostiles investigate where a revealed player stood.");
+        bool("enabled", true, "Enable investigations.");
+        dbl("radius", 24.0, 4.0, 64.0, "Loaded hostile mobs within this distance of the revealed player's position may investigate.");
+        intv("maxPerPlayer", 6, 0, 32, "Most investigators per revealed player per scan.");
+        intv("maxPerScan", 48, 0, 512, "Processing budget: most investigators assigned per scan in one dimension.");
+        intv("maxPlayersPerScan", 32, 0, 512, "Most revealed players processed per scan in one dimension (in a fixed order).");
+        dbl("seconds", 10.0, 1.0, 60.0, "An investigation that finds nobody ends after this long.");
+        dbl("searchSeconds", 3.0, 0.0, 30.0, "Time spent looking around after reaching the old spot (within the limit above).");
+        dbl("speed", 1.0, 0.3, 1.5, "Navigation speed multiplier (1.0 = the mob's normal walking speed).");
+        bool("respectProtection", true,
+                "Skip spots under spawn protection or where the revealed player could not build (claims, World Protector",
+                "regions and other protection mods, asked through Forge's block-place event).");
+        list("mobs", ImmutableList.of("minecraft:zombie", "minecraft:husk", "minecraft:zombie_villager", "minecraft:skeleton",
+                        "minecraft:stray", "minecraft:wither_skeleton", "minecraft:spider", "minecraft:cave_spider",
+                        "minecraft:creeper", "minecraft:witch", "minecraft:pillager", "minecraft:vindicator"),
+                "Mob types that may investigate (entity ids). Only hostile, ground-walking, untamed mobs with no current target",
+                "are ever used, even if listed. Add modded hostiles here; bosses, neutral mobs and special AI should stay out.");
         pop();
 
         moon("thread", "Thread Moon - teammates bound together share protection. Teams are /moonteams (admin-assigned).", false);
@@ -330,7 +377,7 @@ public final class MoonConfig {
         bool("reactToJumps", true, "Nearby drift motes are lifted when the player jumps.");
         pop();
         atmo("revealing", "29282d", "77716e", "e8dcc2", "d9ab54", "d9ab54", 0.30, 0.20, 0.96, 0.30);
-        bool("scanRing", true, "A pale-gold ring expands across the sky at each scan, with a brief light pulse.");
+        bool("scanRing", true, "One thin golden ripple crosses the whole sky at each scan completion, with a brief light pulse.");
         pop();
         atmo("thread", "393043", "a66e91", "e7bfd4", "c88ba7", "f1c8da", 0.30, 0.15, 1.0, 0.0);
         bool("skyStrands", true, "Thin glowing strands across the sky.");

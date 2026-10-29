@@ -19,6 +19,9 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.ecmoons.feature.war.WarFeatures;
+import net.ecmoons.feature.reveal.BindingGaze;
+import net.ecmoons.feature.reveal.ReadYourEnemy;
+import net.ecmoons.feature.reveal.RevealState;
 import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 
 import java.util.HashMap;
@@ -79,7 +82,11 @@ public final class MoonLifecycle {
     /** Gluttony progress ends with the player's life (cancelled deaths, e.g. War Moon knockouts, never get here). */
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onDeath(LivingDeathEvent event) {
-        if (event.getEntityLiving() instanceof ServerPlayerEntity) GluttonyFeatures.onDeath((ServerPlayerEntity) event.getEntityLiving());
+        if (event.getEntityLiving() instanceof ServerPlayerEntity) {
+            ServerPlayerEntity player = (ServerPlayerEntity) event.getEntityLiving();
+            GluttonyFeatures.onDeath(player);
+            if (!event.isCanceled()) RevealState.end(player, RevealState.EndReason.DEATH);
+        }
     }
 
     @SubscribeEvent
@@ -89,12 +96,18 @@ public final class MoonLifecycle {
 
     @SubscribeEvent
     public static void onRespawn(PlayerEvent.PlayerRespawnEvent event) {
-        if (event.getPlayer() instanceof ServerPlayerEntity) refresh((ServerPlayerEntity) event.getPlayer());
+        if (!(event.getPlayer() instanceof ServerPlayerEntity)) return;
+        ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+        RevealState.end(player, RevealState.EndReason.DEATH);
+        refresh(player);
     }
 
     @SubscribeEvent
     public static void onChangeDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
-        if (event.getPlayer() instanceof ServerPlayerEntity) refresh((ServerPlayerEntity) event.getPlayer());
+        if (!(event.getPlayer() instanceof ServerPlayerEntity)) return;
+        ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+        RevealState.end(player, RevealState.EndReason.DIMENSION);
+        refresh(player);
     }
 
     /** Re-sync settings and drop any state that belonged to the previous world/body. */
@@ -103,6 +116,7 @@ public final class MoonLifecycle {
         FrostFeatures.clear(player);
         MistFeatures.updateNametag(player, Moons.is(player.level, MoonType.MIST));
         GluttonyFeatures.tick(player);
+        RevealingFeatures.sync(player); // current Revealing cycle only: no stale reveal, bind or ripple replay
     }
 
     @SubscribeEvent
@@ -112,6 +126,9 @@ public final class MoonLifecycle {
         QuietFeatures.forget(player.getUUID());
         DriftFeatures.forget(player.getUUID());
         ThreadFeatures.forget(player.getUUID());
+        if (player instanceof ServerPlayerEntity) RevealState.forget((ServerPlayerEntity) player);
+        BindingGaze.forget(player.getUUID());
+        ReadYourEnemy.forget(player.getUUID());
     }
 
     @SubscribeEvent

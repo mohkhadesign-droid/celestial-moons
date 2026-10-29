@@ -9,6 +9,8 @@ public final class ClientSetup {
     public static void init() {
         MinecraftForge.EVENT_BUS.register(ClientEvents.class);
         MinecraftForge.EVENT_BUS.register(RevealClient.class);
+        MinecraftForge.EVENT_BUS.register(RevealHud.class);
+        MinecraftForge.EVENT_BUS.register(RevealGrade.class);
         MinecraftForge.EVENT_BUS.register(ThreadClient.class);
         MinecraftForge.EVENT_BUS.register(net.ecmoons.client.atmo.AtmoEvents.class);
         MinecraftForge.EVENT_BUS.register(net.ecmoons.client.ability.AbilityClient.class);

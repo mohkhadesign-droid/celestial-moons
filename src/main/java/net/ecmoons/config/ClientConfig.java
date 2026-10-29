@@ -14,6 +14,11 @@ public final class ClientConfig {
     public enum Quality { OFF, LOW, MEDIUM, HIGH }
     public static final ForgeConfigSpec.EnumValue<Quality> ATMOSPHERE_QUALITY;
     public static final ForgeConfigSpec.DoubleValue ATMOSPHERE_SOUND_VOLUME;
+    public enum ColorMode { DESATURATE, WASH }
+    public static final ForgeConfigSpec.DoubleValue REVEAL_RIPPLE;
+    public static final ForgeConfigSpec.DoubleValue REVEAL_AMBER_EDGES;
+    public static final ForgeConfigSpec.DoubleValue REVEAL_COLOR;
+    public static final ForgeConfigSpec.EnumValue<ColorMode> REVEAL_COLOR_MODE;
 
     static {
         ForgeConfigSpec.Builder b = new ForgeConfigSpec.Builder();
@@ -35,6 +40,18 @@ public final class ClientConfig {
                 .defineEnum("quality", Quality.MEDIUM);
         ATMOSPHERE_SOUND_VOLUME = b.comment("Your volume for the moons' ambient sounds (multiplies the server's setting).")
                 .defineInRange("soundVolume", 1.0, 0.0, 1.0);
+        b.pop();
+        b.comment("Revealing Moon visuals. Purely cosmetic: turning them down never changes the moon's gameplay.").push("revealing");
+        REVEAL_RIPPLE = b.comment("Brightness of the golden sky ripple at each scan completion (0 = off).")
+                .defineInRange("rippleIntensity", 1.0, 0.0, 1.0);
+        REVEAL_AMBER_EDGES = b.comment("Amber glow along the screen edges while YOU are revealed (0 = off).")
+                .defineInRange("amberEdgeIntensity", 1.0, 0.0, 1.0);
+        REVEAL_COLOR = b.comment("World colour loss while YOU are revealed (0 = off). The HUD is never recoloured.")
+                .defineInRange("colorIntensity", 1.0, 0.0, 1.0);
+        REVEAL_COLOR_MODE = b.comment("DESATURATE = true colour loss with a pale-gold cast (world only, a vanilla post-processing pass).",
+                        "WASH = lighter approximation through the light map (pale-gold wash of sky-lit surfaces), for setups where",
+                        "post-processing is unavailable. DESATURATE falls back to WASH automatically if the pass cannot load.")
+                .defineEnum("colorMode", ColorMode.DESATURATE);
         b.pop();
         SPEC = b.build();
     }

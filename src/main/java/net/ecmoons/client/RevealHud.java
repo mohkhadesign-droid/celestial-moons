@@ -214,6 +214,8 @@ public final class RevealHud {
         int height = lines * 10 - 1;
         // to the right of and just below the crosshair: never over the target itself
         int x = Math.min(w / 2 + 14, w - width - 6), y = Math.min(h / 2 + 8, h - height - 30);
+        ms.pushPose();
+        ms.translate(0, 0, 400); // in front of chat and other HUD text, which write depth
         AbstractGui.fill(ms, x - 4, y - 4, x + width + 4, y + height + 3, 0xE8100c08);
         AbstractGui.fill(ms, x - 4, y - 4, x + width + 4, y - 3, 0xC0d9ab54);
         AbstractGui.fill(ms, x - 4, y + height + 2, x + width + 4, y + height + 3, 0x80d9ab54);
@@ -251,6 +253,7 @@ public final class RevealHud {
             ey += 10;
         }
         if (p.more > 0) font.drawShadow(ms, "+" + p.more + " more", x, ey, 0xFFA09888);
+        ms.popPose();
         panelDrawn++;
     }
 

@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=north,half=upper,wall=true": {
+      "model": "letterbanners:block/crimson_banner_k_upper_wall"
+    },
+    "facing=north,half=upper,wall=false": {
+      "model": "letterbanners:block/crimson_banner_k_upper_free"
+    },
+    "facing=north,half=lower,wall=true": {
+      "model": "letterbanners:block/crimson_banner_k_lower_wall"
+    },
+    "facing=north,half=lower,wall=false": {
+      "model": "letterbanners:block/crimson_banner_k_lower_free"
+    },
+    "facing=east,half=upper,wall=true": {
+      "model": "letterbanners:block/crimson_banner_k_upper_wall",
+      "y": 90
+    },
+    "facing=east,half=upper,wall=false": {
+      "model": "letterbanners:block/crimson_banner_k_upper_free",
+      "y": 90
+    },
+    "facing=east,half=lower,wall=true": {
+      "model": "letterbanners:block/crimson_banner_k_lower_wall",
+      "y": 90
+    },
+    "facing=east,half=lower,wall=false": {
+      "model": "letterbanners:block/crimson_banner_k_lower_free",
+      "y": 90
+    },
+    "facing=south,half=upper,wall=true": {
+      "model": "letterbanners:block/crimson_banner_k_upper_wall",
+      "y": 180
+    },
+    "facing=south,half=upper,wall=false": {
+      "model": "letterbanners:block/crimson_banner_k_upper_free",
+      "y": 180
+    },
+    "facing=south,half=lower,wall=true": {
+      "model": "letterbanners:block/crimson_banner_k_lower_wall",
+      "y": 180
+    },
+    "facing=south,half=lower,wall=false": {
+      "model": "letterbanners:block/crimson_banner_k_lower_free",
+      "y": 180
+    },
+    "facing=west,half=upper,wall=true": {
+      "model": "letterbanners:block/crimson_banner_k_upper_wall",
+      "y": 270
+    },
+    "facing=west,half=upper,wall=false": {
+      "model": "letterbanners:block/crimson_banner_k_upper_free",
+      "y": 270
+    },
+    "facing=west,half=lower,wall=true": {
+      "model": "letterbanners:block/crimson_banner_k_lower_wall",
+      "y": 270
+    },
+    "facing=west,half=lower,wall=false": {
+      "model": "letterbanners:block/crimson_banner_k_lower_free",
+      "y": 270
+    }
+  }
+}

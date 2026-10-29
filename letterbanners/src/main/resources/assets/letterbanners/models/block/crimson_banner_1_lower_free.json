@@ -1,0 +1,8 @@
+{
+  "parent": "letterbanners:block/template_shop_lower_free",
+  "textures": {
+    "banner": "letterbanners:block/crimson_1",
+    "rod": "letterbanners:block/crimson_rod",
+    "tassel": "letterbanners:block/shop_tassel"
+  }
+}

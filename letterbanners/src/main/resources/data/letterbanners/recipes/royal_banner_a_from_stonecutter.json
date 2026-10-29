@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "tag": "letterbanners:royal_banners"
+  },
+  "result": "letterbanners:royal_banner_a",
+  "count": 1
+}

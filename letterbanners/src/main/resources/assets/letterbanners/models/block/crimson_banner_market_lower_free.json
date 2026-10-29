@@ -1,0 +1,8 @@
+{
+  "parent": "letterbanners:block/template_market_lower_free",
+  "textures": {
+    "banner": "letterbanners:block/crimson_market",
+    "rod": "letterbanners:block/crimson_rod",
+    "tassel": "letterbanners:block/shop_tassel"
+  }
+}

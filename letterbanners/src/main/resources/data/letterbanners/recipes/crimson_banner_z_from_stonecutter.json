@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "tag": "letterbanners:crimson_banners"
+  },
+  "result": "letterbanners:crimson_banner_z",
+  "count": 1
+}

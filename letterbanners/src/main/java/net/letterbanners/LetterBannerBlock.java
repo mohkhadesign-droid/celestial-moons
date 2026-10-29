@@ -58,8 +58,16 @@ public class LetterBannerBlock extends HorizontalBlock {
         }
     }
 
+    private final boolean floor;
+
     public LetterBannerBlock(Properties props) {
+        this(props, true);
+    }
+
+    /** floor=false: the banner can only go on a wall or under a block (shop banners, whose tassel hangs below them). */
+    public LetterBannerBlock(Properties props, boolean floor) {
         super(props);
+        this.floor = floor;
         registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(HALF, DoubleBlockHalf.UPPER).setValue(WALL, false));
     }
 
@@ -81,6 +89,7 @@ public class LetterBannerBlock extends HorizontalBlock {
         World world = ctx.getLevel();
         BlockPos pos = ctx.getClickedPos();
         Direction face = ctx.getClickedFace();
+        if (face == Direction.UP && !floor) return null; // shop banners only hang (on a wall or under a block)
         if (face == Direction.UP) { // stood on the floor: this block is the bottom half
             if (pos.getY() >= world.getMaxBuildHeight() - 1 || !world.getBlockState(pos.above()).canBeReplaced(ctx)) return null;
             return defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite()).setValue(HALF, DoubleBlockHalf.LOWER)

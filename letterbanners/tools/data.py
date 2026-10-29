@@ -7,7 +7,15 @@ R = sys.argv[1] if len(sys.argv) > 1 else "src/main/resources"
 A = os.path.join(R, "assets/letterbanners")
 D = os.path.join(R, "data/letterbanners")
 STYLES = {"aurum": "Aurum Forge", "frost": "Frost Spell", "ember": "Ember Gears"}
-NAMES = {"amp": "&", "excl": "!", "question": "?", "dash": "-", "blank": "Blank"}
+# the shop collection (SHOPS / market references): same characters plus the market banner
+SHOP_STYLES = {"royal": "Royal Shop", "crimson": "Crimson Shop", "azure": "Azure Shop"}
+SHOP_GLYPHS = GLYPHS + [("market", "")]
+NAMES = {"amp": "&", "excl": "!", "question": "?", "dash": "-", "blank": "Blank", "market": "Market"}
+
+def label(gid, ch):
+    if gid in NAMES:
+        return NAMES[gid]
+    return ("Number " if ch.isdigit() else "Letter ") + ch
 
 def w(path, obj):
     os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -55,16 +63,97 @@ for name, elems in templates.items():
     w(os.path.join(A, "models/block", name + ".json"),
       {"parent": "block/block", "ambientocclusion": False, "textures": dict(tex, particle="#banner"), "elements": elems})
 
+# --- shop banners: a striped rod across the top of the block (model part), the cloth hanging from it, and a cream
+# tassel (model part) under the pointed hem. Faces are the same picture front and back, readable from both sides.
+def box(x0, y0, z0, x1, y1, z1, tex, uvs=None):
+    faces = {}
+    for f in ("north", "south", "east", "west", "up", "down"):
+        faces[f] = {"uv": (uvs or {}).get(f, [0, 0, 16, 16]), "texture": tex}
+    return {"from": [x0, y0, z0], "to": [x1, y1, z1], "faces": faces}
+
+def cloth(x0, x1, ytop, height, split_from_top, z0, z1, part, tex_w_px, cloth_x0_px, cloth_x1_px):
+    """The cloth quad (with the full texture, transparent outside the silhouette), cut at the block boundary.
+    part 'upper': y from 0 to ytop; part 'lower': y from ytop - height + 16 to 16 (lower-block coordinates)."""
+    vsplit = split_from_top / height * 16
+    if part == "upper":
+        y0, y1, v0, v1 = 0, ytop, 0, vsplit
+    else:
+        y0, y1, v0, v1 = ytop - height + 16, 16, vsplit, 16
+    eu0 = (cloth_x0_px + 0.5) / tex_w_px * 16
+    eu1 = (cloth_x1_px - 0.5) / tex_w_px * 16
+    return {"from": [x0, y0, z0], "to": [x1, y1, z1], "faces": {
+        "north": {"uv": [0, v0, 16, v1], "texture": "#banner"},
+        "south": {"uv": [0, v0, 16, v1], "texture": "#banner"},  # the back: the same picture, readable from behind
+        "west": {"uv": [eu0, v0, eu0 + 0.25, v1], "texture": "#banner"},
+        "east": {"uv": [eu1 - 0.25, v0, eu1, v1], "texture": "#banner"},
+        "up": {"uv": [eu0, v0, eu1, v0 + 0.1], "texture": "#banner"},
+        "down": {"uv": [eu0, v1 - 0.1, eu1, v1], "texture": "#banner"}}}
+
+def tassel(cx, y_point, z, cube_w, cube_h, cord_h):
+    """A short cord from the hem's point and a cream tassel cube under it (lower-block coordinates)."""
+    tu = {"north": [6, 0, 10, 8], "south": [6, 0, 10, 8], "east": [2, 0, 6, 8], "west": [10, 0, 14, 8], "up": [6, 0, 10, 4], "down": [6, 12, 10, 16]}
+    return [box(cx - 0.4, y_point - cord_h, z - 0.4, cx + 0.4, y_point + 0.3, z + 0.4, "#tassel", {k: [7, 0, 9, 4] for k in tu}),
+            box(cx - cube_w / 2, y_point - cord_h - cube_h, z - cube_w / 2, cx + cube_w / 2, y_point - cord_h, z + cube_w / 2, "#tassel", tu)]
+
+def rod(x0, x1, y0, y1, z0, z1):
+    L = x1 - x0
+    side = {"north": [0, 4, 16, 11], "south": [0, 4, 16, 11], "up": [0, 0, 16, 4], "down": [0, 11, 16, 16],
+            "east": [0, 4, 4, 11], "west": [12, 4, 16, 11]}
+    return box(x0, y0, z0, x1, y1, z1, "#rod", side)
+
+SHOP_GEOM = {
+    # letter banner: 32x96 face, cloth 30 px (x 1-30) = 13.5 units -> 0.45 units/px; rod 2.2 thick along the block's top
+    "shop": dict(k=0.45, tw=32, th=96, cx0=1, cx1=31, point_row=77.5, rod=(0, 16, 13.8, 16, 2.2), ytop=14.6, cube=(2.4, 4.5), cord=1.5),
+    # market banner: 48x112 face, cloth 48 px = 19.2 units (0.4 units/px), wider than a block; thicker rod
+    "market": dict(k=0.4, tw=48, th=112, cx0=0, cx1=48, point_row=100.5, rod=(-2.5, 18.5, 13.0, 16, 3.0), ytop=14.0, cube=(2.8, 4.0), cord=1.6),
+}
+
+def shop_templates(kind):
+    g = SHOP_GEOM[kind]
+    k, tw, th = g["k"], g["tw"], g["th"]
+    width, height = tw * k, th * k
+    x0, x1 = 8 - width / 2, 8 + width / 2
+    ytop = g["ytop"]
+    split = ytop  # units of cloth above the block boundary
+    rx0, rx1, ry0, ry1, rt = g["rod"]
+    y_point_upper = ytop - g["point_row"] * k  # in upper-block coordinates
+    out = {}
+    for mode, zc in (("wall", 16 - rt / 2), ("free", 8.0)):
+        zr0, zr1 = zc - rt / 2, zc + rt / 2
+        # the cloth sits just in front of the rod's centre; the market cloth a hair further forward, so where a market
+        # banner overlaps its neighbour the two never share a plane
+        zoff = -0.25 if kind == "market" else 0.0
+        z0, z1 = zc - 0.2 + zoff, zc + 0.2 + zoff
+        out["template_%s_upper_%s" % (kind, mode)] = [rod(rx0, rx1, ry0, ry1, zr0, zr1),
+                                                       cloth(x0, x1, ytop, height, split, z0, z1, "upper", tw, g["cx0"], g["cx1"])]
+        out["template_%s_lower_%s" % (kind, mode)] = [cloth(x0, x1, ytop, height, split, z0, z1, "lower", tw, g["cx0"], g["cx1"])] + \
+            tassel(8, y_point_upper + 16, zc + zoff, g["cube"][0], g["cube"][1], g["cord"])
+    return out
+
+for kind in ("shop", "market"):
+    for name, elems in shop_templates(kind).items():
+        w(os.path.join(A, "models/block", name + ".json"),
+          {"parent": "block/block", "ambientocclusion": False, "textures": {"particle": "#banner"}, "elements": elems})
+
 ROT = {"north": 0, "east": 90, "south": 180, "west": 270}
 lang = {"itemGroup.letterbanners": "Letter Banners"}
-for style, sname in STYLES.items():
+ALL_STYLES = list(STYLES.items()) + list(SHOP_STYLES.items())
+for style, sname in ALL_STYLES:
     tag = []
-    for gid, ch in GLYPHS:
+    shop = style in SHOP_STYLES
+    for gid, ch in (SHOP_GLYPHS if shop else GLYPHS):
         name = f"{style}_banner_{gid}"
         tag.append("letterbanners:" + name)
         for part in ("upper_wall", "lower_wall", "upper_free", "lower_free"):
-            w(os.path.join(A, "models/block", f"{name}_{part}.json"),
-              {"parent": f"letterbanners:block/template_{part}", "textures": {"banner": f"letterbanners:block/{style}_{gid}"}})
+            if shop:
+                kind = "market" if gid == "market" else "shop"
+                w(os.path.join(A, "models/block", f"{name}_{part}.json"),
+                  {"parent": f"letterbanners:block/template_{kind}_{part}", "textures": {
+                      "banner": f"letterbanners:block/{style}_{gid}", "rod": f"letterbanners:block/{style}_rod",
+                      "tassel": "letterbanners:block/shop_tassel"}})
+            else:
+                w(os.path.join(A, "models/block", f"{name}_{part}.json"),
+                  {"parent": f"letterbanners:block/template_{part}", "textures": {"banner": f"letterbanners:block/{style}_{gid}"}})
         variants = {}
         for facing, r in ROT.items():
             for half in ("upper", "lower"):
@@ -76,8 +165,7 @@ for style, sname in STYLES.items():
         w(os.path.join(A, "blockstates", name + ".json"), {"variants": variants})
         w(os.path.join(A, "models/item", name + ".json"),
           {"parent": "item/generated", "textures": {"layer0": f"letterbanners:item/{style}_{gid}"}})
-        label = NAMES.get(gid, ch)
-        lang[f"block.letterbanners.{name}"] = f"{sname} Banner: {label}" if gid != "blank" else f"{sname} Banner (Blank)"
+        lang[f"block.letterbanners.{name}"] = f"{sname} Banner: {label(gid, ch)}"
         w(os.path.join(D, "loot_tables/blocks", name + ".json"), {
             "type": "minecraft:block",
             "pools": [{"rolls": 1, "entries": [{"type": "minecraft:item", "name": "letterbanners:" + name}],
@@ -94,6 +182,10 @@ BLANK = {
     "aurum": ("minecraft:yellow_wool", "minecraft:black_dye"),
     "frost": ("minecraft:blue_wool", "minecraft:white_dye"),
     "ember": ("minecraft:red_wool", "minecraft:gold_nugget"),
+    # shop banners: string in the middle (it becomes the tassel)
+    "royal": ("minecraft:blue_wool", "minecraft:string"),
+    "crimson": ("minecraft:red_wool", "minecraft:string"),
+    "azure": ("minecraft:light_blue_wool", "minecraft:string"),
 }
 for style, (wool, extra) in BLANK.items():
     w(os.path.join(D, "recipes", f"{style}_banner_blank.json"), {

@@ -1,0 +1,8 @@
+{
+  "parent": "letterbanners:block/template_shop_upper_wall",
+  "textures": {
+    "banner": "letterbanners:block/azure_h",
+    "rod": "letterbanners:block/azure_rod",
+    "tassel": "letterbanners:block/shop_tassel"
+  }
+}

@@ -24,14 +24,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Letter Banners: two-block-tall hanging banners with one letter each, in three styles. Every style has A-Z, 0-9,
- * &amp; ! ? - and a blank banner. Craft a blank, then pick the letter in a stonecutter.
+ * Letter Banners: two-block-tall hanging banners with one letter each. Styles: aurum, frost, ember, and the shop
+ * collection (royal, crimson, azure) which also has a market banner. Every style has A-Z, 0-9, &amp; ! ? - and a blank
+ * banner. Craft a blank, then pick the letter in a stonecutter.
  */
 @Mod(LetterBanners.MOD_ID)
 public class LetterBanners {
     public static final String MOD_ID = "letterbanners";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static final String[] STYLES = {"aurum", "frost", "ember"};
+    /** The shop collection (royal blue, crimson, azure): the same characters plus the market banner. */
+    public static final String[] SHOP_STYLES = {"royal", "crimson", "azure"};
     public static final String[] GLYPHS = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r",
             "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "amp", "excl", "question",
             "dash", "blank"};
@@ -51,14 +54,24 @@ public class LetterBanners {
         for (String style : STYLES) {
             MaterialColor colour = style.equals("aurum") ? MaterialColor.COLOR_YELLOW : style.equals("frost") ? MaterialColor.COLOR_BLUE
                     : MaterialColor.COLOR_RED;
-            for (String g : GLYPHS) {
-                String name = style + "_banner_" + g;
-                RegistryObject<Block> b = BLOCKS.register(name, () -> new LetterBannerBlock(Block.Properties.of(Material.WOOL, colour)
-                        .noCollission().strength(1.0F).sound(SoundType.WOOL).noOcclusion()));
-                ITEMS.register(name, () -> new BlockItem(b.get(), new Item.Properties().tab(TAB).stacksTo(16)));
-                ALL.add(b);
-            }
+            for (String g : GLYPHS) register(style, g, colour, true);
         }
+        for (String style : SHOP_STYLES) {
+            MaterialColor colour = style.equals("royal") ? MaterialColor.COLOR_BLUE : style.equals("crimson") ? MaterialColor.COLOR_RED
+                    : MaterialColor.COLOR_LIGHT_BLUE;
+            for (String g : GLYPHS) register(style, g, colour, false);
+            register(style, "market", colour, false);
+        }
+    }
+
+    /** One block (and its item) per design: style_banner_glyph. Shop banners hang below their rod with a tassel, so
+     * they can be put on a wall or hung under a block, but not stood on the floor (the tassel would sink into it). */
+    private static void register(String style, String g, MaterialColor colour, boolean floor) {
+        String name = style + "_banner_" + g;
+        RegistryObject<Block> b = BLOCKS.register(name, () -> new LetterBannerBlock(Block.Properties.of(Material.WOOL, colour)
+                .noCollission().strength(1.0F).sound(SoundType.WOOL).noOcclusion(), floor));
+        ITEMS.register(name, () -> new BlockItem(b.get(), new Item.Properties().tab(TAB).stacksTo(16)));
+        ALL.add(b);
     }
 
     public LetterBanners() {

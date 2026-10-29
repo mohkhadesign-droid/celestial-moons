@@ -1,0 +1,8 @@
+{
+  "parent": "letterbanners:block/template_shop_lower_wall",
+  "textures": {
+    "banner": "letterbanners:block/royal_q",
+    "rod": "letterbanners:block/royal_rod",
+    "tassel": "letterbanners:block/shop_tassel"
+  }
+}

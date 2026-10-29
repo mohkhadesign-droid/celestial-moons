@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "tag": "letterbanners:aurum_banners"
+  },
+  "result": "letterbanners:aurum_banner_blank",
+  "count": 1
+}

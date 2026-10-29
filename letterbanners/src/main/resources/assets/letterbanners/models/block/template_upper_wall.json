@@ -1,0 +1,279 @@
+{
+  "parent": "block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "chain": "minecraft:block/chain",
+    "rod": "minecraft:block/dark_oak_log",
+    "particle": "#banner"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        15
+      ],
+      "to": [
+        15,
+        14,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            7.466666666666667
+          ],
+          "texture": "#banner"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            7.466666666666667
+          ],
+          "texture": "#banner"
+        },
+        "east": {
+          "uv": [
+            15.428571428571429,
+            0,
+            16,
+            7.466666666666667
+          ],
+          "texture": "#banner"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            0.5714285714285714,
+            7.466666666666667
+          ],
+          "texture": "#banner"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            0.25
+          ],
+          "texture": "#banner"
+        },
+        "down": {
+          "uv": [
+            0,
+            7.216666666666667,
+            16,
+            7.466666666666667
+          ],
+          "texture": "#banner"
+        }
+      }
+    },
+    {
+      "from": [
+        0.5,
+        14,
+        14.5
+      ],
+      "to": [
+        15.5,
+        15,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            1
+          ],
+          "texture": "#rod"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            1
+          ],
+          "texture": "#rod"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            1
+          ],
+          "texture": "#rod"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            1
+          ],
+          "texture": "#rod"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            1
+          ],
+          "texture": "#rod"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            1
+          ],
+          "texture": "#rod"
+        }
+      }
+    },
+    {
+      "from": [
+        2.5,
+        15,
+        15
+      ],
+      "to": [
+        5.5,
+        16,
+        15
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            3,
+            1
+          ],
+          "texture": "#chain"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            3,
+            1
+          ],
+          "texture": "#chain"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        15,
+        13.5
+      ],
+      "to": [
+        4,
+        16,
+        16.5
+      ],
+      "shade": false,
+      "faces": {
+        "east": {
+          "uv": [
+            3,
+            0,
+            6,
+            1
+          ],
+          "texture": "#chain"
+        },
+        "west": {
+          "uv": [
+            3,
+            0,
+            6,
+            1
+          ],
+          "texture": "#chain"
+        }
+      }
+    },
+    {
+      "from": [
+        10.5,
+        15,
+        15
+      ],
+      "to": [
+        13.5,
+        16,
+        15
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            3,
+            1
+          ],
+          "texture": "#chain"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            3,
+            1
+          ],
+          "texture": "#chain"
+        }
+      }
+    },
+    {
+      "from": [
+        12,
+        15,
+        13.5
+      ],
+      "to": [
+        12,
+        16,
+        16.5
+      ],
+      "shade": false,
+      "faces": {
+        "east": {
+          "uv": [
+            3,
+            0,
+            6,
+            1
+          ],
+          "texture": "#chain"
+        },
+        "west": {
+          "uv": [
+            3,
+            0,
+            6,
+            1
+          ],
+          "texture": "#chain"
+        }
+      }
+    }
+  ]
+}

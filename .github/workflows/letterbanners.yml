@@ -1,0 +1,61 @@
+name: Letter Banners
+
+on:
+  push:
+    branches: [main]
+    paths: ['letterbanners/**', '.github/workflows/letterbanners.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: letterbanners
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '8'
+      - name: Cache Gradle and ForgeGradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-lb-${{ hashFiles('letterbanners/build.gradle', 'letterbanners/gradle.properties') }}
+          restore-keys: |
+            gradle-lb-
+            gradle-fg-
+      - name: Build
+        run: |
+          chmod +x gradlew
+          set -o pipefail
+          ./gradlew build --no-daemon 2>&1 | tee build.log
+      - name: Install virtual display and software OpenGL
+        run: sudo apt-get update -q && sudo apt-get install -y -q xvfb mesa-utils libgl1-mesa-dri
+      - name: Client test (real Minecraft client)
+        timeout-minutes: 30
+        env:
+          LIBGL_ALWAYS_SOFTWARE: 'true'
+          LB_CLIENTTEST: 'true'
+        run: |
+          mkdir -p run-client
+          printf "pauseOnLostFocus:false\ntutorialStep:none\nskipMultiplayerWarning:true\nrenderDistance:8\ngraphicsMode:1\nfov:0.0\njoinedFirstServer:true\nnarrator:0\nsoundCategory_master:0.0\n" > run-client/options.txt
+          timeout 1500 xvfb-run -a -s "-screen 0 1280x720x24" ./gradlew runClient --no-daemon > client-full.log 2>&1 || true
+          grep -E "LB-TEST|ERROR|Exception|Caused by" client-full.log | head -n 400 > client.log || true
+          tail -n 60 client-full.log >> client.log
+          grep -q "LBTEST COMPLETE passed=[0-9]* failed=0" client-full.log
+      - name: Publish jar, logs and screenshots to the lb-out branch
+        if: always()
+        run: |
+          mkdir -p out/jar && cp build/libs/*.jar out/jar/ 2>/dev/null || true
+          cp build.log client.log client-full.log out/ 2>/dev/null || true
+          cp -r run-client/screenshots out/ 2>/dev/null || true
+          cd out && git init -q && git checkout -q -b lb-out
+          git add -A && git -c user.name=ci -c user.email=ci@users.noreply.github.com commit -qm "Letter Banners run ${GITHUB_RUN_NUMBER} (${GITHUB_SHA})" || true
+          git push -q -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" lb-out || true

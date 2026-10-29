@@ -1,0 +1,79 @@
+{
+  "parent": "block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "chain": "minecraft:block/chain",
+    "rod": "minecraft:block/dark_oak_log",
+    "particle": "#banner"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        7.5
+      ],
+      "to": [
+        15,
+        16,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            7.466666666666667,
+            16,
+            16
+          ],
+          "texture": "#banner"
+        },
+        "south": {
+          "uv": [
+            0,
+            7.466666666666667,
+            16,
+            16
+          ],
+          "texture": "#banner"
+        },
+        "east": {
+          "uv": [
+            15.428571428571429,
+            7.466666666666667,
+            16,
+            16
+          ],
+          "texture": "#banner"
+        },
+        "west": {
+          "uv": [
+            0,
+            7.466666666666667,
+            0.5714285714285714,
+            16
+          ],
+          "texture": "#banner"
+        },
+        "up": {
+          "uv": [
+            0,
+            7.466666666666667,
+            16,
+            7.716666666666667
+          ],
+          "texture": "#banner"
+        },
+        "down": {
+          "uv": [
+            0,
+            15.75,
+            16,
+            16
+          ],
+          "texture": "#banner"
+        }
+      }
+    }
+  ]
+}

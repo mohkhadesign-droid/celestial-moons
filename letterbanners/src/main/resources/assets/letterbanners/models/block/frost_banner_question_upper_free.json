@@ -1,0 +1,6 @@
+{
+  "parent": "letterbanners:block/template_upper_free",
+  "textures": {
+    "banner": "letterbanners:block/frost_question"
+  }
+}

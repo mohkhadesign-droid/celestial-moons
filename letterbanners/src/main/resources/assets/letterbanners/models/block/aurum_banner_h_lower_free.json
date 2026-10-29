@@ -1,0 +1,6 @@
+{
+  "parent": "letterbanners:block/template_lower_free",
+  "textures": {
+    "banner": "letterbanners:block/aurum_h"
+  }
+}

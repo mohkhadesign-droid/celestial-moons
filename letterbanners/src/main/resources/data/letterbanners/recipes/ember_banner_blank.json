@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WWW",
+    "WXW",
+    " S "
+  ],
+  "key": {
+    "W": {
+      "item": "minecraft:red_wool"
+    },
+    "X": {
+      "item": "minecraft:gold_nugget"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "letterbanners:ember_banner_blank",
+    "count": 2
+  }
+}

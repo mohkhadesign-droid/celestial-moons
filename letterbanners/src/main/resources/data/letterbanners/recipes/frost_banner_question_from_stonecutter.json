@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "tag": "letterbanners:frost_banners"
+  },
+  "result": "letterbanners:frost_banner_question",
+  "count": 1
+}

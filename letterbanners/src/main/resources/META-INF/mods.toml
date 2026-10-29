@@ -1,0 +1,26 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+license="All rights reserved"
+
+[[mods]]
+modId="letterbanners"
+version="${file.jarVersion}"
+displayName="Letter Banners"
+authors="mohkhadesign"
+description='''
+Hanging letter banners in three styles (Aurum Forge, Frost Spell, Ember Gears): A-Z, 0-9, & ! ? - and blank.
+Readable from the front and the back. Craft a blank banner, then pick letters in a stonecutter.
+'''
+
+[[dependencies.letterbanners]]
+    modId="forge"
+    mandatory=true
+    versionRange="[36.2.0,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.letterbanners]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.5]"
+    ordering="NONE"
+    side="BOTH"

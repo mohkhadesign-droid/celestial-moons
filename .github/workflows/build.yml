@@ -3,7 +3,7 @@ name: Build
 on:
   push:
     branches: [main]
-    paths-ignore: ['**.md']
+    paths-ignore: ['**.md', 'letterbanners/**', '.github/workflows/letterbanners.yml']
   workflow_dispatch:
 
 permissions:

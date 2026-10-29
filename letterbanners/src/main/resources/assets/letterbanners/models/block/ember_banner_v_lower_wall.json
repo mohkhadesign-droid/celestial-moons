@@ -1,0 +1,6 @@
+{
+  "parent": "letterbanners:block/template_lower_wall",
+  "textures": {
+    "banner": "letterbanners:block/ember_v"
+  }
+}

@@ -31,8 +31,9 @@ public final class ReadYourEnemy {
     private static final class Aim {
         final int targetId;
         int validTicks;
-        long lastSent = Long.MIN_VALUE;
+        long lastSent = -1_000_000L; // (not MIN_VALUE: now - lastSent must not overflow)
         boolean acquired;
+        Check last = Check.NO_TARGET;
 
         Aim(int targetId) {
             this.targetId = targetId;
@@ -75,6 +76,7 @@ public final class ReadYourEnemy {
             Entity e = observer.getLevel().getEntity(a.targetId);
             if (e == null) e = TEST_TARGETS.get(a.targetId);
             Check c = check(observer, e instanceof ServerPlayerEntity ? (ServerPlayerEntity) e : null);
+            a.last = c;
             if (c != Check.OK) {
                 a.validTicks = 0;
                 if (a.acquired) {
@@ -134,6 +136,12 @@ public final class ReadYourEnemy {
         if (packet.targetId >= 0) sent++;
         LAST.put(observer.getUUID(), packet);
         Network.send(observer, packet);
+    }
+
+    /** Diagnostics: the observer's current aim state. */
+    public static String describe(ServerPlayerEntity observer) {
+        Aim a = AIMS.get(observer.getUUID());
+        return a == null ? "no aim" : "target " + a.targetId + " valid " + a.validTicks + " acquired " + a.acquired + " last " + a.last;
     }
 
     public static boolean acquired(ServerPlayerEntity observer) {

@@ -125,10 +125,10 @@ final class RevealChecks {
         for (int i = 0; i < 100; i++) BindingGaze.step(starer, true, need, 901);
         check.accept("binding gaze: staring on does not stack or re-bind", BindingGaze.isBound(starer) && BindingGaze.bindsStarted == before
                 && BindingGaze.stareTicks(starer) == need);
-        Vector3d posBefore = starer.position(), motion = new Vector3d(0.3, -0.6, 0.1);
+        Vector3d posBefore = new Vector3d(starer.getX(), starer.getY(), starer.getZ()), motion = new Vector3d(0.3, -0.6, 0.1);
         starer.setDeltaMovement(motion);
         check.accept("binding gaze: the bind never touches position or velocity (falling and knockback continue)",
-                starer.position().equals(posBefore) && starer.getDeltaMovement().equals(motion) && starer.getActiveEffects().isEmpty());
+                new Vector3d(starer.getX(), starer.getY(), starer.getZ()).equals(posBefore) && starer.getDeltaMovement().equals(motion) && starer.getActiveEffects().isEmpty());
         BindingGaze.step(starer, false, need, 901);
         check.accept("binding gaze: looking away releases immediately", !BindingGaze.isBound(starer));
         for (int i = 0; i < need; i++) BindingGaze.step(starer, true, need, 901);
@@ -251,6 +251,8 @@ final class RevealChecks {
         ReadYourEnemy.onAim(obs, tgt.getId());
         List<net.minecraft.entity.player.ServerPlayerEntity> obsList = Collections.singletonList(obs);
         for (int t = 1; t <= 19; t++) ReadYourEnemy.tick(obsList, now + t);
+        EcMoons.LOGGER.info("[ECMOONS-SELFTEST] inspect diag: " + ReadYourEnemy.describe(obs) + " last " + (ReadYourEnemy.LAST.get(obs.getUUID()) == null ? "none"
+                : ReadYourEnemy.LAST.get(obs.getUUID()).targetId) + " tgt id " + tgt.getId() + " world entity " + w.getEntity(tgt.getId()));
         boolean early = !ReadYourEnemy.acquired(obs) && !ReadYourEnemy.LAST.containsKey(obs.getUUID());
         ReadYourEnemy.tick(obsList, now + 20);
         InspectPacket info = ReadYourEnemy.LAST.get(obs.getUUID());
@@ -320,7 +322,7 @@ final class RevealChecks {
         for (MobEntity old : w.getEntitiesOfClass(MobEntity.class, new net.minecraft.util.math.AxisAlignedBB(x - 40, y - 20, z - 40, x + 40, y + 20, z + 40))) old.remove();
         scouted = fake(w, "ecm_scouted");
         scouted.moveTo(x + 0.5, y, z + 0.5, 0, 0);
-        spot = scouted.position();
+        spot = new Vector3d(scouted.getX(), scouted.getY(), scouted.getZ()); // FakePlayer.position() is always 0,0,0
         MOBS.clear();
         // eight idle zombies at increasing distance, one zombie already fighting, a cow and a zombie 30 blocks away
         for (int i = 0; i < 8; i++) MOBS.add(spawn(w, EntityType.ZOMBIE, x + 6 + i * 1.5, y, z + (i % 2 == 0 ? 3 : -3)));

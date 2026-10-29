@@ -46,7 +46,7 @@ public final class WorldNotices {
         final UUID player;
         final Vector3d spot;
         final long start;
-        long arrived = -1, lastPath = Long.MIN_VALUE;
+        long arrived = -1, lastPath = -1_000_000L;
         int failedPaths;
 
         Job(MobEntity mob, UUID player, Vector3d spot, long start) {
@@ -82,7 +82,7 @@ public final class WorldNotices {
         for (ServerPlayerEntity p : revealed) {
             if (budget <= 0 || handled >= players) break;
             handled++;
-            Vector3d spot = p.position();
+            Vector3d spot = new Vector3d(p.getX(), p.getY(), p.getZ());
             BlockPos pos = p.blockPosition();
             if (respect && !allowedSpot(world, p, pos)) continue;
             List<MobEntity> found = world.getEntitiesOfClass(MobEntity.class, new AxisAlignedBB(spot, spot).inflate(r),

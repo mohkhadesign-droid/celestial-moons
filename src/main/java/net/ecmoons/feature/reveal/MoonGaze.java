@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 
@@ -23,9 +24,10 @@ public final class MoonGaze {
     }
 
     public static Vector3d moonDirection(float timeOfDay) {
+        // Vector3f.XP.rotationDegrees is client-only; this constructor and transform exist on both sides
         Vector3f v = new Vector3f(0f, -1f, 0f);
-        v.transform(Vector3f.XP.rotationDegrees(timeOfDay * 360f));
-        v.transform(Vector3f.YP.rotationDegrees(-90f));
+        v.transform(new Quaternion(new Vector3f(1f, 0f, 0f), timeOfDay * 360f, true));
+        v.transform(new Quaternion(new Vector3f(0f, 1f, 0f), -90f, true));
         return new Vector3d(v.x(), v.y(), v.z()).normalize();
     }
 

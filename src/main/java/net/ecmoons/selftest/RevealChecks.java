@@ -5,6 +5,7 @@ import io.netty.buffer.Unpooled;
 import net.ecmoons.EcMoons;
 import net.ecmoons.MoonType;
 import net.ecmoons.Moons;
+import net.ecmoons.config.Settings;
 import net.ecmoons.feature.RevealingFeatures;
 import net.ecmoons.feature.reveal.BindingGaze;
 import net.ecmoons.feature.reveal.MoonGaze;
@@ -74,6 +75,13 @@ final class RevealChecks {
         Vector3d mid = MoonGaze.moonDirection(0.5f), noon = MoonGaze.moonDirection(0f), set = MoonGaze.moonDirection(0.25f);
         check.accept("revealing: the moon is overhead at midnight (" + mid + ") and below at noon (" + noon + ")", mid.y > 0.999 && noon.y < -0.999);
         check.accept("revealing: the moon is on the horizon at time-of-day 0.25 (" + set + ")", Math.abs(set.y) < 1e-3);
+        boolean formula = true;
+        for (float t = 0f; t < 1f; t += 0.07f) {
+            Vector3d d = MoonGaze.moonDirection(t);
+            double a = t * Math.PI * 2;
+            formula &= Math.abs(d.x - Math.sin(a)) < 1e-4 && Math.abs(d.y + Math.cos(a)) < 1e-4 && Math.abs(d.z) < 1e-4;
+        }
+        check.accept("revealing: the sky renderer's rotation gives (sin a, -cos a, 0) at every time of day", formula);
         check.accept("revealing: phase split - a 5 s countdown gives 3 s of active scanning, a 2 s countdown at most 1 s",
                 activeTicks(100) == 60 && activeTicks(40) == 20);
 
@@ -322,6 +330,10 @@ final class RevealChecks {
         FakePlayer other = fake(w, "ecm_victim");
         other.moveTo(x - 8.5, y, z + 0.5, 0, 0);
         fighter.setTarget(other);
+        EcMoons.LOGGER.info("[ECMOONS-SELFTEST] notices diag: spot " + spot + " difficulty " + w.getDifficulty() + " first " + MOBS.get(0).position()
+                + " alive " + MOBS.get(0).isAlive() + " removed " + MOBS.get(0).removed + " found " + w.getEntitiesOfClass(MobEntity.class,
+                new net.minecraft.util.math.AxisAlignedBB(spot, spot).inflate(24)).size() + " allow " + Settings.server().list("revealing_investigate.mobs")
+                + " canPlace " + net.ecmoons.feature.ability.MoonAbilities.canPlace(scouted, scouted.blockPosition()));
         int started = WorldNotices.started;
         int n = WorldNotices.onScan(w, Collections.singletonList(scouted), w.getServer().getTickCount());
         List<MobEntity> nearest = new ArrayList<>(MOBS.subList(0, 6));

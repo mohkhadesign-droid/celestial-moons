@@ -124,7 +124,17 @@ D. **Curios and other equipment mods:** with Curios accessories equipped, enrol 
 E. **Flan Warfare deferral:** start a flag capture, then `/ecmoons war start`: the battle must be postponed ("A claim raid is in progress…"). The integration is by reflection on `net.flanwarfare.core.WarCore.get().capture().activeCount()`, checked against your repository's source but not run.
 F. **Grave/corpse mods and Lootr** in the arena: a knockout never fires a death, so graves shouldn't trigger; confirm no grave appears.
 G. **Thread Moon with two or more real teammates:** the bond percentage on the HUD, the rose threads (visible to the team only, not to other players), the 3 s fade, and actual damage taken.
-H. **Revealing Moon with other players:** markers for other players within 256 blocks, never your own; nothing for spectators, exempt-tagged players, protected areas or arena players; no coordinates in chat.
+H. **Revealing Moon with other players** (two or more real clients; nothing below was tested with a second player):
+  1. Warnings, markers (other players within 256 blocks, never your own), eye glow and exclusions (spectators, exempt tag, protected areas, arena players) unchanged; no coordinates in chat.
+  2. One golden ripple starts at completion (not when the eye opens), crosses the whole sky, stays fixed to the sky while you turn, and never repeats per detected player.
+  3. Two players watch the same wave at the same progress; a player under a roof does not see it through the roof but is still revealed.
+  4. Staring 2 s at the open eye binds; looking away releases at once; a roof prevents it; falling and knockback still work while bound; also try third person (both views).
+  5. Invisible player: visible to the other player during the reveal; invisible again with the right time left afterwards; milk during the reveal = stays visible afterwards; drinking a potion during the reveal does not hide.
+  6. Read Your Enemy: only while revealed, 1 s aim, within 32 blocks, clear view; ends at once when you look away, a wall comes between or the reveal ends; shows only name, health, absorption and effects.
+  7. Hostiles near a revealed player walk to the old spot (not following them), at most 6, and a mob already fighting someone keeps its target.
+  8. Amber edges and colour loss fade with each player's own timer and are gone at zero (try two players revealed by different scans).
+  9. Death, `/ecmoons end`, dimension change, relog and becoming exempt leave no bind, visibility override, panel, investigation or colour behind.
+  10. Spawn protection, Flan claims, World Protector regions, arena exclusions and other moons behave as before.
 I. **Gluttony with modded foods** from the pack (each counts as its own category unless grouped in `foodCategories`) and relogging mid-night (hearts kept).
 
 ### Atmosphere

@@ -797,7 +797,12 @@ public final class ClientSelfTest {
         then(10, () -> cmd("execute as @p run ecmoons reveal scan self"));
         then(10, () -> {
             check("revealing: scan marker received (" + RevealClient.markerCount() + ")", RevealClient.markerCount() == 1);
-            cmd("spreadplayers " + (px + 26) + " " + pz + " 0 1 false @a");
+            onServer(s -> { // to the ground 15 blocks west of the marker (spreadplayers can refuse a spot)
+                net.minecraft.entity.player.ServerPlayerEntity sp = s.getPlayerList().getPlayers().get(0);
+                int x = px + 26, z = pz;
+                int y = sp.getLevel().getHeight(net.minecraft.world.gen.Heightmap.Type.MOTION_BLOCKING, x, z);
+                sp.teleportTo(x + 0.5, y, z + 0.5);
+            });
         });
         waitFor(100, () -> player().isOnGround());
         then(15, () -> {

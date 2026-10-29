@@ -1,0 +1,1104 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. See https://docs.gradle.org/7.6.4/userguide/gradle_daemon.html#sec:disabling_the_daemon.
+Daemon will be stopped at the end of the build 
+
+> Configure project :
+WARNING: This project is configured to use the official obfuscation mappings provided by Mojang. These mapping fall under their associated license, you should be fully aware of this license. For the latest license text, refer below, or the reference copy here: https://github.com/MinecraftForge/MCPConfig/blob/master/Mojang.md, You can hide this warning by running the `hideOfficialWarningUntilChanged` task
+WARNING: (c) 2020 Microsoft Corporation. These mappings are provided "as-is" and you bear the risk of using them. You may copy and use the mappings for development purposes, but you may not redistribute the mappings complete and unmodified. Microsoft makes no warranties, express or implied, with respect to the mappings provided here.  Use and modification of this document or the source code (in any form) of Minecraft: Java Edition is governed by the Minecraft End User License Agreement available at https://account.mojang.com/documents/minecraft_eula.
+
+> Task :compileJava UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+> Task :downloadMcpConfig
+> Task :extractSrg UP-TO-DATE
+> Task :createSrgToMcp
+> Task :downloadMCMeta
+> Task :downloadAssets
+> Task :extractNatives
+> Task :makeSrcDirs
+> Task :prepareRuns
+> Task :prepareRunClient
+
+> Task :runClient
+2026-10-29 03:31:19,765 main WARN Advanced terminal features are not available in this environment
+[03:31:20] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: ModLauncher running: args [--gameDir, ., --launchTarget, fmluserdevclient, --fml.mcpVersion, 20210115.111550, --fml.mcVersion, 1.16.5, --fml.forgeGroup, net.minecraftforge, --fml.forgeVersion, 36.2.39, --assetIndex, 1.16, --assetsDir, /home/runner/.gradle/caches/forge_gradle/assets, --version, MOD_DEV, --username, Dev, --accessToken, ❄❄❄❄❄❄❄❄, --userProperties, {}]
+[03:31:20] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: ModLauncher 8.1.3+8.1.3+main-8.1.x.c94d18ec starting: java version 1.8.0_504 by Temurin
+[03:31:20] [main/INFO] [ne.mi.fm.lo.FixSSL/CORE]: Added Lets Encrypt root certificates as additional trust
+[03:31:20] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.4 Source=file:/home/runner/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.4/4ec7d77d9ab32596ca0b78bb123956734767e3a/mixin-0.8.4.jar Service=ModLauncher Env=CLIENT
+[03:31:20] [main/WARN] [ne.mi.fm.lo.FMLConfig/CORE]: Configuration file /home/runner/work/celestial-moons/celestial-moons/letterbanners/run-client/config/fml.toml is not correct. Correcting
+[03:31:20] [main/WARN] [ne.mi.fm.lo.FMLConfig/CORE]: Incorrect key [defaultConfigPath] was corrected from null to defaultconfigs
+[03:31:23] [main/INFO] [cp.mo.mo.LaunchServiceHandler/MODLAUNCHER]: Launching target 'fmluserdevclient' with arguments [--version, MOD_DEV, --gameDir, ., --assetsDir, /home/runner/.gradle/caches/forge_gradle/assets, --assetIndex, 1.16, --username, Dev, --accessToken, ❄❄❄❄❄❄❄❄, --userProperties, {}]
+[03:31:29] [Render thread/INFO] [mojang/YggdrasilAuthenticationService]: Environment: authHost='https://authserver.mojang.com', accountsHost='https://api.mojang.com', sessionHost='https://sessionserver.mojang.com', servicesHost='https://api.minecraftservices.com', name='PROD'
+[03:31:29] [Render thread/INFO] [minecraft/Minecraft]: Setting user: Dev
+[03:31:30] [Render thread/INFO] [minecraft/Minecraft]: Backend library: LWJGL version 3.2.2 build 10
+[03:31:30] [modloading-worker-1/INFO] [ne.mi.co.ForgeMod/FORGEMOD]: Forge mod loading, version 36.2.39, for MC 1.16.5 with MCP 20210115.111550
+[03:31:30] [modloading-worker-1/INFO] [ne.mi.co.MinecraftForge/FORGE]: MinecraftForge v36.2.39 Initialized
+[03:31:33] [Render thread/WARN] [mojang/NarratorLinux]: ERROR : Couldn't load Narrator library : Unable to load library 'fliteWrapper': Can't obtain InputStream for linux-x86-64/libfliteWrapper.so
+[03:31:33] [Render thread/INFO] [minecraft/SimpleReloadableResourceManager]: Reloading ResourceManager: Default, Mod Resources
+[03:31:33] [modloading-worker-2/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Configuration file /home/runner/work/celestial-moons/celestial-moons/letterbanners/run-client/config/forge-client.toml is not correct. Correcting
+[03:31:33] [modloading-worker-2/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key client was corrected from null to its default, SimpleCommentedConfig:{}. 
+[03:31:33] [modloading-worker-2/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key client.zoomInMissingModelTextInGui was corrected from null to its default, false. 
+[03:31:33] [modloading-worker-2/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key client.forgeCloudsEnabled was corrected from null to its default, true. 
+[03:31:33] [modloading-worker-2/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key client.disableStairSlabCulling was corrected from null to its default, false. 
+[03:31:33] [modloading-worker-2/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key client.alwaysSetupTerrainOffThread was corrected from null to its default, false. 
+[03:31:33] [modloading-worker-2/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key client.forgeLightPipelineEnabled was corrected from null to its default, true. 
+[03:31:33] [modloading-worker-2/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key client.experimentalForgeLightPipelineEnabled was corrected from null to its default, false. 
+[03:31:33] [modloading-worker-2/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key client.selectiveResourceReloadEnabled was corrected from null to its default, true. 
+[03:31:33] [modloading-worker-2/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key client.showLoadWarnings was corrected from null to its default, true. 
+[03:31:33] [modloading-worker-2/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key client.useCombinedDepthStencilAttachment was corrected from null to its default, false. 
+[03:31:33] [modloading-worker-2/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Configuration file /home/runner/work/celestial-moons/celestial-moons/letterbanners/run-client/config/forge-common.toml is not correct. Correcting
+[03:31:33] [modloading-worker-2/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key general was corrected from null to its default, SimpleCommentedConfig:{}. 
+[03:31:33] [modloading-worker-2/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key general.defaultWorldType was corrected from null to its default, default. 
+[03:31:38] [Forge Version Check/INFO] [ne.mi.fm.VersionChecker/]: [forge] Starting version check at https://files.minecraftforge.net/net/minecraftforge/forge/promotions_slim.json
+[03:31:38] [Forge Version Check/INFO] [ne.mi.fm.VersionChecker/]: [forge] Found status: OUTDATED Current: 36.2.39 Target: 36.2.42
+[03:31:39] [Worker-Main-6/WARN] [minecraft/AtlasTexture]: Texture letterbanners:block/aurum_amp with size 28x60 limits mip level from 4 to 2
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5731:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2721:(snd_pcm_open_noupdate) Unknown PCM default
+AL lib: (EE) ALCplaybackAlsa_open: Could not open playback device 'default': No such file or directory
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5731:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2721:(snd_pcm_open_noupdate) Unknown PCM default
+AL lib: (EE) ALCplaybackAlsa_open: Could not open playback device 'default': No such file or directory
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5731:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2721:(snd_pcm_open_noupdate) Unknown PCM default
+AL lib: (EE) ALCplaybackAlsa_open: Could not open playback device 'default': No such file or directory
+[03:31:42] [Render thread/ERROR] [minecraft/SoundEngine]: Error starting SoundSystem. Turning off sounds & music
+java.lang.IllegalStateException: Failed to open OpenAL device
+	at net.minecraft.client.audio.SoundSystem.tryOpenDevice(SoundSystem.java:211) ~[forge-1.16.5-36.2.39_mapped_official_1.16.5.jar:?] {re:classloading,pl:runtimedistcleaner:A}
+	at net.minecraft.client.audio.SoundSystem.init(SoundSystem.java:136) ~[forge-1.16.5-36.2.39_mapped_official_1.16.5.jar:?] {re:classloading,pl:runtimedistcleaner:A}
+	at net.minecraft.client.audio.SoundEngine.loadLibrary(SoundEngine.java:81) ~[forge-1.16.5-36.2.39_mapped_official_1.16.5.jar:?] {re:classloading,pl:accesstransformer:B,pl:runtimedistcleaner:A}
+	at net.minecraft.client.audio.SoundEngine.reload(SoundEngine.java:74) ~[forge-1.16.5-36.2.39_mapped_official_1.16.5.jar:?] {re:classloading,pl:accesstransformer:B,pl:runtimedistcleaner:A}
+	at net.minecraft.client.audio.SoundHandler.apply(SoundHandler.java:109) ~[forge-1.16.5-36.2.39_mapped_official_1.16.5.jar:?] {re:classloading,pl:runtimedistcleaner:A}
+	at net.minecraft.client.audio.SoundHandler.apply(SoundHandler.java:34) ~[forge-1.16.5-36.2.39_mapped_official_1.16.5.jar:?] {re:classloading,pl:runtimedistcleaner:A}
+	at net.minecraft.client.resources.ReloadListener.lambda$reload$1(ReloadListener.java:13) ~[forge-1.16.5-36.2.39_mapped_official_1.16.5.jar:?] {re:classloading}
+	at java.util.concurrent.CompletableFuture.uniAccept(CompletableFuture.java:670) ~[?:1.8.0_504] {}
+	at java.util.concurrent.CompletableFuture$UniAccept.tryFire(CompletableFuture.java:646) ~[?:1.8.0_504] {}
+	at java.util.concurrent.CompletableFuture$Completion.run(CompletableFuture.java:456) ~[?:1.8.0_504] {}
+	at net.minecraft.resources.AsyncReloader.lambda$null$3(AsyncReloader.java:71) ~[forge-1.16.5-36.2.39_mapped_official_1.16.5.jar:?] {re:classloading}
+	at net.minecraft.util.concurrent.ThreadTaskExecutor.execute(ThreadTaskExecutor.java:94) ~[forge-1.16.5-36.2.39_mapped_official_1.16.5.jar:?] {re:classloading,pl:accesstransformer:B}
+	at net.minecraft.resources.AsyncReloader.lambda$new$4(AsyncReloader.java:70) ~[forge-1.16.5-36.2.39_mapped_official_1.16.5.jar:?] {re:classloading}
+	at java.util.concurrent.CompletableFuture$UniCompletion.claim(CompletableFuture.java:543) ~[?:1.8.0_504] {}
+	at java.util.concurrent.CompletableFuture.uniAccept(CompletableFuture.java:667) ~[?:1.8.0_504] {}
+	at java.util.concurrent.CompletableFuture$UniAccept.tryFire(CompletableFuture.java:646) ~[?:1.8.0_504] {}
+	at java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488) ~[?:1.8.0_504] {}
+	at java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:575) ~[?:1.8.0_504] {}
+	at java.util.concurrent.CompletableFuture$UniAccept.tryFire(CompletableFuture.java:649) ~[?:1.8.0_504] {}
+	at java.util.concurrent.CompletableFuture$Completion.run(CompletableFuture.java:456) ~[?:1.8.0_504] {}
+	at com.mojang.blaze3d.systems.RenderSystem.replayQueue(RenderSystem.java:116) ~[forge-1.16.5-36.2.39_mapped_official_1.16.5.jar:?] {re:classloading,pl:runtimedistcleaner:A}
+	at com.mojang.blaze3d.systems.RenderSystem.flipFrame(RenderSystem.java:103) ~[forge-1.16.5-36.2.39_mapped_official_1.16.5.jar:?] {re:classloading,pl:runtimedistcleaner:A}
+	at net.minecraft.client.MainWindow.updateDisplay(MainWindow.java:306) ~[forge-1.16.5-36.2.39_mapped_official_1.16.5.jar:?] {re:classloading,pl:runtimedistcleaner:A}
+	at net.minecraft.client.Minecraft.runTick(Minecraft.java:997) ~[forge-1.16.5-36.2.39_mapped_official_1.16.5.jar:?] {re:classloading,pl:accesstransformer:B,pl:runtimedistcleaner:A}
+	at net.minecraft.client.Minecraft.run(Minecraft.java:607) ~[forge-1.16.5-36.2.39_mapped_official_1.16.5.jar:?] {re:classloading,pl:accesstransformer:B,pl:runtimedistcleaner:A}
+	at net.minecraft.client.main.Main.main(Main.java:184) ~[forge-1.16.5-36.2.39_mapped_official_1.16.5.jar:?] {re:classloading,pl:runtimedistcleaner:A}
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_504] {}
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_504] {}
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_504] {}
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_504] {}
+	at net.minecraftforge.userdev.FMLUserdevClientLaunchProvider.lambda$launchService$0(FMLUserdevClientLaunchProvider.java:38) ~[forge-1.16.5-36.2.39_mapped_official_1.16.5.jar:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:37) [modlauncher-8.1.3.jar:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:54) [modlauncher-8.1.3.jar:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:72) [modlauncher-8.1.3.jar:?] {}
+	at cpw.mods.modlauncher.Launcher.run(Launcher.java:82) [modlauncher-8.1.3.jar:?] {}
+	at cpw.mods.modlauncher.Launcher.main(Launcher.java:66) [modlauncher-8.1.3.jar:?] {}
+	at net.minecraftforge.userdev.LaunchTesting.main(LaunchTesting.java:94) [forge-1.16.5-36.2.39_mapped_official_1.16.5.jar:?] {}
+[03:31:42] [Render thread/INFO] [minecraft/AtlasTexture]: Created: 1024x1024x4 minecraft:textures/atlas/blocks.png-atlas
+[03:31:43] [Render thread/INFO] [minecraft/AtlasTexture]: Created: 256x128x4 minecraft:textures/atlas/signs.png-atlas
+[03:31:43] [Render thread/INFO] [minecraft/AtlasTexture]: Created: 512x512x4 minecraft:textures/atlas/banner_patterns.png-atlas
+[03:31:43] [Render thread/INFO] [minecraft/AtlasTexture]: Created: 512x512x4 minecraft:textures/atlas/shield_patterns.png-atlas
+[03:31:43] [Render thread/INFO] [minecraft/AtlasTexture]: Created: 256x256x4 minecraft:textures/atlas/chest.png-atlas
+[03:31:43] [Render thread/INFO] [minecraft/AtlasTexture]: Created: 512x256x4 minecraft:textures/atlas/beds.png-atlas
+[03:31:43] [Render thread/INFO] [minecraft/AtlasTexture]: Created: 512x256x4 minecraft:textures/atlas/shulker_boxes.png-atlas
+[03:31:45] [Render thread/INFO] [minecraft/AtlasTexture]: Created: 256x256x0 minecraft:textures/atlas/particles.png-atlas
+[03:31:45] [Render thread/INFO] [minecraft/AtlasTexture]: Created: 256x256x0 minecraft:textures/atlas/paintings.png-atlas
+[03:31:45] [Render thread/INFO] [minecraft/AtlasTexture]: Created: 128x128x0 minecraft:textures/atlas/mob_effects.png-atlas
+[03:31:45] [Realms Notification Availability checker #1/INFO] [mojang/RealmsClient]: Could not authorize you against Realms server: java.lang.RuntimeException: Failed to parse into SignedJWT: DONT_CRASH
+[03:31:46] [Render thread/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, destination] and [teleport, targets] with inputs: [Player, 0123, @e, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[03:31:46] [Render thread/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, location] and [teleport, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[03:31:46] [Render thread/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, location] and [teleport, targets] with inputs: [0.1 -0.5 .9, 0 0 0]
+[03:31:46] [Render thread/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, targets] and [teleport, destination] with inputs: [Player, 0123, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[03:31:46] [Render thread/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, targets, location] and [teleport, targets, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[03:31:46] [Render thread/INFO] [minecraft/SimpleReloadableResourceManager]: Reloading ResourceManager: Default, main, forge-1.16.5-36.2.39_mapped_official_1.16.5.jar
+[03:31:47] [Render thread/INFO] [minecraft/RecipeManager]: Loaded 7 recipes
+[03:31:48] [Render thread/INFO] [minecraft/AdvancementList]: Loaded 927 advancements
+[03:31:49] [Render thread/INFO] [mojang/YggdrasilAuthenticationService]: Environment: authHost='https://authserver.mojang.com', accountsHost='https://api.mojang.com', sessionHost='https://sessionserver.mojang.com', servicesHost='https://api.minecraftservices.com', name='PROD'
+[03:31:49] [Server thread/INFO] [minecraft/IntegratedServer]: Starting integrated minecraft server version 1.16.5
+[03:31:49] [Server thread/INFO] [minecraft/MinecraftServer]: Generating keypair
+[03:31:50] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Configuration file ./saves/lb-test/serverconfig/forge-server.toml is not correct. Correcting
+[03:31:50] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server was corrected from null to its default, SimpleCommentedConfig:{}. 
+[03:31:50] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server.removeErroringEntities was corrected from null to its default, false. 
+[03:31:50] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server.removeErroringTileEntities was corrected from null to its default, false. 
+[03:31:50] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server.fullBoundingBoxLadders was corrected from null to its default, false. 
+[03:31:50] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server.zombieBaseSummonChance was corrected from null to its default, 0.1. 
+[03:31:50] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server.zombieBabyChance was corrected from null to its default, 0.05. 
+[03:31:50] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server.logCascadingWorldGeneration was corrected from null to its default, true. 
+[03:31:50] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server.fixVanillaCascading was corrected from null to its default, false. 
+[03:31:50] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server.dimensionUnloadQueueDelay was corrected from null to its default, 0. 
+[03:31:50] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server.treatEmptyTagsAsAir was corrected from null to its default, false. 
+[03:31:50] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server.fixAdvancementLoading was corrected from null to its default, true. 
+[03:31:55] [Server thread/INFO] [minecraft/MinecraftServer]: Preparing start region for dimension minecraft:overworld
+[03:31:56] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 0%
+[03:31:56] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 0%
+[03:31:56] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 0%
+[03:31:57] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 0%
+[03:31:57] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 1%
+[03:31:58] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 2%
+[03:31:58] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 4%
+[03:31:59] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 4%
+[03:31:59] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 9%
+[03:32:00] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 9%
+[03:32:00] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 9%
+[03:32:01] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 12%
+[03:32:01] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 12%
+[03:32:02] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 12%
+[03:32:02] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 23%
+[03:32:03] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 23%
+[03:32:03] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 23%
+[03:32:04] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 32%
+[03:32:05] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 32%
+[03:32:05] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 32%
+[03:32:05] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 32%
+[03:32:06] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 43%
+[03:32:06] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 43%
+[03:32:07] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 43%
+[03:32:07] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 43%
+[03:32:08] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 43%
+[03:32:09] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 43%
+[03:32:10] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 55%
+[03:32:10] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 55%
+[03:32:10] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 55%
+[03:32:11] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 66%
+[03:32:11] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 66%
+[03:32:12] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 76%
+[03:32:12] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 76%
+[03:32:13] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 83%
+[03:32:13] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Preparing spawn area: 94%
+[03:32:13] [Render thread/INFO] [minecraft/LoggingChunkStatusListener]: Time elapsed: 17814 ms
+[03:32:14] [Server thread/INFO] [minecraft/IntegratedServer]: Changing view distance to 7, from 10
+[03:32:14] [Netty Local Client IO #0/INFO] [ne.mi.fm.ne.NetworkHooks/]: Connected to a modded server.
+[03:32:14] [Server thread/INFO] [ne.mi.co.AdvancementLoadFix/]: Using new advancement loading for net.minecraft.advancements.PlayerAdvancements@375f9d9
+[03:32:14] [Server thread/INFO] [minecraft/PlayerList]: Dev[local:E:b4302102] logged in with entity id 214 at (-184.5, 66.0, -199.5)
+[03:32:14] [Server thread/INFO] [minecraft/MinecraftServer]: Dev joined the game
+[03:32:15] [Server thread/INFO] [minecraft/IntegratedServer]: Saving and pausing game...
+[03:32:15] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[lb-test]'/minecraft:overworld
+[03:32:15] [Render thread/INFO] [minecraft/AdvancementList]: Loaded 0 advancements
+[03:32:16] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[lb-test]'/minecraft:the_nether
+[03:32:16] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[lb-test]'/minecraft:the_end
+[03:32:18] [Server thread/INFO] [minecraft/MinecraftServer]: Set the time to 6000
+[03:32:18] [Server thread/INFO] [letterbanners/]: [LB-TEST] /time set 6000 -> 6000
+[03:32:18] [Server thread/INFO] [minecraft/MinecraftServer]: Gamerule doDaylightCycle is now set to: false
+[03:32:18] [Server thread/INFO] [letterbanners/]: [LB-TEST] /gamerule doDaylightCycle false -> 0
+[03:32:18] [Server thread/INFO] [minecraft/MinecraftServer]: Gamerule doWeatherCycle is now set to: false
+[03:32:18] [Server thread/INFO] [letterbanners/]: [LB-TEST] /gamerule doWeatherCycle false -> 0
+[03:32:18] [Server thread/INFO] [minecraft/MinecraftServer]: Set the weather to clear
+[03:32:18] [Server thread/INFO] [letterbanners/]: [LB-TEST] /weather clear -> 6000
+[03:32:18] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -184.5, 156.0, -208.0
+[03:32:18] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -184.5 156.0 -208.0 0.0 0.0 -> 1
+[03:32:18] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Set the time to 6000]
+[03:32:18] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Gamerule doDaylightCycle is now set to: false]
+[03:32:18] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Gamerule doWeatherCycle is now set to: false]
+[03:32:18] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Set the weather to clear]
+[03:32:18] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -184.5, 156.0, -208.0]
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Successfully filled 1333 blocks
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /fill -199 149 -212 -169 149 -170 minecraft:stone_bricks -> 1333
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Successfully filled 1333 blocks]
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: No blocks were filled
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /fill -199 150 -212 -169 164 -170 minecraft:air -> 0
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Successfully filled 7 blocks
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /fill -197 162 -190 -191 162 -190 minecraft:dark_oak_planks -> 7
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -192, 161, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -192 161 -190 letterbanners:aurum_banner_a[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -192, 160, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -192 160 -190 letterbanners:aurum_banner_a[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -193, 161, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -193 161 -190 letterbanners:aurum_banner_u[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -193, 160, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -193 160 -190 letterbanners:aurum_banner_u[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -194, 161, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -194 161 -190 letterbanners:aurum_banner_r[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -194, 160, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -194 160 -190 letterbanners:aurum_banner_r[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -195, 161, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -195 161 -190 letterbanners:aurum_banner_u[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -195, 160, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -195 160 -190 letterbanners:aurum_banner_u[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -196, 161, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -196 161 -190 letterbanners:aurum_banner_m[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -196, 160, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -196 160 -190 letterbanners:aurum_banner_m[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Successfully filled 7 blocks
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /fill -197 158 -190 -191 158 -190 minecraft:dark_oak_planks -> 7
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -192, 157, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -192 157 -190 letterbanners:aurum_banner_f[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -192, 156, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -192 156 -190 letterbanners:aurum_banner_f[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -193, 157, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -193 157 -190 letterbanners:aurum_banner_o[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -193, 156, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -193 156 -190 letterbanners:aurum_banner_o[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -194, 157, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -194 157 -190 letterbanners:aurum_banner_r[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -194, 156, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -194 156 -190 letterbanners:aurum_banner_r[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -195, 157, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -195 157 -190 letterbanners:aurum_banner_g[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -195, 156, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -195 156 -190 letterbanners:aurum_banner_g[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -196, 157, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -196 157 -190 letterbanners:aurum_banner_e[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -196, 156, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -196 156 -190 letterbanners:aurum_banner_e[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Successfully filled 7 blocks]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -192, 161, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -192, 160, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -193, 161, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -193, 160, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -194, 161, -190]
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Successfully filled 7 blocks
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /fill -188 162 -190 -182 162 -190 minecraft:dark_oak_planks -> 7
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -183, 161, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -183 161 -190 letterbanners:frost_banner_f[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -183, 160, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -183 160 -190 letterbanners:frost_banner_f[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -184, 161, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -184 161 -190 letterbanners:frost_banner_r[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -184, 160, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -184 160 -190 letterbanners:frost_banner_r[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -185, 161, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -185 161 -190 letterbanners:frost_banner_o[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -185, 160, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -185 160 -190 letterbanners:frost_banner_o[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -186, 161, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -186 161 -190 letterbanners:frost_banner_s[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -186, 160, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -186 160 -190 letterbanners:frost_banner_s[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -187, 161, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -187 161 -190 letterbanners:frost_banner_t[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -187, 160, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -187 160 -190 letterbanners:frost_banner_t[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -194, 160, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -195, 161, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -195, 160, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -196, 161, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -196, 160, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Successfully filled 7 blocks]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -192, 157, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -192, 156, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -193, 157, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -193, 156, -190]
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Successfully filled 7 blocks
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /fill -188 158 -190 -182 158 -190 minecraft:dark_oak_planks -> 7
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -183, 157, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -183 157 -190 letterbanners:frost_banner_s[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -183, 156, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -183 156 -190 letterbanners:frost_banner_s[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -184, 157, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -184 157 -190 letterbanners:frost_banner_p[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -184, 156, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -184 156 -190 letterbanners:frost_banner_p[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -185, 157, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -185 157 -190 letterbanners:frost_banner_e[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -185, 156, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -185 156 -190 letterbanners:frost_banner_e[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -186, 157, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -186 157 -190 letterbanners:frost_banner_l[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -186, 156, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -186 156 -190 letterbanners:frost_banner_l[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -187, 157, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -187 157 -190 letterbanners:frost_banner_l[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -187, 156, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -187 156 -190 letterbanners:frost_banner_l[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -194, 157, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -194, 156, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -195, 157, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -195, 156, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -196, 157, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -196, 156, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Successfully filled 7 blocks]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -183, 161, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -183, 160, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -184, 161, -190]
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Successfully filled 7 blocks
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /fill -179 162 -190 -173 162 -190 minecraft:dark_oak_planks -> 7
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -174, 161, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -174 161 -190 letterbanners:ember_banner_e[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -174, 160, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -174 160 -190 letterbanners:ember_banner_e[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -175, 161, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -175 161 -190 letterbanners:ember_banner_m[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -184, 160, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -185, 161, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -185, 160, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -186, 161, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -186, 160, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -187, 161, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -187, 160, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Successfully filled 7 blocks]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -183, 157, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -183, 156, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -184, 157, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -184, 156, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -185, 157, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -185, 156, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -186, 157, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -186, 156, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -187, 157, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -187, 156, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Successfully filled 7 blocks]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -174, 161, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -174, 160, -190]
+[03:32:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -175, 161, -190]
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -175, 160, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -175 160 -190 letterbanners:ember_banner_m[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -176, 161, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -176 161 -190 letterbanners:ember_banner_b[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -176, 160, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -176 160 -190 letterbanners:ember_banner_b[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -177, 161, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -177 161 -190 letterbanners:ember_banner_e[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -177, 160, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -177 160 -190 letterbanners:ember_banner_e[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -178, 161, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -178 161 -190 letterbanners:ember_banner_r[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -178, 160, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -178 160 -190 letterbanners:ember_banner_r[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Successfully filled 7 blocks
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /fill -179 158 -190 -173 158 -190 minecraft:dark_oak_planks -> 7
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -174, 157, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -174 157 -190 letterbanners:ember_banner_g[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -174, 156, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -174 156 -190 letterbanners:ember_banner_g[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -175, 157, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -175 157 -190 letterbanners:ember_banner_e[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -175, 156, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -175 156 -190 letterbanners:ember_banner_e[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -176, 157, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -176 157 -190 letterbanners:ember_banner_a[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -176, 156, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -176 156 -190 letterbanners:ember_banner_a[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -177, 157, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -177 157 -190 letterbanners:ember_banner_r[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -177, 156, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -177 156 -190 letterbanners:ember_banner_r[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -178, 157, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -178 157 -190 letterbanners:ember_banner_s[facing=north,half=upper,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -178, 156, -190
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -178 156 -190 letterbanners:ember_banner_s[facing=north,half=lower,wall=false] -> 1
+[03:32:21] [Server thread/INFO] [minecraft/MinecraftServer]: Successfully filled 168 blocks
+[03:32:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /fill -196 150 -176 -173 156 -176 minecraft:polished_blackstone_bricks -> 168
+[03:32:23] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -175, 160, -190]
+[03:32:23] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -176, 161, -190]
+[03:32:23] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -176, 160, -190]
+[03:32:23] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -177, 161, -190]
+[03:32:23] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -177, 160, -190]
+[03:32:23] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -178, 161, -190]
+[03:32:23] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -178, 160, -190]
+[03:32:23] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Successfully filled 7 blocks]
+[03:32:23] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -174, 157, -190]
+[03:32:23] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -174, 156, -190]
+[03:32:23] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -175, 157, -190]
+[03:32:23] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -175, 156, -190]
+[03:32:23] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -176, 157, -190]
+[03:32:23] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -176, 156, -190]
+[03:32:23] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -177, 157, -190]
+[03:32:23] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -177, 156, -190]
+[03:32:23] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -178, 157, -190]
+[03:32:23] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -178, 156, -190]
+[03:32:23] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Successfully filled 168 blocks]
+[03:32:25] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -184.5, 157.5, -209.0
+[03:32:25] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -184.5 157.5 -209.0 0.0 0.0 -> 1
+[03:32:25] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -184.5, 157.5, -209.0]
+[03:32:28] [IO-Worker-12/INFO] [letterbanners/]: [LB-TEST] screenshot 01_gallery_front
+[03:32:28] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -193.5, 158.0, -197.0
+[03:32:28] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -193.5 158.0 -197.0 0.0 0.0 -> 1
+[03:32:28] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -193.5, 158.0, -197.0]
+[03:32:29] [IO-Worker-12/INFO] [letterbanners/]: [LB-TEST] screenshot 02_aurum_front_close
+[03:32:30] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -184.5, 158.0, -197.0
+[03:32:30] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -184.5 158.0 -197.0 0.0 0.0 -> 1
+[03:32:30] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -184.5, 158.0, -197.0]
+[03:32:31] [IO-Worker-12/INFO] [letterbanners/]: [LB-TEST] screenshot 03_frost_front_close
+[03:32:31] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -175.5, 158.0, -197.0
+[03:32:31] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -175.5 158.0 -197.0 0.0 0.0 -> 1
+[03:32:31] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -175.5, 158.0, -197.0]
+[03:32:33] [IO-Worker-12/INFO] [letterbanners/]: [LB-TEST] screenshot 04_ember_front_close
+[03:32:33] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -184.5, 157.5, -178.0
+[03:32:33] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -184.5 157.5 -178.0 180.0 0.0 -> 1
+[03:32:33] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -184.5, 157.5, -178.0]
+[03:32:35] [IO-Worker-12/INFO] [letterbanners/]: [LB-TEST] screenshot 05_gallery_back
+[03:32:36] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -193.5, 158.0, -183.0
+[03:32:36] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -193.5 158.0 -183.0 180.0 0.0 -> 1
+[03:32:36] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -193.5, 158.0, -183.0]
+[03:32:37] [IO-Worker-12/INFO] [letterbanners/]: [LB-TEST] screenshot 06_aurum_back_close
+[03:32:37] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -184.5, 158.0, -183.0
+[03:32:37] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -184.5 158.0 -183.0 180.0 0.0 -> 1
+[03:32:37] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -184.5, 158.0, -183.0]
+[03:32:39] [IO-Worker-12/INFO] [letterbanners/]: [LB-TEST] screenshot 07_frost_back_close
+[03:32:39] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -175.5, 158.0, -183.0
+[03:32:39] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -175.5 158.0 -183.0 180.0 0.0 -> 1
+[03:32:39] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -175.5, 158.0, -183.0]
+[03:32:41] [IO-Worker-12/INFO] [letterbanners/]: [LB-TEST] screenshot 08_ember_back_close
+[03:32:41] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -179.5, 159.0, -192.0
+[03:32:41] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -179.5 159.0 -192.0 -60.0 25.0 -> 1
+[03:32:41] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -179.5, 159.0, -192.0]
+[03:32:43] [IO-Worker-12/INFO] [letterbanners/]: [LB-TEST] screenshot 09_side_angle
+[03:32:43] [Server thread/INFO] [minecraft/MinecraftServer]: Set Dev's game mode to Survival Mode
+[03:32:43] [Server thread/INFO] [letterbanners/]: [LB-TEST] /gamemode survival @a -> 1
+[03:32:43] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -184.5, 150.0, -178.5
+[03:32:43] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -184.5 150.0 -178.5 180.0 0.0 -> 1
+[03:32:43] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] Your game mode has been updated to Survival Mode
+[03:32:43] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Set Dev's game mode to Survival Mode]
+[03:32:43] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -184.5, 150.0, -178.5]
+[03:32:44] [Server thread/INFO] [minecraft/MinecraftServer]: Replaced a slot on Dev with [Ember Gears Banner: Letter H]
+[03:32:44] [Server thread/INFO] [letterbanners/]: [LB-TEST] /replaceitem entity @p weapon.mainhand letterbanners:ember_banner_h 16 -> 1
+[03:32:44] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Replaced a slot on Dev with [Ember Gears Banner: Letter H]]
+[03:32:45] [Render thread/INFO] [letterbanners/]: [LB-TEST] PASS: wall placement: top half on the wall, facing away from it (Block{letterbanners:ember_banner_h}[facing=north,half=upper,wall=true])
+[03:32:45] [Render thread/INFO] [letterbanners/]: [LB-TEST] PASS: wall placement: bottom half below it (Block{letterbanners:ember_banner_h}[facing=north,half=lower,wall=true])
+[03:32:45] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -187.5, 155.0, -187.5
+[03:32:45] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -187.5 155.0 -187.5 180.0 -30.0 -> 1
+[03:32:45] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -187.5, 155.0, -187.5]
+[03:32:46] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -181.5, 150.0, -177.5
+[03:32:46] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -181.5 150.0 -177.5 180.0 30.0 -> 1
+[03:32:46] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -181.5, 150.0, -177.5]
+[03:32:47] [Render thread/INFO] [letterbanners/]: [LB-TEST] PASS: hung under a beam: top half, not on a wall (Block{letterbanners:ember_banner_h}[facing=south,half=upper,wall=false])
+[03:32:47] [Render thread/INFO] [letterbanners/]: [LB-TEST] PASS: on the floor: bottom half on the ground, top above it, facing the player
+[03:32:47] [Render thread/INFO] [letterbanners/]: [LB-TEST] PASS: three banners used from the stack of 16
+[03:32:47] [Render thread/INFO] [letterbanners/]: [LB-TEST] PASS: breaking the top half removes the bottom half too
+[03:32:47] [Render thread/INFO] [letterbanners/]: [LB-TEST] PASS: exactly one banner drops (1)
+[03:32:47] [Render thread/INFO] [letterbanners/]: [LB-TEST] PASS: stonecutter recipes for every banner of every style (249)
+[03:32:47] [Render thread/INFO] [letterbanners/]: [LB-TEST] PASS: crafting recipes for the three blank banners
+[03:32:47] [Render thread/INFO] [letterbanners/]: [LB-TEST] PASS: all 249 banners registered (3 x 41 + 3 x 42)
+[03:32:47] [Render thread/INFO] [letterbanners/]: [LB-TEST] PASS: royal, crimson and azure each have A-Z, 0-9, blank and market, and a blank-banner recipe
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Successfully filled 528 blocks
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /fill -226 149 -160 -179 159 -160 minecraft:stone_bricks -> 528
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Successfully filled 459 blocks
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /fill -226 149 -170 -179 149 -161 minecraft:stone_bricks -> 459
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -213, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -213 153 -161 letterbanners:aurum_banner_a[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -213, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -213 152 -161 letterbanners:aurum_banner_a[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -214, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -214 153 -161 letterbanners:frost_banner_b[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -214, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -214 152 -161 letterbanners:frost_banner_b[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -215, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -215 153 -161 letterbanners:ember_banner_c[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -215, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -215 152 -161 letterbanners:ember_banner_c[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -216, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -216 153 -161 letterbanners:aurum_banner_d[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -216, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -216 152 -161 letterbanners:aurum_banner_d[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -217, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -217 153 -161 letterbanners:frost_banner_e[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -217, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -217 152 -161 letterbanners:frost_banner_e[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -218, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -218 153 -161 letterbanners:ember_banner_f[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -218, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -218 152 -161 letterbanners:ember_banner_f[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -219, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -219 153 -161 letterbanners:aurum_banner_g[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -219, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -219 152 -161 letterbanners:aurum_banner_g[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -220, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -220 153 -161 letterbanners:frost_banner_h[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -220, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -220 152 -161 letterbanners:frost_banner_h[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -221, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -221 153 -161 letterbanners:ember_banner_i[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -221, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -221 152 -161 letterbanners:ember_banner_i[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -222, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -222 153 -161 letterbanners:aurum_banner_j[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -222, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -222 152 -161 letterbanners:aurum_banner_j[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -223, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -223 153 -161 letterbanners:frost_banner_k[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -223, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -223 152 -161 letterbanners:frost_banner_k[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -224, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -224 153 -161 letterbanners:ember_banner_l[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -224, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -224 152 -161 letterbanners:ember_banner_l[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -225, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -225 153 -161 letterbanners:aurum_banner_m[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -225, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -225 152 -161 letterbanners:aurum_banner_m[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -198, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -198 153 -161 letterbanners:frost_banner_n[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -198, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -198 152 -161 letterbanners:frost_banner_n[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -199, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -199 153 -161 letterbanners:ember_banner_o[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -199, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -199 152 -161 letterbanners:ember_banner_o[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -200, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -200 153 -161 letterbanners:aurum_banner_p[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -200, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -200 152 -161 letterbanners:aurum_banner_p[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -201, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -201 153 -161 letterbanners:frost_banner_q[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -201, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -201 152 -161 letterbanners:frost_banner_q[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -202, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -202 153 -161 letterbanners:ember_banner_r[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -202, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -202 152 -161 letterbanners:ember_banner_r[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -203, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -203 153 -161 letterbanners:aurum_banner_s[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -203, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -203 152 -161 letterbanners:aurum_banner_s[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -204, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -204 153 -161 letterbanners:frost_banner_t[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -204, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -204 152 -161 letterbanners:frost_banner_t[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -205, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -205 153 -161 letterbanners:ember_banner_u[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -205, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -205 152 -161 letterbanners:ember_banner_u[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -206, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -206 153 -161 letterbanners:aurum_banner_v[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -206, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -206 152 -161 letterbanners:aurum_banner_v[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -207, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -207 153 -161 letterbanners:frost_banner_w[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -207, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -207 152 -161 letterbanners:frost_banner_w[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -208, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -208 153 -161 letterbanners:ember_banner_x[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -208, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -208 152 -161 letterbanners:ember_banner_x[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -209, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -209 153 -161 letterbanners:aurum_banner_y[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -209, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -209 152 -161 letterbanners:aurum_banner_y[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -210, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -210 153 -161 letterbanners:frost_banner_z[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -210, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -210 152 -161 letterbanners:frost_banner_z[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -182, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -182 153 -161 letterbanners:ember_banner_0[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -182, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -182 152 -161 letterbanners:ember_banner_0[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -183, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -183 153 -161 letterbanners:aurum_banner_1[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -183, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -183 152 -161 letterbanners:aurum_banner_1[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -184, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -184 153 -161 letterbanners:frost_banner_2[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -184, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -184 152 -161 letterbanners:frost_banner_2[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -185, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -185 153 -161 letterbanners:ember_banner_3[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -185, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -185 152 -161 letterbanners:ember_banner_3[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -186, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -186 153 -161 letterbanners:aurum_banner_4[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -186, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -186 152 -161 letterbanners:aurum_banner_4[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -187, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -187 153 -161 letterbanners:frost_banner_5[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -187, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -187 152 -161 letterbanners:frost_banner_5[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -188, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -188 153 -161 letterbanners:ember_banner_6[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -188, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -188 152 -161 letterbanners:ember_banner_6[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -189, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -189 153 -161 letterbanners:aurum_banner_7[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -189, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -189 152 -161 letterbanners:aurum_banner_7[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -190, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -190 153 -161 letterbanners:frost_banner_8[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -190, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -190 152 -161 letterbanners:frost_banner_8[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -191, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -191 153 -161 letterbanners:ember_banner_9[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -191, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -191 152 -161 letterbanners:ember_banner_9[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -192, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -192 153 -161 letterbanners:aurum_banner_amp[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -192, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -192 152 -161 letterbanners:aurum_banner_amp[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -193, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -193 153 -161 letterbanners:frost_banner_excl[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -193, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -193 152 -161 letterbanners:frost_banner_excl[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -194, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -194 153 -161 letterbanners:ember_banner_question[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -194, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -194 152 -161 letterbanners:ember_banner_question[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -195, 153, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -195 153 -161 letterbanners:aurum_banner_dash[facing=north,half=upper,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -195, 152, -161
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -195 152 -161 letterbanners:aurum_banner_dash[facing=north,half=lower,wall=true] -> 1
+[03:32:47] [Server thread/INFO] [minecraft/MinecraftServer]: Set Dev's game mode to Creative Mode
+[03:32:47] [Server thread/INFO] [letterbanners/]: [LB-TEST] /gamemode creative @a -> 1
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Successfully filled 528 blocks]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Successfully filled 459 blocks]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -213, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -213, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -214, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -214, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -215, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -215, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -216, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -216, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -217, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -217, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -218, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -218, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -219, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -219, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -220, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -220, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -221, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -221, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -222, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -222, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -223, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -223, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -224, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -224, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -225, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -225, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -198, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -198, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -199, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -199, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -200, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -200, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -201, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -201, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -202, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -202, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -203, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -203, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -204, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -204, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -205, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -205, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -206, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -206, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -207, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -207, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -208, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -208, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -209, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -209, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -210, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -210, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -182, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -182, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -183, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -183, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -184, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -184, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -185, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -185, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -186, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -186, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -187, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -187, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -188, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -188, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -189, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -189, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -190, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -190, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -191, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -191, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -192, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -192, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -193, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -193, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -194, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -194, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -195, 153, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -195, 152, -161]
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] Your game mode has been updated to Creative Mode
+[03:32:47] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Set Dev's game mode to Creative Mode]
+[03:32:48] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -202.5, 152.5, -178.0
+[03:32:48] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -202.5 152.5 -178.0 0.0 0.0 -> 1
+[03:32:48] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -202.5, 152.5, -178.0]
+[03:32:51] [IO-Worker-12/INFO] [letterbanners/]: [LB-TEST] screenshot 10_all_characters_on_wall
+[03:32:51] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -218.5, 152.5, -168.0
+[03:32:51] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -218.5 152.5 -168.0 0.0 0.0 -> 1
+[03:32:51] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -218.5, 152.5, -168.0]
+[03:32:53] [IO-Worker-12/INFO] [letterbanners/]: [LB-TEST] screenshot 11_wall_close
+[03:32:53] [Render thread/INFO] [letterbanners/]: [LB-TEST] PASS: every block state and item has its model and textures (3984 states, 249 items, 0 missing)
+[03:32:53] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -114.5, 156.5, -217.0
+[03:32:53] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -114.5 156.5 -217.0 0.0 0.0 -> 1
+[03:32:53] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -114.5, 156.5, -217.0]
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Successfully filled 2940 blocks
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /fill -139 149 -220 -91 149 -161 minecraft:stone_bricks -> 2940
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Too many blocks in the specified area (maximum 32768, specified 43365)
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /fill -139 150 -220 -91 164 -162 minecraft:air -> 0
+[03:32:56] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Successfully filled 2940 blocks]
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Successfully filled 637 blocks
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /fill -139 150 -161 -91 162 -161 minecraft:polished_blackstone_bricks -> 637
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Successfully filled 9 blocks
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /fill -103 160 -190 -95 160 -190 minecraft:dark_oak_planks -> 9
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -96, 159, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -96 159 -190 letterbanners:royal_banner_market[facing=north,half=upper,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -96, 158, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -96 158 -190 letterbanners:royal_banner_market[facing=north,half=lower,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -98, 159, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -98 159 -190 letterbanners:royal_banner_s[facing=north,half=upper,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -98, 158, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -98 158 -190 letterbanners:royal_banner_s[facing=north,half=lower,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -99, 159, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -99 159 -190 letterbanners:royal_banner_h[facing=north,half=upper,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -99, 158, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -99 158 -190 letterbanners:royal_banner_h[facing=north,half=lower,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -100, 159, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -100 159 -190 letterbanners:royal_banner_o[facing=north,half=upper,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -100, 158, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -100 158 -190 letterbanners:royal_banner_o[facing=north,half=lower,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -101, 159, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -101 159 -190 letterbanners:royal_banner_p[facing=north,half=upper,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -101, 158, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -101 158 -190 letterbanners:royal_banner_p[facing=north,half=lower,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -102, 159, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -102 159 -190 letterbanners:royal_banner_s[facing=north,half=upper,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -102, 158, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -102 158 -190 letterbanners:royal_banner_s[facing=north,half=lower,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -96, 154, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -96 154 -162 letterbanners:royal_banner_market[facing=north,half=upper,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -96, 153, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -96 153 -162 letterbanners:royal_banner_market[facing=north,half=lower,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -98, 154, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -98 154 -162 letterbanners:royal_banner_s[facing=north,half=upper,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -98, 153, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -98 153 -162 letterbanners:royal_banner_s[facing=north,half=lower,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -99, 154, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -99 154 -162 letterbanners:royal_banner_h[facing=north,half=upper,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -99, 153, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -99 153 -162 letterbanners:royal_banner_h[facing=north,half=lower,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -100, 154, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -100 154 -162 letterbanners:royal_banner_o[facing=north,half=upper,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -100, 153, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -100 153 -162 letterbanners:royal_banner_o[facing=north,half=lower,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -101, 154, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -101 154 -162 letterbanners:royal_banner_p[facing=north,half=upper,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -101, 153, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -101 153 -162 letterbanners:royal_banner_p[facing=north,half=lower,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -102, 154, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -102 154 -162 letterbanners:royal_banner_s[facing=north,half=upper,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -102, 153, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -102 153 -162 letterbanners:royal_banner_s[facing=north,half=lower,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Successfully filled 9 blocks
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /fill -118 160 -190 -110 160 -190 minecraft:dark_oak_planks -> 9
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -111, 159, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -111 159 -190 letterbanners:crimson_banner_market[facing=north,half=upper,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -111, 158, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -111 158 -190 letterbanners:crimson_banner_market[facing=north,half=lower,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -113, 159, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -113 159 -190 letterbanners:crimson_banner_s[facing=north,half=upper,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -113, 158, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -113 158 -190 letterbanners:crimson_banner_s[facing=north,half=lower,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -114, 159, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -114 159 -190 letterbanners:crimson_banner_h[facing=north,half=upper,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -114, 158, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -114 158 -190 letterbanners:crimson_banner_h[facing=north,half=lower,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -115, 159, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -115 159 -190 letterbanners:crimson_banner_o[facing=north,half=upper,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -115, 158, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -115 158 -190 letterbanners:crimson_banner_o[facing=north,half=lower,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -116, 159, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -116 159 -190 letterbanners:crimson_banner_p[facing=north,half=upper,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -116, 158, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -116 158 -190 letterbanners:crimson_banner_p[facing=north,half=lower,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -117, 159, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -117 159 -190 letterbanners:crimson_banner_s[facing=north,half=upper,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -117, 158, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -117 158 -190 letterbanners:crimson_banner_s[facing=north,half=lower,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -111, 154, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -111 154 -162 letterbanners:crimson_banner_market[facing=north,half=upper,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -111, 153, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -111 153 -162 letterbanners:crimson_banner_market[facing=north,half=lower,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -113, 154, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -113 154 -162 letterbanners:crimson_banner_s[facing=north,half=upper,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -113, 153, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -113 153 -162 letterbanners:crimson_banner_s[facing=north,half=lower,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -114, 154, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -114 154 -162 letterbanners:crimson_banner_h[facing=north,half=upper,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -114, 153, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -114 153 -162 letterbanners:crimson_banner_h[facing=north,half=lower,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -115, 154, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -115 154 -162 letterbanners:crimson_banner_o[facing=north,half=upper,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -115, 153, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -115 153 -162 letterbanners:crimson_banner_o[facing=north,half=lower,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -116, 154, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -116 154 -162 letterbanners:crimson_banner_p[facing=north,half=upper,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -116, 153, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -116 153 -162 letterbanners:crimson_banner_p[facing=north,half=lower,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -117, 154, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -117 154 -162 letterbanners:crimson_banner_s[facing=north,half=upper,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -117, 153, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -117 153 -162 letterbanners:crimson_banner_s[facing=north,half=lower,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Successfully filled 9 blocks
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /fill -133 160 -190 -125 160 -190 minecraft:dark_oak_planks -> 9
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -126, 159, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -126 159 -190 letterbanners:azure_banner_market[facing=north,half=upper,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -126, 158, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -126 158 -190 letterbanners:azure_banner_market[facing=north,half=lower,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -128, 159, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -128 159 -190 letterbanners:azure_banner_s[facing=north,half=upper,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -128, 158, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -128 158 -190 letterbanners:azure_banner_s[facing=north,half=lower,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -129, 159, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -129 159 -190 letterbanners:azure_banner_h[facing=north,half=upper,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -129, 158, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -129 158 -190 letterbanners:azure_banner_h[facing=north,half=lower,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -130, 159, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -130 159 -190 letterbanners:azure_banner_o[facing=north,half=upper,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -130, 158, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -130 158 -190 letterbanners:azure_banner_o[facing=north,half=lower,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -131, 159, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -131 159 -190 letterbanners:azure_banner_p[facing=north,half=upper,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -131, 158, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -131 158 -190 letterbanners:azure_banner_p[facing=north,half=lower,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -132, 159, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -132 159 -190 letterbanners:azure_banner_s[facing=north,half=upper,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -132, 158, -190
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -132 158 -190 letterbanners:azure_banner_s[facing=north,half=lower,wall=false] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -126, 154, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -126 154 -162 letterbanners:azure_banner_market[facing=north,half=upper,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -126, 153, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -126 153 -162 letterbanners:azure_banner_market[facing=north,half=lower,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -128, 154, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -128 154 -162 letterbanners:azure_banner_s[facing=north,half=upper,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -128, 153, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -128 153 -162 letterbanners:azure_banner_s[facing=north,half=lower,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -129, 154, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -129 154 -162 letterbanners:azure_banner_h[facing=north,half=upper,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -129, 153, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -129 153 -162 letterbanners:azure_banner_h[facing=north,half=lower,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -130, 154, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -130 154 -162 letterbanners:azure_banner_o[facing=north,half=upper,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -130, 153, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -130 153 -162 letterbanners:azure_banner_o[facing=north,half=lower,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -131, 154, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -131 154 -162 letterbanners:azure_banner_p[facing=north,half=upper,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -131, 153, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -131 153 -162 letterbanners:azure_banner_p[facing=north,half=lower,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -132, 154, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -132 154 -162 letterbanners:azure_banner_s[facing=north,half=upper,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [minecraft/MinecraftServer]: Changed the block at -132, 153, -162
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /setblock -132 153 -162 letterbanners:azure_banner_s[facing=north,half=lower,wall=true] -> 1
+[03:32:56] [Server thread/INFO] [letterbanners/]: [LB-TEST] /gamemode creative @a -> 0
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Successfully filled 637 blocks]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Successfully filled 9 blocks]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -96, 159, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -96, 158, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -98, 159, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -98, 158, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -99, 159, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -99, 158, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -100, 159, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -100, 158, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -101, 159, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -101, 158, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -102, 159, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -102, 158, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -96, 154, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -96, 153, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -98, 154, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -98, 153, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -99, 154, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -99, 153, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -100, 154, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -100, 153, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -101, 154, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -101, 153, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -102, 154, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -102, 153, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Successfully filled 9 blocks]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -111, 159, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -111, 158, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -113, 159, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -113, 158, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -114, 159, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -114, 158, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -115, 159, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -115, 158, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -116, 159, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -116, 158, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -117, 159, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -117, 158, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -111, 154, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -111, 153, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -113, 154, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -113, 153, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -114, 154, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -114, 153, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -115, 154, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -115, 153, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -116, 154, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -116, 153, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -117, 154, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -117, 153, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Successfully filled 9 blocks]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -126, 159, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -126, 158, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -128, 159, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -128, 158, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -129, 159, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -129, 158, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -130, 159, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -130, 158, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -131, 159, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -131, 158, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -132, 159, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -132, 158, -190]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -126, 154, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -126, 153, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -128, 154, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -128, 153, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -129, 154, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -129, 153, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -130, 154, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -130, 153, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -131, 154, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -131, 153, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -132, 154, -162]
+[03:32:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Changed the block at -132, 153, -162]
+[03:32:58] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -114.5, 156.5, -217.0
+[03:32:58] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -114.5 156.5 -217.0 0.0 0.0 -> 1
+[03:32:58] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -114.5, 156.5, -217.0]
+[03:33:00] [IO-Worker-13/INFO] [letterbanners/]: [LB-TEST] screenshot 12_shop_gallery_front
+[03:33:01] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -98.5, 157.5, -197.5
+[03:33:01] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -98.5 157.5 -197.5 0.0 5.0 -> 1
+[03:33:01] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -98.5, 157.5, -197.5]
+[03:33:02] [IO-Worker-10/INFO] [letterbanners/]: [LB-TEST] screenshot 13_shop_royal_front
+[03:33:02] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -113.5, 157.5, -197.5
+[03:33:02] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -113.5 157.5 -197.5 0.0 5.0 -> 1
+[03:33:02] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -113.5, 157.5, -197.5]
+[03:33:04] [IO-Worker-10/INFO] [letterbanners/]: [LB-TEST] screenshot 13_shop_crimson_front
+[03:33:04] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -128.5, 157.5, -197.5
+[03:33:04] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -128.5 157.5 -197.5 0.0 5.0 -> 1
+[03:33:04] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -128.5, 157.5, -197.5]
+[03:33:06] [IO-Worker-12/INFO] [letterbanners/]: [LB-TEST] screenshot 13_shop_azure_front
+[03:33:06] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -114.5, 156.5, -170.0
+[03:33:06] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -114.5 156.5 -170.0 180.0 0.0 -> 1
+[03:33:06] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -114.5, 156.5, -170.0]
+[03:33:09] [IO-Worker-9/INFO] [letterbanners/]: [LB-TEST] screenshot 14_shop_gallery_back
+[03:33:09] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -98.5, 157.5, -182.5
+[03:33:09] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -98.5 157.5 -182.5 180.0 5.0 -> 1
+[03:33:09] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -98.5, 157.5, -182.5]
+[03:33:10] [IO-Worker-12/INFO] [letterbanners/]: [LB-TEST] screenshot 15_shop_royal_back
+[03:33:11] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -92.5, 158.5, -194.0
+[03:33:11] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -92.5 158.5 -194.0 40.0 15.0 -> 1
+[03:33:11] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -92.5, 158.5, -194.0]
+[03:33:12] [IO-Worker-10/INFO] [letterbanners/]: [LB-TEST] screenshot 16_shop_side_angle
+[03:33:12] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -98.5, 153.5, -168.0
+[03:33:12] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -98.5 153.5 -168.0 0.0 5.0 -> 1
+[03:33:12] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -98.5, 153.5, -168.0]
+[03:33:14] [IO-Worker-9/INFO] [letterbanners/]: [LB-TEST] screenshot 17_shop_wall_royal
+[03:33:14] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -113.5, 153.5, -168.0
+[03:33:14] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -113.5 153.5 -168.0 0.0 5.0 -> 1
+[03:33:14] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -113.5, 153.5, -168.0]
+[03:33:16] [IO-Worker-9/INFO] [letterbanners/]: [LB-TEST] screenshot 18_shop_wall_crimson
+[03:33:16] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -95.5, 156.9, -193.4
+[03:33:16] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -95.5 156.9 -193.4 0.0 8.0 -> 1
+[03:33:16] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -95.5, 156.9, -193.4]
+[03:33:18] [IO-Worker-9/INFO] [letterbanners/]: [LB-TEST] screenshot 19_close_market_royal
+[03:33:18] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -97.5, 156.9, -192.4
+[03:33:18] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -97.5 156.9 -192.4 0.0 8.0 -> 1
+[03:33:18] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -97.5, 156.9, -192.4]
+[03:33:19] [IO-Worker-9/INFO] [letterbanners/]: [LB-TEST] screenshot 20_close_s_royal
+[03:33:20] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -110.5, 156.9, -193.4
+[03:33:20] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -110.5 156.9 -193.4 0.0 8.0 -> 1
+[03:33:20] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -110.5, 156.9, -193.4]
+[03:33:21] [IO-Worker-9/INFO] [letterbanners/]: [LB-TEST] screenshot 21_close_market_crimson
+[03:33:21] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -125.5, 156.9, -193.4
+[03:33:21] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -125.5 156.9 -193.4 0.0 8.0 -> 1
+[03:33:21] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -125.5, 156.9, -193.4]
+[03:33:23] [IO-Worker-9/INFO] [letterbanners/]: [LB-TEST] screenshot 22_close_market_azure
+[03:33:23] [Server thread/INFO] [minecraft/MinecraftServer]: Set Dev's game mode to Survival Mode
+[03:33:23] [Server thread/INFO] [letterbanners/]: [LB-TEST] /gamemode survival @a -> 1
+[03:33:23] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -133.5, 150.0, -164.5
+[03:33:23] [Server thread/INFO] [letterbanners/]: [LB-TEST] /tp @a -133.5 150.0 -164.5 0.0 0.0 -> 1
+[03:33:23] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] Your game mode has been updated to Survival Mode
+[03:33:23] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Set Dev's game mode to Survival Mode]
+[03:33:23] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -133.5, 150.0, -164.5]
+[03:33:24] [Server thread/INFO] [minecraft/MinecraftServer]: Replaced a slot on Dev with [Crimson Shop Banner: Market]
+[03:33:24] [Server thread/INFO] [letterbanners/]: [LB-TEST] /replaceitem entity @p weapon.mainhand letterbanners:crimson_banner_market 8 -> 1
+[03:33:24] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Replaced a slot on Dev with [Crimson Shop Banner: Market]]
+[03:33:25] [Render thread/INFO] [letterbanners/]: [LB-TEST] PASS: shop banner on a wall: both halves, facing out (Block{letterbanners:crimson_banner_market}[facing=north,half=upper,wall=true])
+[03:33:25] [Render thread/INFO] [letterbanners/]: [LB-TEST] PASS: shop banner on the floor is refused (it only hangs)
+[03:33:25] [Render thread/INFO] [letterbanners/]: [LB-TEST] PASS: one shop banner used
+[03:33:26] [Render thread/INFO] [letterbanners/]: [LB-TEST] LBTEST COMPLETE passed=15 failed=0
+[03:33:26] [Render thread/INFO] [minecraft/Minecraft]: Stopping!
+[03:33:26] [Server thread/INFO] [minecraft/ServerPlayNetHandler]: Dev lost connection: Disconnected
+[03:33:26] [Server thread/INFO] [minecraft/MinecraftServer]: Dev left the game
+[03:33:26] [Server thread/INFO] [minecraft/ServerPlayNetHandler]: Stopping singleplayer server as player logged out
+[03:33:26] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping server
+[03:33:26] [Server thread/INFO] [minecraft/MinecraftServer]: Saving players
+[03:33:26] [Server thread/INFO] [minecraft/MinecraftServer]: Saving worlds
+[03:33:26] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[lb-test]'/minecraft:overworld
+[03:33:26] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (lb-test): All chunks are saved
+[03:33:26] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[lb-test]'/minecraft:the_nether
+[03:33:26] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[03:33:26] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[lb-test]'/minecraft:the_end
+[03:33:26] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[03:33:26] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (lb-test): All chunks are saved
+[03:33:26] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[03:33:26] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+
+The message received from the daemon indicates that the daemon has disappeared.
+Build request sent: Build{id=955830f0-eeeb-40ae-bc10-e3f25ddad046, currentDir=/home/runner/work/celestial-moons/celestial-moons/letterbanners}
+Attempting to read last messages from the daemon log...
+Daemon pid: 3386
+  log file: /home/runner/.gradle/daemon/7.6.4/daemon-3386.out.log
+----- Last  20 lines from daemon log file - daemon-3386.out.log -----
+[03:33:25] [Render thread/INFO] [letterbanners/]: [LB-TEST] PASS: shop banner on the floor is refused (it only hangs)
+[03:33:25] [Render thread/INFO] [letterbanners/]: [LB-TEST] PASS: one shop banner used
+[03:33:26] [Render thread/INFO] [letterbanners/]: [LB-TEST] LBTEST COMPLETE passed=15 failed=0
+[03:33:26] [Render thread/INFO] [minecraft/Minecraft]: Stopping!
+[03:33:26] [Server thread/INFO] [minecraft/ServerPlayNetHandler]: Dev lost connection: Disconnected
+[03:33:26] [Server thread/INFO] [minecraft/MinecraftServer]: Dev left the game
+[03:33:26] [Server thread/INFO] [minecraft/ServerPlayNetHandler]: Stopping singleplayer server as player logged out
+[03:33:26] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping server
+[03:33:26] [Server thread/INFO] [minecraft/MinecraftServer]: Saving players
+[03:33:26] [Server thread/INFO] [minecraft/MinecraftServer]: Saving worlds
+[03:33:26] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[lb-test]'/minecraft:overworld
+[03:33:26] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (lb-test): All chunks are saved
+[03:33:26] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[lb-test]'/minecraft:the_nether
+[03:33:26] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[03:33:26] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[lb-test]'/minecraft:the_end
+[03:33:26] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[03:33:26] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (lb-test): All chunks are saved
+[03:33:26] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[03:33:26] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+Daemon vm is shutting down... The daemon has exited normally or was terminated in response to a user interrupt.
+----- End of the daemon log -----
+
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Gradle build daemon disappeared unexpectedly (it may have been killed or may have crashed)
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+
+* Get more help at https://help.gradle.org

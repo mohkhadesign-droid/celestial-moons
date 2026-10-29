@@ -55,7 +55,7 @@ public final class RevealGrade {
         if (k <= 0.003f) return;
         Minecraft mc = Minecraft.getInstance();
         if (!ensure(mc)) return;
-        float sat = 1f - 0.72f * k;
+        float sat = 1f - 0.6f * k; // restrained: at most 60% of the colour is lost
         lastSaturation = sat;
         convolve.getEffect().safeGetUniform("Saturation").set(sat);
         convolve.getEffect().safeGetUniform("ColorScale").set(1f + 0.05f * k, 1f - 0.01f * k, 1f - 0.16f * k);

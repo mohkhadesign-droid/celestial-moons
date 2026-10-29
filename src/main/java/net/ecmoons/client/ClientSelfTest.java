@@ -725,17 +725,17 @@ public final class ClientSelfTest {
             check("revealing: completion releases binds and starts YOUR reveal", !RevealClient.bound() && RevealClient.revealed());
             lookUp();
         });
-        then(10, () -> {
+        then(6, () -> {
             lookUp();
             shot("reveal_6_ripple_moon");
             check("revealing: the reveal effects eased in (intensity " + RevealClient.revealIntensity(0) + ")", RevealClient.revealIntensity(0) > 0.8f);
         });
-        then(14, () -> {
+        then(10, () -> {
             ClientPlayerEntity p = player();
             p.yRot = 0F; // face south, away from the moon overhead: the same wave is crossing this part of the sky
             p.yRotO = 0F;
-            p.xRot = -20F;
-            p.xRotO = -20F;
+            p.xRot = -15F;
+            p.xRotO = -15F;
         });
         then(2, () -> {
             shot("reveal_7_ripple_sky");
@@ -762,7 +762,20 @@ public final class ClientSelfTest {
                         && sp.hasEffect(net.minecraft.potion.Effects.INVISIBILITY) && net.ecmoons.feature.reveal.RevealState.isRevealed(sp));
             });
         });
-        then(40, () -> check("revealing: the amber/colour strength follows your own timer (" + RevealClient.revealIntensity(0) + " vs "
+        then(1, () -> RevealHud.testPanel(new net.ecmoons.net.InspectPacket(99999, "Raider_Ash", 7f, 20f, 4f, java.util.Arrays.asList(
+                new net.ecmoons.net.InspectPacket.Effect(new net.minecraft.util.ResourceLocation("minecraft:strength"), 1, 1500),
+                new net.ecmoons.net.InspectPacket.Effect(new net.minecraft.util.ResourceLocation("minecraft:speed"), 0, 340),
+                new net.ecmoons.net.InspectPacket.Effect(new net.minecraft.util.ResourceLocation("minecraft:fire_resistance"), 0, 2900)), 2)));
+        then(2, () -> {
+            shot("reveal_8b_panel");
+            check("read your enemy: the panel renders (" + RevealHud.panelDrawn + " frames)", RevealHud.panelDrawn > 0);
+            RevealHud.testPanel(new net.ecmoons.net.InspectPacket(99998, "Tank", 31f, 40f, 0f, java.util.Collections.emptyList(), 0));
+        });
+        then(2, () -> {
+            shot("reveal_8c_panel_modded_health");
+            RevealHud.testPanel(null);
+        });
+        then(35, () -> check("revealing: the amber/colour strength follows your own timer (" + RevealClient.revealIntensity(0) + " vs "
                 + RevealClient.revealRemaining(0) / 160f + " remaining)", Math.abs(RevealClient.revealIntensity(0) - RevealClient.revealRemaining(0) / 160f) < 0.03f
                 && RevealClient.revealIntensity(0) > 0.2f && RevealClient.revealIntensity(0) < 0.8f));
         then(0, () -> shot("reveal_9_fading"));

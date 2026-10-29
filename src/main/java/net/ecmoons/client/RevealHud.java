@@ -70,7 +70,15 @@ public final class RevealHud {
 
     /** The panel is shown only while you are revealed, still aiming at that player and updates keep coming. */
     public static boolean panelVisible() {
+        if (testPanel != null) return true;
         return panel != null && RevealClient.revealed() && panel.targetId == aimTarget && ticks - panelAt <= 12;
+    }
+
+    /** Client test only: show this panel regardless of aim (a single-player test has nobody else to aim at). */
+    private static InspectPacket testPanel;
+
+    public static void testPanel(InspectPacket p) {
+        testPanel = p;
     }
 
     public static InspectPacket panel() {
@@ -144,8 +152,8 @@ public final class RevealHud {
         float k = RevealClient.revealIntensity(event.getPartialTicks()) * ClientConfig.REVEAL_AMBER_EDGES.get().floatValue();
         if (k <= 0.004f) return;
         int w = event.getWindow().getGuiScaledWidth(), h = event.getWindow().getGuiScaledHeight();
-        float e = Math.max(10f, Math.min(w, h) * 0.11f);
-        float a = 0.34f * k;
+        float e = Math.max(8f, Math.min(w, h) * 0.09f);
+        float a = 0.28f * k;
         float r = 1f, g = 0.66f, b = 0.2f;
         RenderSystem.disableTexture();
         RenderSystem.enableBlend();
@@ -187,7 +195,7 @@ public final class RevealHud {
         if (mc.options.hideGui) return;
         MatrixStack ms = event.getMatrixStack();
         FontRenderer font = mc.font;
-        InspectPacket p = panel;
+        InspectPacket p = testPanel != null ? testPanel : panel;
         int w = event.getWindow().getGuiScaledWidth(), h = event.getWindow().getGuiScaledHeight();
 
         float hearts = p.health / 2f, maxHearts = Math.max(0.5f, p.maxHealth / 2f), absorb = p.absorption / 2f;

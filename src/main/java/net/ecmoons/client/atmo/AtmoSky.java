@@ -381,6 +381,7 @@ public final class AtmoSky {
         float[] up = {ax.y(), ay.y(), az.y()};
         float lead = (float) Math.toRadians(0.9 + 1.1 * p), core = (float) Math.toRadians(0.45 + 0.5 * p), trail = (float) Math.toRadians(5 + 9 * p);
         float r = 1f, g = 0.80f, b = 0.38f; // translucent gold
+        RenderSystem.shadeModel(7425); // smooth: the soft edges are alpha gradients across each quad
         BufferBuilder buf = Tessellator.getInstance().getBuilder();
         buf.begin(7, DefaultVertexFormats.POSITION_COLOR);
         int n = Math.max(64, segments() * 3);
@@ -390,6 +391,7 @@ public final class AtmoSky {
         band(buf, m, n, theta + core, a * 0.55f, theta + core + lead, 0f, up, r, g, b);   // soft leading edge
         buf.end();
         WorldVertexBufferUploader.end(buf);
+        RenderSystem.shadeModel(7424);
     }
 
     /** One band of the ripple between angular distances t0 and t1 from the moon, alpha a0 -> a1. */
@@ -399,10 +401,11 @@ public final class AtmoSky {
         if (t1 <= t0) return;
         for (int i = 0; i < n; i++) {
             double p0 = i * Math.PI * 2 / n, p1 = (i + 1) * Math.PI * 2 / n;
+            // wound like the moon and halo quads (seen from inside the sky sphere), so face culling keeps them
             vertex(buf, m, t0, p0, a0, up, r, g, b);
-            vertex(buf, m, t1, p0, a1, up, r, g, b);
-            vertex(buf, m, t1, p1, a1, up, r, g, b);
             vertex(buf, m, t0, p1, a0, up, r, g, b);
+            vertex(buf, m, t1, p1, a1, up, r, g, b);
+            vertex(buf, m, t1, p0, a1, up, r, g, b);
         }
     }
 

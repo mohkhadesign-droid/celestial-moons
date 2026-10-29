@@ -70,7 +70,7 @@ r,g,b=m[...,0],m[...,1],m[...,2]
 yy,xx=np.mgrid[0:N,0:N]+0.5
 mint=(np.hypot(xx-16,yy-16)<9)&(g>r)&(g>140)
 base,over=sheet(m,glow=mint)
-save(base,OUT+'/shell_moon_phases.png'); save(over*0.6,OUT+'/shell_moon_details.png')
+save(base,OUT+'/shell_moon_phases.png'); save(over*np.array([0.08,0.16,0.12]),OUT+'/shell_moon_details.png')  # only a faint mint breath, never a bright white centre
 
 # Wisp (second build): slate moon, the soul flame glows/flickers
 m=sample('wisp')

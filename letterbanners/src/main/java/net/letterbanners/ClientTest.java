@@ -44,7 +44,7 @@ public final class ClientTest {
     private static int wait, passed, failed, waitTimeout;
     private static BooleanSupplier waitUntil;
     private static boolean requested;
-    private static int X, Y = 150, Z;
+    private static int X, Y = 150, Z, SX, SZ;
 
     private ClientTest() {}
 
@@ -317,43 +317,46 @@ public final class ClientTest {
                 }
             }
             check("every block state and item has its model and textures (" + states + " states, " + items + " items, " + bad + " missing)", bad == 0);
-            // the gallery: market + SHOPS in each colour, hanging from a beam; and the same on a wall
-            cmd("fill " + (X - 24) + " " + (Y - 1) + " " + (Z + 50) + " " + (X + 24) + " " + (Y - 1) + " " + (Z + 90) + " minecraft:stone_bricks");
-            cmd("fill " + (X - 24) + " " + Y + " " + (Z + 50) + " " + (X + 24) + " " + (Y + 14) + " " + (Z + 89) + " minecraft:air");
-            cmd("fill " + (X - 24) + " " + Y + " " + (Z + 90) + " " + (X + 24) + " " + (Y + 12) + " " + (Z + 90) + " minecraft:polished_blackstone_bricks");
+            // the gallery, in open ground east of the other tests: market + SHOPS in each colour hanging from a beam
+            // (z = SZ + 10), and the same on a wall (z = SZ + 38, wall at SZ + 39)
+            SX = X + 70;
+            SZ = Z;
+            cmd("fill " + (SX - 24) + " " + (Y - 1) + " " + (SZ - 20) + " " + (SX + 24) + " " + (Y - 1) + " " + (SZ + 39) + " minecraft:stone_bricks");
+            cmd("fill " + (SX - 24) + " " + Y + " " + (SZ - 20) + " " + (SX + 24) + " " + (Y + 14) + " " + (SZ + 38) + " minecraft:air");
+            cmd("fill " + (SX - 24) + " " + Y + " " + (SZ + 39) + " " + (SX + 24) + " " + (Y + 12) + " " + (SZ + 39) + " minecraft:polished_blackstone_bricks");
             String[] st = LetterBanners.SHOP_STYLES;
             for (int k = 0; k < 3; k++) {
-                int right = X + 19 - k * 15; // seen from the front (looking south) +x is on the left: the first item goes at the highest x
-                cmd("fill " + (right - 7) + " " + (Y + 10) + " " + (Z + 60) + " " + (right + 1) + " " + (Y + 10) + " " + (Z + 60) + " minecraft:dark_oak_planks");
-                shopRow(st[k], right, Y + 9, Z + 60, false);
-                shopRow(st[k], right, Y + 4, Z + 89, true);
+                int right = SX + 19 - k * 15; // seen from the front (looking south) +x is on the left: the first item goes at the highest x
+                cmd("fill " + (right - 7) + " " + (Y + 10) + " " + (SZ + 10) + " " + (right + 1) + " " + (Y + 10) + " " + (SZ + 10) + " minecraft:dark_oak_planks");
+                shopRow(st[k], right, Y + 9, SZ + 10, false);
+                shopRow(st[k], right, Y + 4, SZ + 38, true);
             }
             Minecraft.getInstance().options.hideGui = true;
             cmd("gamemode creative @a");
         });
-        then(20, () -> view(X + 0.5, Y + 6.5, Z + 33, 0, 0));
+        then(20, () -> view(SX + 0.5, Y + 6.5, SZ - 17, 0, 0));
         then(50, () -> shot("12_shop_gallery_front"));
         for (int k = 0; k < 3; k++) {
-            final int right = X + 19 - k * 15;
+            final int kk = k;
             final String name = LetterBanners.SHOP_STYLES[k];
-            then(2, () -> view(right - 2.5, Y + 7.5, Z + 52.5, 0, 5));
+            then(2, () -> view(SX + 19 - kk * 15 - 2.5, Y + 7.5, SZ + 2.5, 0, 5));
             then(30, () -> shot("13_shop_" + name + "_front"));
         }
-        then(2, () -> view(X + 0.5, Y + 6.5, Z + 80, 180, 0));
+        then(2, () -> view(SX + 0.5, Y + 6.5, SZ + 30, 180, 0));
         then(50, () -> shot("14_shop_gallery_back"));
-        then(2, () -> view(X + 19 - 2.5, Y + 7.5, Z + 67.5, 180, 5));
+        then(2, () -> view(SX + 19 - 2.5, Y + 7.5, SZ + 17.5, 180, 5));
         then(30, () -> shot("15_shop_royal_back"));
-        then(2, () -> view(X + 22.5, Y + 8.5, Z + 56, 40, 15));
+        then(2, () -> view(SX + 22.5, Y + 8.5, SZ + 6, 40, 15));
         then(30, () -> shot("16_shop_side_angle"));
-        then(2, () -> view(X + 19 - 2.5, Y + 3.5, Z + 83, 0, 5));
+        then(2, () -> view(SX + 19 - 2.5, Y + 3.5, SZ + 32, 0, 5));
         then(30, () -> shot("17_shop_wall_royal"));
-        then(2, () -> view(X + 4 - 2.5, Y + 3.5, Z + 83, 0, 5));
+        then(2, () -> view(SX + 4 - 2.5, Y + 3.5, SZ + 32, 0, 5));
         then(30, () -> shot("18_shop_wall_crimson"));
         // real placement of a shop banner: on the wall and under a beam it works, on the floor it is refused
         then(2, () -> {
             Minecraft.getInstance().options.hideGui = false;
             cmd("gamemode survival @a");
-            view(X - 18.5, Y, Z + 86.5, 0, 0);
+            view(SX - 18.5, Y, SZ + 35.5, 0, 0);
         });
         then(20, () -> {
             Minecraft.getInstance().player.inventory.selected = 0;
@@ -362,16 +365,16 @@ public final class ClientTest {
         then(10, () -> {
             Minecraft mc = Minecraft.getInstance();
             mc.gameMode.useItemOn(mc.player, mc.level, Hand.MAIN_HAND,
-                    new BlockRayTraceResult(new Vector3d(X - 18.5, Y + 3.5, Z + 90), Direction.NORTH, new BlockPos(X - 18, Y + 3, Z + 90), false));
+                    new BlockRayTraceResult(new Vector3d(SX - 18.5, Y + 3.5, SZ + 39), Direction.NORTH, new BlockPos(SX - 18, Y + 3, SZ + 39), false));
             mc.gameMode.useItemOn(mc.player, mc.level, Hand.MAIN_HAND,
-                    new BlockRayTraceResult(new Vector3d(X - 20.5, Y, Z + 86.5), Direction.UP, new BlockPos(X - 21, Y - 1, Z + 86), false));
+                    new BlockRayTraceResult(new Vector3d(SX - 20.5, Y, SZ + 35.5), Direction.UP, new BlockPos(SX - 21, Y - 1, SZ + 35), false));
         });
         then(10, () -> {
             ServerWorld w = sw();
-            BlockState up = w.getBlockState(new BlockPos(X - 18, Y + 3, Z + 89)), lo = w.getBlockState(new BlockPos(X - 18, Y + 2, Z + 89));
+            BlockState up = w.getBlockState(new BlockPos(SX - 18, Y + 3, SZ + 38)), lo = w.getBlockState(new BlockPos(SX - 18, Y + 2, SZ + 38));
             check("shop banner on a wall: both halves, facing out (" + up + ")", up.getBlock().getRegistryName().toString().equals(id("crimson", "market"))
                     && up.getValue(LetterBannerBlock.WALL) && up.getValue(LetterBannerBlock.HALF) == DoubleBlockHalf.UPPER && lo.getBlock() == up.getBlock());
-            check("shop banner on the floor is refused (it only hangs)", w.isEmptyBlock(new BlockPos(X - 21, Y, Z + 86)) && w.isEmptyBlock(new BlockPos(X - 21, Y + 1, Z + 86)));
+            check("shop banner on the floor is refused (it only hangs)", w.isEmptyBlock(new BlockPos(SX - 21, Y, SZ + 35)) && w.isEmptyBlock(new BlockPos(SX - 21, Y + 1, SZ + 35)));
             check("one shop banner used", Minecraft.getInstance().player.getMainHandItem().getCount() == 7);
         });
         then(5, () -> {

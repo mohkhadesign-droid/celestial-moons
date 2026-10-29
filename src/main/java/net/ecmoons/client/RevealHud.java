@@ -203,7 +203,7 @@ public final class RevealHud {
         String healthText = fmt(hearts) + " / " + fmt(maxHearts);
         int lines = 2 + p.effects.size() + (p.more > 0 ? 1 : 0);
         int width = font.width(p.name);
-        int heartRow = icons ? (int) Math.ceil(maxHearts) * 8 + 1 : 10 + font.width(healthText);
+        int heartRow = icons ? (int) Math.ceil(maxHearts) * 8 + 1 : 12 + font.width(healthText);
         if (absorb > 0f) heartRow += 14 + font.width("+" + fmt(absorb));
         width = Math.max(width, heartRow);
         String[] effectLines = new String[p.effects.size()];
@@ -214,7 +214,7 @@ public final class RevealHud {
         int height = lines * 10 - 1;
         // to the right of and just below the crosshair: never over the target itself
         int x = Math.min(w / 2 + 14, w - width - 6), y = Math.min(h / 2 + 8, h - height - 30);
-        AbstractGui.fill(ms, x - 4, y - 4, x + width + 4, y + height + 3, 0xB0100c08);
+        AbstractGui.fill(ms, x - 4, y - 4, x + width + 4, y + height + 3, 0xE8100c08);
         AbstractGui.fill(ms, x - 4, y - 4, x + width + 4, y - 3, 0xC0d9ab54);
         AbstractGui.fill(ms, x - 4, y + height + 2, x + width + 4, y + height + 3, 0x80d9ab54);
         font.drawShadow(ms, p.name, x, y, 0xFFF4E2B8);
@@ -235,15 +235,15 @@ public final class RevealHud {
         } else {
             mc.gui.blit(ms, cx, hy, 16, 0, 9, 9);
             mc.gui.blit(ms, cx, hy, 52, 0, 9, 9);
-            font.drawShadow(ms, healthText, cx + 10, hy + 1, 0xFFFF6A6A);
+            font.drawShadow(ms, healthText, cx + 12, hy + 1, 0xFFFF6A6A);
             mc.getTextureManager().bind(AbstractGui.GUI_ICONS_LOCATION);
-            cx += 10 + font.width(healthText);
+            cx += 12 + font.width(healthText);
         }
         if (absorb > 0f) {
             cx += 5;
             mc.gui.blit(ms, cx, hy, 16, 0, 9, 9);
             mc.gui.blit(ms, cx, hy, 160, 0, 9, 9); // absorption (golden) heart, shown apart from health
-            font.drawShadow(ms, "+" + fmt(absorb), cx + 10, hy + 1, 0xFFFFD25A);
+            font.drawShadow(ms, "+" + fmt(absorb), cx + 11, hy + 1, 0xFFFFD25A);
         }
         int ey = hy + 10;
         for (String line : effectLines) {

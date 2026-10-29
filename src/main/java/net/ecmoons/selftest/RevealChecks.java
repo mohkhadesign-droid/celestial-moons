@@ -307,12 +307,17 @@ final class RevealChecks {
     private static Vector3d spot;
     private static ZombieEntity fighter;
     private static double startDist;
+    private static int forcedX, forcedZ;
 
     static void investigateSetup(ServerWorld w, BiConsumer<String, Boolean> check) {
         BlockPos sp = w.getSharedSpawnPos();
         int x = sp.getX() - 24, z = sp.getZ() + 24;
         w.getChunk(x >> 4, z >> 4);
         int y = w.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, x, z);
+        // a world without players stops ticking entities after 15 s: force this chunk for the walking part
+        w.setChunkForced(x >> 4, z >> 4, true);
+        forcedX = x >> 4;
+        forcedZ = z >> 4;
         // a flat stone pad with a ceiling of glass, so the test mobs neither burn nor wander off a cliff
         for (int dx = -20; dx <= 20; dx++) for (int dz = -20; dz <= 20; dz++) {
             w.setBlock(new BlockPos(x + dx, y - 1, z + dz), Blocks.STONE.defaultBlockState(), 2);
@@ -346,7 +351,8 @@ final class RevealChecks {
                 && !WorldNotices.investigating(MOBS.get(6)) && !WorldNotices.investigating(MOBS.get(7)));
         check.accept("world notices: a mob already fighting keeps its target and is not used", !WorldNotices.investigating(fighter) && fighter.getTarget() == other);
         check.accept("world notices: neutral/passive mobs and mobs out of range are never used", !WorldNotices.investigating(cow) && !WorldNotices.investigating(far));
-        check.accept("world notices: no attack target is set on investigators", MOBS.get(0).getTarget() == null);
+        check.accept("world notices: no attack target is set on investigators, each has an ordinary path to the spot",
+                MOBS.get(0).getTarget() == null && !MOBS.get(0).getNavigation().isDone());
         int again = WorldNotices.onScan(w, Collections.singletonList(scouted), w.getServer().getTickCount());
         check.accept("world notices: one assignment per mob (a second scan adds only the 2 unassigned)", again == 2);
         startDist = 0;
@@ -392,6 +398,7 @@ final class RevealChecks {
         check.accept("world notices: the moon ending removes every investigation", WorldNotices.active(w) == 0);
         for (MobEntity mob : MOBS) mob.remove();
         MOBS.clear();
+        w.setChunkForced(forcedX, forcedZ, false);
     }
 
     // ---- live cycle with the moon up ---------------------------------------------------------------------------------

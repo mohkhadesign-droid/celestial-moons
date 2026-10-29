@@ -332,10 +332,18 @@ final class RevealChecks {
         // eight idle zombies at increasing distance, one zombie already fighting, a cow and a zombie 30 blocks away
         for (int i = 0; i < 8; i++) MOBS.add(spawn(w, EntityType.ZOMBIE, x + 6 + i * 1.5, y, z + (i % 2 == 0 ? 3 : -3)));
         fighter = (ZombieEntity) spawn(w, EntityType.ZOMBIE, x - 4.5, y, z + 0.5);
-        CowEntity cow = (CowEntity) spawn(w, EntityType.COW, x - 3.5, y, z - 4.5);
+        MobEntity cow = spawn(w, EntityType.COW, x - 3.5, y, z - 4.5);
         MobEntity far = spawn(w, EntityType.ZOMBIE, x + 0.5, y, z + 30.5);
+        MOBS.add(fighter);
+        MOBS.add(cow);
+        MOBS.add(far);
+    }
+
+    /** A second later (the mobs have landed: path finding needs them on the ground), with the Revealing Moon up. */
+    static void investigateAssign(ServerWorld w, BiConsumer<String, Boolean> check) {
+        MobEntity cow = MOBS.get(9), far = MOBS.get(10);
         FakePlayer other = fake(w, "ecm_victim");
-        other.moveTo(x - 8.5, y, z + 0.5, 0, 0);
+        other.moveTo(fighter.getX() - 4, fighter.getY(), fighter.getZ(), 0, 0);
         fighter.setTarget(other);
         EcMoons.LOGGER.info("[ECMOONS-SELFTEST] notices diag: spot " + spot + " difficulty " + w.getDifficulty() + " first " + MOBS.get(0).position()
                 + " alive " + MOBS.get(0).isAlive() + " removed " + MOBS.get(0).removed + " found " + w.getEntitiesOfClass(MobEntity.class,
@@ -357,9 +365,6 @@ final class RevealChecks {
         check.accept("world notices: one assignment per mob (a second scan adds only the 2 unassigned)", again == 2);
         startDist = 0;
         for (int i = 0; i < 6; i++) startDist += MOBS.get(i).position().distanceTo(spot);
-        MOBS.add(fighter);
-        MOBS.add(cow);
-        MOBS.add(far);
         scouted.moveTo(scouted.getX() + 15, scouted.getY(), scouted.getZ(), 0, 0); // the player moves away: no tracking
     }
 

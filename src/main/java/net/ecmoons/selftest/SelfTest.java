@@ -102,8 +102,15 @@ public final class SelfTest {
         step("static checks", 1, SelfTest::staticChecks);
         step("new moon static checks", 1, w -> NewMoonChecks.staticChecks(w, SelfTest::check));
         step("revealing static checks", 1, w -> RevealChecks.staticChecks(w, SelfTest::check));
-        step("revealing investigations", 1, w -> RevealChecks.investigateSetup(w, SelfTest::check));
-        step("revealing investigations walk", 50, w -> RevealChecks.investigateWalk(w, SelfTest::check));
+        step("revealing investigations", 1, w -> {
+            check("start revealing for the investigation test", cmd("ecmoons start ecmoons-revealing_moon") == 1);
+            RevealChecks.investigateSetup(w, SelfTest::check);
+        });
+        step("revealing investigations assign", 30, w -> RevealChecks.investigateAssign(w, SelfTest::check));
+        step("revealing investigations walk", 60, w -> {
+            RevealChecks.investigateWalk(w, SelfTest::check);
+            check("/ecmoons end (investigations)", cmd("ecmoons end") == 1);
+        });
         step("field guide recipe", 1, w -> {
             boolean patchouli = net.minecraftforge.fml.ModList.get().isLoaded("patchouli");
             boolean recipe = w.getServer().getRecipeManager().byKey(new net.minecraft.util.ResourceLocation("ecmoons", "field_guide")).isPresent();

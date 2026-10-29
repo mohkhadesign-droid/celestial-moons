@@ -99,12 +99,24 @@ public final class ClientTest {
         cmd("fill " + (x - 1) + " " + top + " " + z + " " + (x + word.length()) + " " + top + " " + z + " minecraft:dark_oak_planks");
         for (int i = 0; i < word.length(); i++) {
             String b = id(style, glyph(word.charAt(i)));
-            cmd("setblock " + (x + i) + " " + (top - 1) + " " + z + " " + b + "[facing=north,half=upper,wall=false]");
-            cmd("setblock " + (x + i) + " " + (top - 2) + " " + z + " " + b + "[facing=north,half=lower,wall=false]");
+            int bx = x + word.length() - 1 - i; // seen from the front (looking south) +x is on the left
+            cmd("setblock " + bx + " " + (top - 1) + " " + z + " " + b + "[facing=north,half=upper,wall=false]");
+            cmd("setblock " + bx + " " + (top - 2) + " " + z + " " + b + "[facing=north,half=lower,wall=false]");
         }
     }
 
+    /** Put the camera somewhere and keep it there: flying on both the client and the integrated server. */
     private static void view(double x, double y, double z, float yaw, float pitch) {
+        Minecraft mc = Minecraft.getInstance();
+        mc.player.abilities.mayfly = true;
+        mc.player.abilities.flying = true;
+        mc.player.onUpdateAbilities();
+        mc.getSingleplayerServer().execute(() -> {
+            net.minecraft.entity.player.ServerPlayerEntity sp = mc.getSingleplayerServer().getPlayerList().getPlayers().get(0);
+            sp.abilities.mayfly = true;
+            sp.abilities.flying = true;
+            sp.onUpdateAbilities();
+        });
         cmd("tp @a " + x + " " + y + " " + z + " " + yaw + " " + pitch);
     }
 
@@ -241,7 +253,7 @@ public final class ClientTest {
                 String row = rows[s];
                 for (int i = 0; i < row.length(); i++) {
                     String b = id(styles[(i + s) % 3], glyph(row.charAt(i)));
-                    int x = x0 + s * 15 + i, y = Y + 2;
+                    int x = x0 + s * 15 + (row.length() - 1 - i), y = Y + 2;
                     cmd("setblock " + x + " " + (y + 1) + " " + (Z + 39) + " " + b + "[facing=north,half=upper,wall=true]");
                     cmd("setblock " + x + " " + y + " " + (Z + 39) + " " + b + "[facing=north,half=lower,wall=true]");
                 }

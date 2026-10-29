@@ -1,181 +1,223 @@
-"""Letter banner textures: 3 styles x 41 glyphs. Each banner face is 28x60 px (14x30 model units at 2 px/unit),
-plus a 16x16 inventory icon. Pixel art: glyphs come from a TTF rendered large and reduced to a pixel mask."""
+"""Letter banner textures: 3 styles x 41 glyphs, matching the gate-sign references (Aurum Forge, Frost Spell,
+Ember Gears). Each banner face is 28x60 px (14x30 model units at 2 px per unit); the back of the banner uses the
+same picture, so it reads correctly from behind. Plus a 16x16 inventory icon per banner.
+Usage: python3 textures.py <resources/assets/letterbanners> [preview.png]"""
 import os, sys, random
 import numpy as np
-from PIL import Image, ImageDraw, ImageFont, ImageFilter
+from PIL import Image, ImageDraw, ImageFont
 
-OUT = sys.argv[1] if __name__ == "__main__" else None
 W, H = 28, 60
 GLYPHS = [(c.lower(), c) for c in "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"] + \
          [("amp", "&"), ("excl", "!"), ("question", "?"), ("dash", "-"), ("blank", "")]
 FONTS = {
-    "aurum": "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf",
-    "frost": "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf",
-    "ember": "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+    "aurum": "DejaVuSansCondensed-Bold.ttf",
+    "frost": "DejaVuSerifCondensed-Bold.ttf",
+    "ember": "DejaVuSans-Bold.ttf",
 }
 
-def find_font(path):
-    if os.path.exists(path):
-        return path
+def font_path(name):
+    for d in ("/usr/share/fonts/truetype/dejavu/", "/usr/share/fonts/TTF/", "/usr/share/fonts/dejavu/"):
+        if os.path.exists(d + name):
+            return d + name
     import subprocess
-    name = "DejaVu Serif:style=Bold" if "Serif" in path else "DejaVu Sans:style=Bold"
-    return subprocess.check_output(["fc-match", "-f", "%{file}", name]).decode()
+    fam = {"DejaVuSansCondensed-Bold.ttf": "DejaVu Sans Condensed:style=Bold", "DejaVuSerifCondensed-Bold.ttf": "DejaVu Serif Condensed:style=Bold",
+           "DejaVuSans-Bold.ttf": "DejaVu Sans:style=Bold"}[name]
+    return subprocess.check_output(["fc-match", "-f", "%{file}", fam]).decode()
 
-def glyph_mask(ch, font, bw, bh):
-    """Pixel mask of the glyph fitted into a bw x bh box (keeps proportions of tall letters, stretches narrow ones a little)."""
+_cache = {}
+def glyph(ch, w, h, font):
+    """Pixel mask (h x w): cap height fills h, round letters (O) fill the width, punctuation keeps its place."""
+    m = np.zeros((h, w), bool)
     if not ch:
-        return np.zeros((bh, bw), bool)
-    f = ImageFont.truetype(find_font(font), 400)
-    im = Image.new("L", (600, 600), 0)
-    ImageDraw.Draw(im).text((100, 20), ch, font=f, fill=255)
-    box = im.getbbox()
-    im = im.crop(box)
-    w, h = im.size
-    # letters fill the height; width scaled with a slight condensing so wide letters (M, W) still fit
-    tw = min(bw, max(4, round(w / h * bh)))
-    if ch in "-":
-        tw, th = bw - 4, 4
-        m = np.zeros((bh, bw), bool)
-        y0 = bh // 2 - 2
-        m[y0:y0 + th, 2:2 + tw] = True
         return m
-    th = bh
-    small = im.resize((tw, th), Image.LANCZOS)
-    a = np.asarray(small) > 110
-    m = np.zeros((bh, bw), bool)
-    x0 = (bw - tw) // 2
-    m[:, x0:x0 + tw] = a
+    f = _cache.setdefault(font, ImageFont.truetype(font_path(font), 600))
+    def render(c):
+        im = Image.new("L", (1000, 1000), 0)
+        ImageDraw.Draw(im).text((150, 50), c, font=f, fill=255)
+        return im
+    ref = render("H").getbbox()
+    cap_top, cap_h = ref[1], ref[3] - ref[1]
+    o = render("O").getbbox()
+    sx, sy = w / (o[2] - o[0]), h / cap_h
+    im = render(ch)
+    bb = im.getbbox()
+    tw = max(2, min(w, round((bb[2] - bb[0]) * sx)))
+    th = max(2, min(h + 3, round((bb[3] - bb[1]) * sy)))
+    top = round((bb[1] - cap_top) * sy)
+    g = np.asarray(im.crop(bb).resize((tw, th), Image.LANCZOS)) > 120
+    ox = (w - tw) // 2
+    for y in range(th):
+        if 0 <= top + y < h:
+            m[top + y, ox:ox + tw] = g[y]
     return m
 
-def dilate(m, n=1):
-    out = m.copy()
-    for _ in range(n):
-        o = out.copy()
-        o[1:, :] |= out[:-1, :]; o[:-1, :] |= out[1:, :]; o[:, 1:] |= out[:, :-1]; o[:, :-1] |= out[:, 1:]
-        out = o
-    return out
+def outline(mask):
+    p = np.pad(mask, 1)
+    return (p[:-2, 1:-1] | p[2:, 1:-1] | p[1:-1, :-2] | p[1:-1, 2:]) & ~mask
 
-def noise(rng, shape, amt):
-    return rng.integers(-amt, amt + 1, shape + (1,))
-
-def banner_shape(style):
-    """Alpha mask of the banner cloth (notched/pointed hems)."""
-    a = np.ones((H, W), bool)
-    if style == "aurum":  # shallow pointed hem with a centre notch, like the gold banners
-        for x in range(W):
-            d = abs(x - (W - 1) / 2)
-            cut = int(round(4 - d * 4 / (W / 2)))  # longer at the edges
-            a[H - 1 - max(0, 3 - cut):, x] = False if 3 - cut > 0 else a[H - 1:, x]
-        for x in range(W):
-            d = abs(x - (W - 1) / 2)
-            depth = max(0, 4 - int(d * 0.6))
-            if depth:
-                a[H - depth:, x] = False
-    elif style == "frost":  # straight hem
-        pass
-    else:  # ember: framed plate, square
-        pass
+def canvas(col):
+    a = np.zeros((H, W, 4), float)
+    a[..., :3] = col
+    a[..., 3] = 255
     return a
 
-def draw(style, ch, rng):
-    img = np.zeros((H, W, 4), int)
-    shape = banner_shape(style)
-    yy, xx = np.mgrid[0:H, 0:W]
-    edge = (xx == 0) | (xx == W - 1) | (yy == 0)
-    if style == "aurum":
-        base = np.array([236, 178, 26])
-        col = base + noise(rng, (H, W), 10)
-        col = col - (np.abs(xx - W / 2) / W * 30)[..., None]  # slight cloth shading
-        img[..., :3] = col
-        # dark border + top band with diamonds
-        border = dilate(~shape, 1) & shape | edge
-        img[border, :3] = [52, 34, 10]
-        img[3:5, 2:W - 2, :3] = [52, 34, 10]
-        for x in range(4, W - 3, 6):
-            for dx, dy in [(0, -1), (-1, 0), (0, 0), (1, 0), (0, 1)]:
-                img[8 + dy, x + dx, :3] = [52, 34, 10]
-        img[H - 9:H - 8, 2:W - 2, :3] = [52, 34, 10]
-        for x in range(5, W - 4, 6):
-            img[H - 11, x, :3] = [52, 34, 10]
-        m = glyph_mask(ch, FONTS[style], 20, 30)
-        g = np.zeros((H, W), bool); g[15:45, 4:24] = m
-        img[g, :3] = [24, 18, 12] + noise(rng, (int(g.sum()),), 6)[:, 0:1]
-        hl = g & ~np.roll(g, 1, axis=1)  # left edge of strokes: worn brown
-        img[hl, :3] = [70, 48, 18]
-    elif style == "frost":
-        base = np.array([30, 26, 92])
-        col = base + noise(rng, (H, W), 6)
-        img[..., :3] = col
-        # white frosted frame with lavender corner gems
-        frame = (xx <= 1) | (xx >= W - 2) | (yy <= 1) | (yy >= H - 2)
-        img[frame, :3] = [226, 236, 250]
-        img[(xx == 2) | (xx == W - 3) | (yy == 2) | (yy == H - 3), :3] = [150, 170, 220]
-        for cx, cy in [(1, 1), (W - 2, 1), (1, H - 2), (W - 2, H - 2), (1, H // 2), (W - 2, H // 2)]:
-            img[cy - 1:cy + 1, cx - 1:cx + 1, :3] = [176, 120, 236]
-        # icicles hanging from the top frame
-        for x in range(3, W - 3, 2):
-            L = rng.integers(1, 4)
-            img[3:3 + L, x, :3] = [200, 220, 248]
-        m = glyph_mask(ch, FONTS[style], 18, 30)
-        g = np.zeros((H, W), bool); g[14:44, 5:23] = m
-        # icy gradient: white top -> pale blue bottom, with a darker blue shadow on the right
-        grad = np.clip((yy - 13) / 32, 0, 1)[..., None]
-        ice = np.array([246, 250, 255]) * (1 - grad) + np.array([150, 200, 245]) * grad
-        img[g, :3] = ice[g]
-        sh = g & ~np.roll(g, -1, axis=1)
-        img[sh, :3] = [110, 150, 220]
-        # drips under the strokes
-        bottoms = g & ~np.roll(g, -1, axis=0)
-        for y, x in zip(*np.where(bottoms)):
-            if rng.random() < 0.45 and y + 3 < H - 4:
-                L = rng.integers(1, 4)
-                img[y + 1:y + 1 + L, x, :3] = [190, 220, 250]
-        # purple sparkles (4-point stars) away from the letter
-        for _ in range(4):
-            for _t in range(30):
-                sx, sy = rng.integers(4, W - 4), rng.integers(8, H - 8)
-                if not dilate(g, 2)[sy, sx]:
-                    break
-            img[sy, sx, :3] = [236, 210, 255]
-            for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
-                img[sy + dy, sx + dx, :3] = [170, 110, 235]
-    else:  # ember
-        base = np.array([206, 66, 26])
-        col = base + noise(rng, (H, W), 9)
-        col = col + (((yy * 7 + xx * 3) % 11 == 0) * 14)[..., None]  # cloth weave
-        img[..., :3] = col
-        gold = np.array([236, 170, 50]); dark = np.array([40, 28, 22])
-        outer = (xx == 0) | (xx == W - 1) | (yy == 0) | (yy == H - 1)
-        frame = (xx <= 2) | (xx >= W - 3) | (yy <= 2) | (yy >= H - 3)
-        img[frame, :3] = gold + noise(rng, (H, W), 8)[frame]
-        img[outer, :3] = dark
-        img[(xx == 3) | (xx == W - 4) | ((yy == 3) | (yy == H - 4)) & (xx >= 3) & (xx <= W - 4), :3] = [150, 40, 18]
-        for cx, cy in [(1, 1), (W - 2, 1), (1, H - 2), (W - 2, H - 2), (1, H // 2), (W - 2, H // 2)]:
-            img[cy, cx, :3] = [120, 120, 125]
-        m = glyph_mask(ch, FONTS[style], 16, 28)
-        g = np.zeros((H, W), bool); g[16:44, 6:22] = m
-        ring = dilate(g, 1) & ~g
-        img[ring, :3] = gold
-        img[g, :3] = [30, 22, 20] + noise(rng, (int(g.sum()),), 5)[:, 0:1]
-    img[..., 3] = np.where(shape, 255, 0)
-    return Image.fromarray(np.clip(img, 0, 255).astype(np.uint8), "RGBA")
+def rect(y0, y1, x0, x1):
+    m = np.zeros((H, W), bool)
+    m[y0:y1, x0:x1] = True
+    return m
 
-def icon(face):
-    """16x16 item icon: the banner scaled into the middle with a little rod on top."""
+def put(a, mask, col):
+    a[mask, :3] = col
+
+YY = np.arange(H)[:, None]
+XX = np.arange(W)[None, :]
+CX = (W - 1) / 2
+
+# ---------------------------------------------------------------------------------------------------------------------
+def aurum(ch, rng):
+    """Gold cloth, black block letter, black diamond ornaments top and bottom, pointed swallow hem."""
+    a = canvas((236, 182, 34))
+    a[..., :3] += rng.normal(0, 5, (H, W, 1)) - ((np.abs(XX - CX) > 11.5)[..., None] * 24)
+    black, brown = (28, 22, 16), (70, 48, 12)
+    cut = np.array([55 + (0 if d < 2 else 1 if d < 4 else 2 if d < 7 else 3 if d < 10 else 4) for d in np.abs(np.arange(W) - CX)])
+    hem = YY >= cut[None, :]
+    a[hem, 3] = 0
+    edge = rect(0, H, 0, 1) | rect(0, H, W - 1, W) | rect(0, 1, 0, W) | (YY == cut[None, :] - 1)
+    inner = (rect(3, 4, 3, W - 3) | ((XX == 3) | (XX == W - 4)) & (YY >= 3)) & (YY <= cut[None, :] - 4) | \
+            (YY == cut[None, :] - 4) & (XX >= 3) & (XX <= W - 4)
+    put(a, inner & ~hem, brown)
+    put(a, edge & ~hem, black)
+    def diamond(cx, cy, r, col):
+        for y in range(cy - r, cy + r + 1):
+            for x in range(cx - r, cx + r + 1):
+                if abs(x - cx) + abs(y - cy) <= r:
+                    a[y, x, :3] = col
+    diamond(14, 6, 2, black); a[6, 14, :3] = (236, 182, 34)
+    for cx in (8, 20):
+        diamond(cx, 6, 1, black)
+    for cx in (5, 23):
+        a[6, cx, :3] = black
+    diamond(14, 48, 1, black)
+    for cx in (9, 19):
+        a[48, cx, :3] = black
+    m = np.zeros((H, W), bool); m[11:44, 4:24] = glyph(ch, 20, 33, FONTS["aurum"])
+    put(a, m, black)
+    put(a, m & (rng.random((H, W)) < 0.08), (54, 44, 30))
+    return a
+
+def frost(ch, rng):
+    """Deep navy cloth, icy white letter with icicles, frosted border, violet gems and sparkles."""
+    a = canvas((30, 26, 84))
+    a[..., :3] += rng.normal(0, 4, (H, W, 1)) + (YY / H)[..., None] * np.array([-6, -4, 10])
+    white, ice, deep = np.array((236, 244, 255)), np.array((160, 200, 240)), np.array((110, 150, 220))
+    violet = (172, 110, 240)
+    r = random.Random(int(rng.integers(0, 1 << 30)))
+    frame = rect(0, H, 0, 2) | rect(0, H, W - 2, W) | rect(0, 2, 0, W) | rect(H - 2, H, 0, W)
+    put(a, frame, white)
+    a[frame, :3] -= rng.integers(0, 18, (int(frame.sum()), 1))
+    for x in range(3, W - 3, 3):
+        L = r.choice((1, 2, 2, 3, 4))
+        for y in range(2, 2 + L):
+            a[y, x, :3] = white if y < 1 + L else ice
+    for x in range(4, W - 3, 4):
+        for y in range(H - 2 - r.choice((1, 1, 2)), H - 2):
+            a[y, x, :3] = ice
+    for (y, x) in ((1, 1), (1, W - 3), (H - 3, 1), (H - 3, W - 3), (29, 0), (29, W - 2)):
+        a[y:y + 2, x:x + 2, :3] = violet
+        a[y, x, :3] = (214, 170, 255)
+    m = np.zeros((H, W), bool); m[10:45, 4:24] = glyph(ch, 20, 35, FONTS["frost"])
+    grad = np.broadcast_to(np.clip((YY - 10) / 35, 0, 1), (H, W))[..., None] * 0.75
+    col = white * (1 - grad) + ice * grad
+    a[m, :3] = col[m]
+    put(a, outline(m) & ~frame, deep * 0.55)
+    for x in range(4, 24):
+        ys = np.where(m[:, x])[0]
+        if len(ys) and r.random() < 0.45:
+            for k in range(r.choice((1, 2, 2, 3))):
+                if ys.max() + 1 + k < H - 3:
+                    a[ys.max() + 1 + k, x, :3] = ice if k == 0 else deep
+    def star(cx, cy):
+        for dx, dy in ((0, 0), (1, 0), (-1, 0), (0, 1), (0, -1)):
+            a[cy + dy, cx + dx, :3] = (230, 200, 255) if (dx, dy) == (0, 0) else violet
+    for cx, cy in ((6, 6), (21, 6), (14, 6), (7, 51), (20, 52), (14, 53)):
+        if not m[cy - 1:cy + 2, cx - 1:cx + 2].any():
+            star(cx, cy)
+    if not ch:
+        for d in range(7):
+            for (x, y) in ((14 + d, 29), (14 - d, 29), (14, 29 + d), (14, 29 - d)):
+                a[y, x, :3] = violet if d > 1 else (230, 200, 255)
+    return a
+
+def ember(ch, rng):
+    """Red-orange cloth in a gold frame with iron rivets, black letter with a hot orange rim."""
+    a = canvas((214, 74, 28))
+    vign = np.sqrt(((XX - CX) / 14) ** 2 + ((YY - (H - 1) / 2) / 30) ** 2)
+    a[..., :3] += rng.normal(0, 5, (H, W, 1)) - vign[..., None] * np.array([60, 40, 20])
+    gold, gold2, iron, iron2 = (240, 176, 48), (176, 112, 24), (150, 150, 156), (90, 88, 96)
+    frame = rect(0, H, 0, 2) | rect(0, H, W - 2, W) | rect(0, 2, 0, W) | rect(H - 2, H, 0, W)
+    put(a, frame, gold)
+    put(a, rect(0, H, 1, 2) | rect(0, H, W - 2, W - 1) | rect(1, 2, 1, W - 1) | rect(H - 2, H - 1, 1, W - 1), gold2)
+    put(a, rect(2, 3, 2, W - 2) | rect(H - 3, H - 2, 2, W - 2) | rect(2, H - 2, 2, 3) | rect(2, H - 2, W - 3, W - 2), (110, 30, 12))
+    for (y, x) in ((0, 0), (0, W - 2), (H - 2, 0), (H - 2, W - 2), (0, 13), (H - 2, 13), (29, 0), (29, W - 2)):
+        a[y:y + 2, x:x + 2, :3] = iron
+        a[y + 1, x + 1, :3] = iron2
+    m = np.zeros((H, W), bool); m[11:47, 4:24] = glyph(ch, 20, 36, FONTS["ember"])
+    put(a, m, (26, 20, 20))
+    o = outline(m)
+    put(a, o, (255, 150, 40))
+    put(a, outline(m | o) & ~frame, (150, 44, 14))
+    put(a, m & (rng.random((H, W)) < 0.1), (48, 34, 30))
+    if not ch:  # blank: a small gear
+        d = np.sqrt((XX - CX) ** 2 + (YY - 29.5) ** 2)
+        ang = np.arctan2(YY - 29.5, XX - CX)
+        gear = ((d < 5.5) | ((d < 7.5) & (np.cos(ang * 8) > 0.3))) & (d > 2.2)
+        put(a, gear, (36, 28, 26))
+    return a
+
+STYLES = {"aurum": aurum, "frost": frost, "ember": ember}
+
+def draw(style, ch, rng):
+    return Image.fromarray(np.clip(STYLES[style](ch, rng), 0, 255).astype(np.uint8), "RGBA")
+
+def icon(style, ch, face):
+    """16x16 item icon: the banner's look, with the character large enough to read in the inventory."""
+    small = face.resize((10, 16), Image.BOX)
     ic = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
-    small = face.resize((7, 15), Image.NEAREST if False else Image.BOX)
-    ic.paste(small, (4, 1))
-    d = ImageDraw.Draw(ic)
-    d.line([(3, 0), (12, 0)], fill=(90, 62, 36, 255))
-    return ic
+    ic.paste(small, (3, 0))
+    a = np.asarray(ic).copy()
+    m = np.zeros((16, 16), bool)
+    if ch:
+        m[3:12, 4:12] = glyph(ch, 8, 9, FONTS[style])
+    col = {"aurum": (28, 22, 16), "frost": (236, 244, 255), "ember": (26, 20, 20)}[style]
+    bg = {"aurum": (236, 182, 34), "frost": (30, 26, 84), "ember": (200, 70, 28)}[style]
+    a[2:13, 4:12, :3] = bg  # clear the reduced letter, then draw a crisp one
+    a[m, :3] = col
+    if style == "ember":
+        a[outline(m) & (np.arange(16)[:, None] >= 2) & (np.arange(16)[:, None] < 13) & (np.arange(16)[None, :] >= 4)
+          & (np.arange(16)[None, :] < 12), :3] = (255, 150, 40)
+    return Image.fromarray(a, "RGBA")
 
 if __name__ == "__main__":
-    tex = os.path.join(OUT, "textures/block"); os.makedirs(tex, exist_ok=True)
-    item = os.path.join(OUT, "textures/item"); os.makedirs(item, exist_ok=True)
-    for style in ("aurum", "frost", "ember"):
+    out = sys.argv[1]
+    tex = os.path.join(out, "textures/block"); os.makedirs(tex, exist_ok=True)
+    item = os.path.join(out, "textures/item"); os.makedirs(item, exist_ok=True)
+    rows = []
+    for style in STYLES:
+        row = []
         for gid, ch in GLYPHS:
-            rng = np.random.default_rng(abs(hash((style, gid))) % 2**32 if False else (sum(map(ord, style + gid)) * 7919))
+            rng = np.random.default_rng(sum(map(ord, style + gid)) * 7919)
             face = draw(style, ch, rng)
             face.save(os.path.join(tex, f"{style}_{gid}.png"))
-            icon(face).save(os.path.join(item, f"{style}_{gid}.png"))
+            ic = icon(style, ch, face)
+            ic.save(os.path.join(item, f"{style}_{gid}.png"))
+            row.append((face, ic))
+        rows.append(row)
+    if len(sys.argv) > 2:
+        n = len(GLYPHS)
+        pv = Image.new("RGBA", (n * 32, 3 * 84), (20, 20, 26, 255))
+        for r_, row in enumerate(rows):
+            for c, (face, ic) in enumerate(row):
+                pv.alpha_composite(face, (c * 32 + 2, r_ * 84 + 2))
+                pv.alpha_composite(ic, (c * 32 + 8, r_ * 84 + 64))
+        pv.resize((pv.width * 3, pv.height * 3), Image.NEAREST).save(sys.argv[2])
     print("ok", 3 * len(GLYPHS))

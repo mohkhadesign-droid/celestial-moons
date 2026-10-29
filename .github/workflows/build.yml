@@ -78,6 +78,7 @@ jobs:
           echo "extra: $EXTRA" >> decomp/jars.txt
           mkdir -p decomp/data && (cd decomp/data && unzip -q -o "$EXTRA" 'data/minecraft/loot_tables/entities/*' 'data/minecraft/loot_tables/chests/*' 'data/minecraft/tags/blocks/*' 'data/minecraft/tags/items/*' || true)
           (cd decomp/data && unzip -q -o "$MC" 'data/forge/tags/*' || true)
+          (cd decomp/data && unzip -q -o "$EXTRA" 'assets/minecraft/shaders/*' 'assets/minecraft/textures/gui/icons.png' || true)
 
       - name: Publish logs and probe output to the ci-logs branch
         if: always()

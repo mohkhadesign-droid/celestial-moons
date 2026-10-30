@@ -227,6 +227,8 @@ final class ThreadChecks {
         check.accept("guard: out of range the selection does nothing (no free protection)", near(kept, 10f) && near(a.getHealth(), 20f));
         a.moveTo(x + 0.5, y, z + 0.5, 0, 0);
         GuardThread.tick(Arrays.asList(a), g0 + 8);
+        EcMoons.LOGGER.info("[ECMOONS-SELFTEST] guard diag after return: " + ThreadLinks.explain(a, b) + " guarding " + GuardThread.guarding(a, b)
+                + " a@" + a.getX() + "," + a.getY() + "," + a.getZ() + " b@" + b.getX() + "," + b.getY() + "," + b.getZ() + " hp " + a.getHealth() + "/" + b.getHealth());
 
         // ---- Last Stitch ------------------------------------------------------------------------------------------
         ThreadEvent tev = ThreadEvent.get(w);

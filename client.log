@@ -1,0 +1,680 @@
+MixinGradle is skipping eclipse integration, extension not found
+Note: SpongePowered MIXIN Annotation Processor Version=0.8.5 (MixinGradle Version=0.7)
+[02:05:18] [Thread-1/INFO] [STDERR/]: [com.electronwill.nightconfig.core.file.FileWatcher$WatcherThread:run:183]: com.electronwill.nightconfig.core.io.ParsingException: Invalid TOML data: entry "[maxThreads]" defined twice in its table.
+[02:05:22] [main/INFO] [mixin/]: Successfully loaded Mixin Connector [vazkii.patchouli.common.MixinConnector]
+[02:05:28] [Render thread/INFO] [minecraft/Minecraft]: Backend library: LWJGL version 3.2.2 build 10
+[02:05:31] [Render thread/WARN] [mojang/NarratorLinux]: ERROR : Couldn't load Narrator library : Unable to load library 'fliteWrapper': Can't obtain InputStream for linux-x86-64/libfliteWrapper.so
+[02:05:38] [Render thread/ERROR] [minecraft/SoundEngine]: Error starting SoundSystem. Turning off sounds & music
+java.lang.IllegalStateException: Failed to open OpenAL device
+[02:05:39] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] creating test world
+[02:05:39] [Realms Notification Availability checker #1/INFO] [mojang/RealmsClient]: Could not authorize you against Realms server: java.lang.RuntimeException: Failed to parse into SignedJWT: DONT_CRASH
+[02:05:43] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] confirming screen: Worlds using Experimental Settings are not supported -> Proceed
+[02:06:14] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /gamerule doDaylightCycle false -> 0
+[02:06:14] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /gamerule doWeatherCycle false -> 0
+[02:06:14] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /gamerule doMobSpawning false -> 0
+[02:06:14] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /weather clear -> 6000
+[02:06:14] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /time set 18000 -> 18000
+[02:06:14] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /difficulty peaceful -> 0
+[02:06:16] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /tp @a -193 220 -200 -> 1
+[02:06:20] [IO-Worker-9/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot moon_00_ordinary: Saved screenshot as moon_00_ordinary.png
+[02:06:20] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start enhancedcelestials-blood_moon -> 1
+[02:06:23] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: blood synced to client
+[02:06:24] [IO-Worker-9/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot moon_01_blood: Saved screenshot as moon_01_blood.png
+[02:06:24] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start enhancedcelestials-blue_moon -> 1
+[02:06:27] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: blue synced to client
+[02:06:27] [IO-Worker-9/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot moon_02_blue: Saved screenshot as moon_02_blue.png
+[02:06:28] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start enhancedcelestials-harvest_moon -> 1
+[02:06:31] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: harvest synced to client
+[02:06:31] [IO-Worker-9/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot moon_03_harvest: Saved screenshot as moon_03_harvest.png
+[02:06:31] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start ecmoons-mist_moon -> 1
+[02:06:34] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: mist synced to client
+[02:06:35] [IO-Worker-9/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot moon_04_mist: Saved screenshot as moon_04_mist.png
+[02:06:35] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start ecmoons-frost_moon -> 1
+[02:06:38] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: frost synced to client
+[02:06:38] [IO-Worker-9/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot moon_05_frost: Saved screenshot as moon_05_frost.png
+[02:06:39] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start ecmoons-arcane_moon -> 1
+[02:06:42] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: arcane synced to client
+[02:06:42] [IO-Worker-9/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot moon_06_arcane: Saved screenshot as moon_06_arcane.png
+[02:06:42] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start ecmoons-prospector_moon -> 1
+[02:06:45] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: prospector synced to client
+[02:06:46] [IO-Worker-9/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot moon_07_prospector: Saved screenshot as moon_07_prospector.png
+[02:06:46] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start ecmoons-wisdom_moon -> 1
+[02:06:49] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: wisdom synced to client
+[02:06:49] [IO-Worker-9/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot moon_08_wisdom: Saved screenshot as moon_08_wisdom.png
+[02:06:49] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start ecmoons-quiet_moon -> 1
+[02:06:53] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: quiet synced to client
+[02:06:53] [IO-Worker-9/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot moon_09_quiet: Saved screenshot as moon_09_quiet.png
+[02:06:53] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start ecmoons-drift_moon -> 1
+[02:06:56] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: drift synced to client
+[02:06:57] [IO-Worker-9/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot moon_10_drift: Saved screenshot as moon_10_drift.png
+[02:06:57] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start ecmoons-revealing_moon -> 1
+[02:07:00] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: revealing synced to client
+[02:07:00] [IO-Worker-9/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot moon_11_revealing: Saved screenshot as moon_11_revealing.png
+[02:07:00] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start ecmoons-thread_moon -> 1
+[02:07:04] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: thread synced to client
+[02:07:04] [IO-Worker-9/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot moon_12_thread: Saved screenshot as moon_12_thread.png
+[02:07:04] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start ecmoons-war_moon -> 1
+[02:07:07] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war synced to client
+[02:07:08] [IO-Worker-9/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot moon_13_war: Saved screenshot as moon_13_war.png
+[02:07:08] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start ecmoons-gluttony_moon -> 1
+[02:07:11] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: gluttony synced to client
+[02:07:11] [IO-Worker-10/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot moon_14_gluttony: Saved screenshot as moon_14_gluttony.png
+[02:07:11] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start ecmoons-afterimage_moon -> 1
+[02:07:15] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: afterimage synced to client
+[02:07:15] [IO-Worker-10/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot moon_15_afterimage: Saved screenshot as moon_15_afterimage.png
+[02:07:15] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start ecmoons-shell_moon -> 1
+[02:07:18] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: shell synced to client
+[02:07:19] [IO-Worker-10/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot moon_16_shell: Saved screenshot as moon_16_shell.png
+[02:07:19] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start ecmoons-wisp_moon -> 1
+[02:07:22] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: wisp synced to client
+[02:07:22] [IO-Worker-10/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot moon_17_wisp: Saved screenshot as moon_17_wisp.png
+[02:07:22] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start enhancedcelestials-super_blood_moon -> 1
+[02:07:26] [IO-Worker-10/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot moon_99_super_blood: Saved screenshot as moon_99_super_blood.png
+[02:07:27] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons end -> 1
+[02:07:27] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /tp @a -193 73 -200 -> 1
+[02:07:27] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /effect give @a minecraft:night_vision 600 0 true -> 1
+[02:07:32] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start ecmoons-mist_moon -> 1
+[02:07:32] [IO-Worker-10/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot mist_0_clear_night: Saved screenshot as mist_0_clear_night.png
+[02:07:35] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: mist fading in (factor 0.30999985)
+[02:07:42] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: mist fully faded in
+[02:07:43] [IO-Worker-10/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot mist_1_fog_night: Saved screenshot as mist_1_fog_night.png
+[02:07:44] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute in minecraft:the_nether run tp @a 0 100 0 -> 1
+[02:07:53] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: no mist in the Nether (factor 0.0)
+[02:07:53] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute in minecraft:overworld run tp @a -193 120 -200 -> 1
+[02:08:04] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: mist restored after returning to the overworld
+[02:08:04] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons end -> 1
+[02:08:14] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: mist faded out after the moon ended
+[02:08:14] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /tp @a -193 63 -200 -> 1
+[02:08:14] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /gamemode survival @a -> 1
+[02:08:14] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /effect clear @a -> 1
+[02:08:14] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /difficulty easy -> 0
+[02:08:14] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /gamerule naturalRegeneration false -> 0
+[02:08:14] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start ecmoons-frost_moon -> 1
+[02:08:38] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: frost: chilled state received
+[02:08:38] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: frost: movement modifier synced to client
+[02:08:39] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons end -> 1
+[02:08:39] [IO-Worker-17/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot frost_overlay_chilled: Saved screenshot as frost_overlay_chilled.png
+[02:08:42] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: frost: modifier removed when the moon ended
+[02:08:42] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: frost: client state cleared
+[02:08:42] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] tooltip levels (arcane=false): 3
+[02:08:42] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: arcane tooltip: 3 levels without the lock
+[02:08:42] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] tooltip levels (arcane=true): 2
+[02:08:42] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: arcane tooltip: 2 levels with the server's Arcane lock
+[02:08:42] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons end -> 0
+[02:08:45] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: zombie rare-drop baseline 0.0261 (vanilla 0.025)
+[02:08:45] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start enhancedcelestials-blood_moon -> 1
+[02:08:47] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: blood active for real-player checks
+[02:08:47] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: Blood Moon zombie rare-drop rate 0.0311 (target 0.03125 = 1.25 x 0.025)
+[02:08:47] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: spawner zombie rare-drop rate unchanged 0.0261 (baseline 0.025)
+[02:08:48] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start ecmoons-prospector_moon -> 1
+[02:08:49] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: prospector active for real-player checks
+[02:08:49] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: natural iron ore bonus rate 0.244 (target 0.25)
+[02:08:49] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: no bonus with Silk Touch
+[02:08:49] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: no bonus for a fake player (machines)
+[02:08:49] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: placement event accepted
+[02:08:49] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: placed ore is not natural
+[02:08:49] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: no bonus from a placed ore (place-and-break loop)
+[02:08:49] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: ore XP unchanged outside Wisdom
+[02:08:50] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start ecmoons-wisdom_moon -> 1
+[02:08:51] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: wisdom active for real-player checks
+[02:08:51] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: natural zombie XP doubled (5 -> 10)
+[02:08:51] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: spawner zombie XP not doubled
+[02:08:51] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: spawn-egg zombie XP not doubled
+[02:08:51] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: fake-player kill XP not doubled
+[02:08:51] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: natural coal ore XP doubled (3 -> 6)
+[02:08:51] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: placed coal ore XP not doubled
+[02:08:52] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons end -> 1
+[02:08:52] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /fill -196 150 -203 -190 150 -197 minecraft:stone -> 49
+[02:08:52] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /tp @a -193.5 151 -200.5 -> 1
+[02:08:52] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /effect clear @a -> 0
+[02:08:54] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] vanilla jump height 1.2522033402537147
+[02:08:54] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start ecmoons-drift_moon -> 1
+[02:08:56] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: drift jump higher than vanilla (1.65 vs 1.25) but below 2 blocks
+[02:08:56] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons end -> 1
+[02:08:59] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /effect give @a minecraft:instant_health 1 10 -> 1
+[02:09:00] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /tp @a -193.5 163 -200.5 -> 1
+[02:09:02] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] vanilla 12-block fall damage 8.0
+[02:09:02] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /effect give @a minecraft:instant_health 1 10 -> 1
+[02:09:02] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start ecmoons-drift_moon -> 1
+[02:09:03] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /tp @a -193.5 163 -200.5 -> 1
+[02:09:05] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: drift fall damage reduced (5.0 vs 8.0 vanilla)
+[02:09:05] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /effect give @a minecraft:instant_health 1 10 -> 1
+[02:09:06] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /tp @a -193.5 180 -200.5 -> 1
+[02:09:07] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons end -> 1
+[02:09:09] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: airborne when Drift ended: landing still reduced (13.0 damage from 29 blocks, vanilla would be 26)
+[02:09:10] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /effect clear @a -> 0
+[02:09:10] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /gamemode creative @a -> 1
+[02:09:10] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /tp @a -193 220 -200 -> 1
+[02:09:10] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start ecmoons-revealing_moon -> 1
+[02:09:13] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute as @p run ecmoons reveal blink -> 1
+[02:09:13] [IO-Worker-17/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot reveal_0_open: Saved screenshot as reveal_0_open.png
+[02:09:14] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: revealing: blink passes a half-closed frame (1)
+[02:09:14] [IO-Worker-17/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot reveal_1_half: Saved screenshot as reveal_1_half.png
+[02:09:14] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: revealing: blink reaches the closed frame
+[02:09:14] [IO-Worker-17/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot reveal_2_closed: Saved screenshot as reveal_2_closed.png
+[02:09:14] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: revealing: eye opens again after the blink
+[02:09:15] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /fill -195 218 -202 -191 218 -198 minecraft:glass -> 25
+[02:09:15] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /tp @a -193.5 219 -200.5 -> 1
+[02:09:15] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /gamemode survival @a -> 1
+[02:09:15] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /effect give @a minecraft:invisibility 120 0 true -> 1
+[02:09:16] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons reveal warn -> 1
+[02:09:17] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: revealing: while the eye opens the eyelids first narrow (frame 1) and the glow builds (0.275)
+[02:09:17] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: revealing: no ripple when the eye starts opening
+[02:09:17] [IO-Worker-17/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot reveal_4_warning: Saved screenshot as reveal_4_warning.png
+[02:09:18] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: revealing: active scanning - the eye is fully open with its strong glow (frame 0, glow 1.0) and still no ripple
+[02:09:18] [IO-Worker-17/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot reveal_5_active_open: Saved screenshot as reveal_5_active_open.png
+[02:09:20] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: binding gaze: two seconds of staring at the open eye binds (client)
+[02:09:20] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS (server): binding gaze: the server bound the player
+[02:09:20] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: binding gaze: holding the forward key does not walk (moved 0.000)
+[02:09:21] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: binding gaze: looking away releases at once
+[02:09:21] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS (server): binding gaze: the server released it too
+[02:09:21] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: revealing: ONE golden ripple starts at scan completion (ripples 1), the eye begins to close and the light pulses
+[02:09:21] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: revealing: completion releases binds and starts YOUR reveal
+[02:09:22] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: revealing: the reveal effects eased in (intensity 0.9375)
+[02:09:22] [IO-Worker-17/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot reveal_6_ripple_moon: Saved screenshot as reveal_6_ripple_moon.png
+[02:09:22] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: revealing: the ripple is drawn across the sky (progress 0.41599992)
+[02:09:22] [IO-Worker-17/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot reveal_7_ripple_sky: Saved screenshot as reveal_7_ripple_sky.png
+[02:09:23] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: revealing: a late sync joins the same wave instead of starting another (ripples 1)
+[02:09:23] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: revealing: amber edges and colour loss are drawn for the revealed player (edges 9, colour pass 174, saturation 0.54999995)
+[02:09:23] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: true exposure: your invisibility is suppressed while revealed, the potion still there
+[02:09:23] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS (server): true exposure: the server agrees (visible, effect kept, revealed)
+[02:09:23] [IO-Worker-17/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot reveal_8_seen: Saved screenshot as reveal_8_seen.png
+[02:09:23] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: read your enemy: the panel renders (7 frames)
+[02:09:23] [IO-Worker-17/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot reveal_8b_panel: Saved screenshot as reveal_8b_panel.png
+[02:09:24] [IO-Worker-17/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot reveal_8c_panel_modded_health: Saved screenshot as reveal_8c_panel_modded_health.png
+[02:09:25] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: revealing: the amber/colour strength follows your own timer (0.45 vs 0.45 remaining)
+[02:09:26] [IO-Worker-17/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot reveal_9_fading: Saved screenshot as reveal_9_fading.png
+[02:09:29] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: revealing: at zero the amber edges and colour loss are gone
+[02:09:29] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: true exposure: invisibility resumes afterwards because the potion still runs
+[02:09:30] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: revealing: nothing is drawn after the timer (edges 0, colour 0)
+[02:09:30] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: revealing: a finished ripple is never replayed by a later sync
+[02:09:30] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /effect clear @a -> 1
+[02:09:30] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /gamemode creative @a -> 1
+[02:09:30] [IO-Worker-17/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot reveal_10_after: Saved screenshot as reveal_10_after.png
+[02:09:30] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: revealing: the eye reopens and returns to idle
+[02:09:30] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /gamemode survival @a -> 1
+[02:09:30] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /spreadplayers -153 -200 0 1 false @a -> 1
+[02:09:31] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute as @p run ecmoons reveal scan self -> 1
+[02:09:32] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: revealing: scan marker received (1)
+[02:09:32] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] reveal render: 1 markers, alpha 0.6113083, now 4140.54, until 4284.0, cam (-166.5, 64.26188398848964, -199.5), first (-151.5, 66.0, -198.5)
+[02:09:34] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] reveal render: 1 markers, alpha 0.6940028, now 4180.18, until 4284.0, cam (-166.5, 62.354362688094305, -199.5), first (-151.5, 66.0, -198.5)
+[02:09:34] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] reveal render: 1 markers, alpha 0.6772918, now 4180.52, until 4284.0, cam (-166.5, 62.34585339819391, -199.5), first (-151.5, 66.0, -198.5)
+[02:09:34] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] reveal render: 1 markers, alpha 0.66185516, now 4180.86, until 4284.0, cam (-166.5, 62.337344108293514, -199.5), first (-151.5, 66.0, -198.5)
+[02:09:35] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] reveal render: 1 markers, alpha 0.744459, now 4200.2, until 4284.0, cam (-166.5, 61.85373248555726, -199.5), first (-151.5, 66.0, -198.5)
+[02:09:35] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] reveal render: 1 markers, alpha 0.7240801, now 4200.56, until 4284.0, cam (-166.5, 61.84473237127396, -199.5), first (-151.5, 66.0, -198.5)
+[02:09:35] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] reveal render: 1 markers, alpha 0.7056426, now 4200.9, until 4284.0, cam (-166.5, 61.83623226284303, -199.5), first (-151.5, 66.0, -198.5)
+[02:09:36] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] reveal render: 1 markers, alpha 0.79558116, now 4220.28, until 4284.0, cam (-166.5, 61.61999988555908, -199.5), first (-151.5, 66.0, -198.5)
+[02:09:36] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] reveal render: 1 markers, alpha 0.776417, now 4220.6, until 4284.0, cam (-166.5, 61.61999988555908, -199.5), first (-151.5, 66.0, -198.5)
+[02:09:36] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] reveal render: 1 markers, alpha 0.75749916, now 4220.92, until 4284.0, cam (-166.5, 61.61999988555908, -199.5), first (-151.5, 66.0, -198.5)
+[02:09:36] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: revealing: marker drawn in the world (1)
+[02:09:36] [IO-Worker-17/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot reveal_3_marker: Saved screenshot as reveal_3_marker.png
+[02:09:37] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] reveal render: 1 markers, alpha 0.8653784, now 4240.04, until 4284.0, cam (-166.5, 61.61999988555908, -199.5), first (-151.5, 66.0, -198.5)
+[02:09:37] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] reveal render: 1 markers, alpha 0.8185875, now 4240.84, until 4284.0, cam (-166.5, 61.61999988555908, -199.5), first (-151.5, 66.0, -198.5)
+[02:09:38] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] reveal render: 1 markers, alpha 0.8801153, now 4260.72, until 4284.0, cam (-166.5, 61.61999988555908, -199.5), first (-151.5, 66.0, -198.5)
+[02:09:39] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] reveal render: 1 markers, alpha 0.15653265, now 4280.64, until 4284.0, cam (-166.5, 61.61999988555908, -199.5), first (-151.5, 66.0, -198.5)
+[02:09:39] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: revealing: markers disappear after markerSeconds
+[02:09:39] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons end -> 1
+[02:09:40] [IO-Worker-17/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot thread_hud: Saved screenshot as thread_hud.png
+[02:09:40] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /gamemode survival @a -> 0
+[02:09:40] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start ecmoons-gluttony_moon -> 1
+[02:09:42] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: gluttony (real player): bread, bread, porkchop = 2 bonus hearts (max 24.0)
+[02:09:43] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: gluttony: client sees 24 max health (24.0)
+[02:09:43] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons end -> 1
+[02:09:43] [IO-Worker-17/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot gluttony_hearts: Saved screenshot as gluttony_hearts.png
+[02:09:46] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: gluttony: bonus hearts gone when the moon ended (20.0)
+[02:09:47] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons war start solo -> 1
+[02:09:49] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: player moved to the arena dimension
+[02:09:49] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: recovery record written before stripping
+[02:09:49] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: own items removed (no diamonds, torches, helmet, totem)
+[02:09:49] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: equal kit given (iron armour, sword, bow, 16 arrows, 16 beef)
+[02:09:49] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: adventure mode, no flight
+[02:09:49] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: phase PREP
+[02:09:49] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: no attacking during preparation
+[02:09:50] [IO-Worker-17/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot war_0_cell: Saved screenshot as war_0_cell.png
+[02:09:58] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: phase FIGHT after the countdown
+[02:09:58] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: player is fighting
+[02:09:58] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: the kit sword is in the hotbar (slot 0)
+[02:09:58] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: tossed items stay in the inventory and no item entity appears
+[02:09:58] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: arena blocks cannot be broken
+[02:09:58] [IO-Worker-17/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot war_1_fight: Saved screenshot as war_1_fight.png
+[02:09:59] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: lethal damage is a knockout, not a death
+[02:09:59] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: knocked-out player is a watcher
+[02:09:59] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: no drops from the knockout
+[02:09:59] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: knockout empties the kit
+[02:09:59] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: watcher moved to the viewing gallery (y 119.0)
+[02:09:59] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: watchers take no damage
+[02:09:59] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: solo match with nobody left ends (phase FIGHT)
+[02:10:01] [IO-Worker-17/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot war_2_gallery: Saved screenshot as war_2_gallery.png
+[02:10:11] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: session finished (phase IDLE, fighters 0, watchers 0, pending records 0)
+[02:10:11] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: back in the overworld near the original spot ((-166.5, 60.813997830396104, -199.5) vs (-166.5, 60.0, -199.5))
+[02:10:11] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: own items restored exactly (7 diamonds, 33 torches, golden helmet, totem)
+[02:10:11] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: no kit items left
+[02:10:11] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: XP restored (5)
+[02:10:11] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: game mode restored
+[02:10:11] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: recovery record deleted
+[02:10:11] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: arena removed after the match
+[02:10:11] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war: restoring again does nothing (no duplication)
+[02:10:11] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons war champion @p -> 1
+[02:10:13] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war champion: Haste I applied (effect.minecraft.haste, Duration: 268, Particles: false)
+[02:10:13] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: war champion: winning again refreshes (does not stack)
+[02:10:14] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /gamemode creative @a -> 1
+[02:10:14] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /effect clear @a -> 1
+[02:10:14] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /gamemode creative @a -> 0
+[02:10:14] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /tp @a -193 220 -200 -> 1
+[02:10:14] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start ecmoons-thread_moon -> 1
+[02:10:19] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: thread moon: the cat is drawn on the yarn moon, idling (frame 2, draws 915)
+[02:10:19] [IO-Worker-38/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot thread_1_cat_idle: Saved screenshot as thread_1_cat_idle.png
+[02:10:20] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: thread moon: the server's Knotbind reaction plays on the moon (frame 46)
+[02:10:20] [IO-Worker-38/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot thread_2_knot_reaction: Saved screenshot as thread_2_knot_reaction.png
+[02:10:21] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: thread moon: after the reaction the cat returns to its idle loop
+[02:10:21] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: thread moon: an old reaction packet never restarts
+[02:10:21] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: thread moon: an expired reaction is not replayed after a late join
+[02:10:21] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: thread moon: Lifeline kneading plays
+[02:10:21] [IO-Worker-38/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot thread_3_lifeline_reaction: Saved screenshot as thread_3_lifeline_reaction.png
+[02:10:23] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: thread moon: Guard bracing plays
+[02:10:23] [IO-Worker-38/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot thread_4_guard_reaction: Saved screenshot as thread_4_guard_reaction.png
+[02:10:24] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: thread moon: Last Stitch gives the moon one soft rose-gold pulse (0.9999209)
+[02:10:24] [IO-Worker-38/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot thread_5_last_stitch_flare: Saved screenshot as thread_5_last_stitch_flare.png
+[02:10:25] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: thread moon: cosmetic fibres stay within the cap of 12 (9)
+[02:10:25] [IO-Worker-38/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot thread_6_last_stitch_tumble: Saved screenshot as thread_6_last_stitch_tumble.png
+[02:10:26] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: thread moon: the fibres fade out completely and the cat idles again
+[02:10:27] [IO-Worker-38/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot thread_7_sky_strands: Saved screenshot as thread_7_sky_strands.png
+[02:10:28] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /summon minecraft:armor_stand -189.5 220 -200.5 {NoGravity:1b,Tags:["ecmtest"]} -> 1
+[02:10:30] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: thread: the guard link is drawn braided (1) and the HUD shows its lines (4)
+[02:10:30] [IO-Worker-38/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot thread_8_guard_hud: Saved screenshot as thread_8_guard_hud.png
+[02:10:30] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: thread: a Knotbind tether with its knot is drawn (1) with the unravel prompt
+[02:10:30] [IO-Worker-38/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot thread_9_knot_tether: Saved screenshot as thread_9_knot_tether.png
+[02:10:31] [IO-Worker-38/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot thread_10_knot_fibres: Saved screenshot as thread_10_knot_fibres.png
+[02:10:31] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /gamemode survival @a -> 1
+[02:10:31] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /kill @e[tag=ecmtest] -> 1
+[02:10:31] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: thread: the Moon Ability key throws Knotbind yarn on the Thread Moon (3:-1)
+[02:10:31] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: thread: the Guard key asks the server (nobody aimed -> clear)
+[02:10:31] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons end -> 1
+[02:10:31] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /gamemode creative @a -> 1
+[02:10:32] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: thread: the moon ending clears the Thread state on the client
+[02:10:32] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /gamemode creative @a -> 0
+[02:10:32] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /tp @a -112.5 200 -199.5 -90 10 -> 1
+[02:10:34] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /gamerule doMobSpawning false -> 0
+[02:10:34] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /gamerule naturalRegeneration false -> 0
+[02:10:34] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /gamerule doMobLoot false -> 0
+[02:10:34] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /kill @e[type=!player] -> 116
+[02:10:34] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /effect clear @a -> 0
+[02:10:34] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /gamemode survival @a -> 1
+[02:10:34] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /fill -133 199 -215 -89 199 -185 obsidian -> 1395
+[02:10:34] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /fill -133 200 -215 -89 205 -185 air -> 0
+[02:10:34] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /tp @a -112.5 200 -199.5 -90 10 -> 1
+[02:10:34] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start ecmoons-afterimage_moon -> 1
+[02:10:36] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /summon zombie -101.7 200 -199.5 {NoAI:1b,Silent:1b,IsBaby:0b,PersistenceRequired:1b,Tags:["ectest"]} -> 1
+[02:10:36] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] ability state: stage 0 bonus false penalised false cd 0 shell false charging false shellCd 0 bonusHits 0 steps 0.0/0.0/0.0 kb 0.0 health 7.0 pos -112.5,200.0,-199.5
+[02:10:36] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: afterimage: step 1 done and the input window opened (HUD phase 2)
+[02:10:36] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: afterimage: an afterimage is shown where the step started (1)
+[02:10:37] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: afterimage: step 2 done inside the window
+[02:10:37] [IO-Worker-38/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot afterimage_0_steps: Saved screenshot as afterimage_0_steps.png
+[02:10:37] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: afterimage: third step done, final attack window on the HUD
+[02:10:37] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: afterimage: afterimages drawn (2)
+[02:10:37] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: afterimage: target zombie in reach after the dash (1)
+[02:10:37] [IO-Worker-38/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot afterimage_1_final_window: Saved screenshot as afterimage_1_final_window.png
+[02:10:37] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] ability state: stage 0 bonus false penalised false cd 154 shell false charging false shellCd 0 bonusHits 1 steps 2.000000000000014/3.0/3.999999999999986 kb 0.64 health 7.0 pos -103.5,200.0,-199.5
+[02:10:37] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: afterimage: step distances 2.00 / 3.00 / 4.00 (expected 2 / 3 / 4)
+[02:10:37] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: afterimage: total movement 9.00 blocks east (expected 9)
+[02:10:37] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: afterimage: the first melee hit got the knockback bonus (0.64, hits 1)
+[02:10:37] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: afterimage: bonus consumed by that hit
+[02:10:37] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: afterimage: cooldown started (154 ticks)
+[02:10:39] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] ability state: stage 0 bonus false penalised false cd 123 shell false charging false shellCd 0 bonusHits 1 steps 2.000000000000014/3.0/3.999999999999986 kb 0.4 health 7.0 pos -103.5,200.0,-199.5
+[02:10:39] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: afterimage: the next hit has normal knockback (0.4)
+[02:10:40] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: afterimage: on cooldown the key does not move you (0.00)
+[02:10:40] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /kill @e[tag=ectest] -> 1
+[02:10:40] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons ability reset @p -> 1
+[02:10:40] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /tp @a -112.5 200 -199.5 -90 10 -> 1
+[02:10:41] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] ability state: stage 0 bonus false penalised true cd 156 shell false charging false shellCd 0 bonusHits 1 steps 2.000000000000014/3.0/3.999999999999986 kb 0.4 health 7.0 pos -112.5,200.0,-199.5
+[02:10:41] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: afterimage: a too-early press breaks the sequence with a slowdown and starts the cooldown (stage 0, penalised true, cd 156)
+[02:10:42] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] ability state: stage 0 bonus false penalised false cd 135 shell false charging false shellCd 0 bonusHits 1 steps 2.000000000000014/3.0/3.999999999999986 kb 0.4 health 7.0 pos -112.5,200.0,-199.5
+[02:10:42] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: afterimage: the slowdown wears off after penaltyTicks
+[02:10:42] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons ability reset @p -> 1
+[02:10:42] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /tp @a -112.5 200 -199.5 -90 10 -> 1
+[02:10:42] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /fill -111 200 -202 -111 202 -198 stone -> 15
+[02:10:44] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] ability state: stage 0 bonus false penalised false cd 156 shell false charging false shellCd 0 bonusHits 1 steps 1.1666666666666714/3.0/3.999999999999986 kb 0.4 health 7.0 pos -111.33333333333333,200.0,-199.5
+[02:10:44] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: afterimage: a wall stops the step before it (x -111.33, wall face at -111)
+[02:10:44] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /fill -111 200 -202 -111 202 -198 air -> 15
+[02:10:44] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons ability reset @p -> 1
+[02:10:44] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons end -> 1
+[02:10:44] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /tp @a -102.5 200 -199.5 -90 10 -> 1
+[02:10:44] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /fill -104 200 -203 -104 204 -197 obsidian -> 35
+[02:10:44] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start ecmoons-shell_moon -> 1
+[02:10:45] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /summon tnt -100 200 -199.5 {Fuse:1} -> 1
+[02:10:46] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] ability state: stage 0 bonus false penalised false cd 0 shell false charging false shellCd 0 bonusHits 1 steps 1.1666666666666714/3.0/3.999999999999986 kb 0.4 health 10.8488 pos -102.69999998807907,200.0,-199.5
+[02:10:46] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] control explosion damage 9.1512
+[02:10:46] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /tp @a -102.5 200 -199.5 -90 10 -> 1
+[02:10:47] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: shell: without crouching the key raises nothing (0)
+[02:10:48] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: shell: crouch + hold starts charging (HUD)
+[02:10:48] [IO-Worker-38/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot shell_0_charging: Saved screenshot as shell_0_charging.png
+[02:10:50] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: shell: deployed after the charge
+[02:10:50] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: shell: shell drawn (1)
+[02:10:50] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] ability state: stage 0 bonus false penalised false cd 0 shell true charging false shellCd 0 bonusHits 1 steps 1.1666666666666714/3.0/3.999999999999986 kb 0.4 health 10.8488 pos -102.5,200.0,-199.5
+[02:10:50] [IO-Worker-38/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot shell_1_up: Saved screenshot as shell_1_up.png
+[02:10:50] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: shell: server has the shell
+[02:10:51] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] ability state: stage 0 bonus false penalised false cd 0 shell false charging false shellCd 395 bonusHits 1 steps 1.1666666666666714/3.0/3.999999999999986 kb 0.4 health 10.8488 pos -102.5,200.0,-199.5
+[02:10:51] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: shell: releasing the key collapses it and starts the cooldown (cd 395)
+[02:10:53] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: shell: the shell fades away on the client (0)
+[02:10:53] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons ability reset @p -> 1
+[02:10:56] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /summon tnt -100 200 -199.5 {Fuse:1} -> 1
+[02:10:56] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] ability state: stage 0 bonus false penalised false cd 0 shell true charging false shellCd 0 bonusHits 1 steps 1.1666666666666714/3.0/3.999999999999986 kb 0.4 health 17.7122 pos -102.69999998807907,200.0,-199.5
+[02:10:57] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: shell: explosion damage inside the shell 2.3 vs 9.2 without (75% less expected)
+[02:10:57] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons ability reset @p -> 1
+[02:10:57] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /effect clear @a -> 1
+[02:10:57] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /fill -104 200 -203 -104 204 -197 air -> 35
+[02:10:57] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /fill -107 200 -203 -107 204 -197 stone -> 35
+[02:10:57] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /tp @a -112.5 200 -199.5 -90 10 -> 1
+[02:10:57] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start ecmoons-wisp_moon -> 1
+[02:10:58] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: wisp: the Moon Ability key opens the Wisp menu
+[02:10:58] [IO-Worker-38/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot wisp_0_menu: Saved screenshot as wisp_0_menu.png
+[02:10:58] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: wisp: piloting switches the camera to the wisp (WispEntity['Scouting Wisp'/1077, l='ClientLevel', x=-112.50, y=201.37, z=-199.50])
+[02:10:58] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: wisp: the menu closed and the game mode is unchanged
+[02:10:59] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: wisp: the wisp flies with the movement keys (4.90 blocks east)
+[02:10:59] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: wisp: the body stays where it was (0.000)
+[02:11:00] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: wisp: a wall stops the wisp (x 5.75, wall face 6)
+[02:11:00] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: wisp: the Use key places a soul observer on the wall (1)
+[02:11:01] [IO-Worker-38/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot wisp_1_observer_placed: Saved screenshot as wisp_1_observer_placed.png
+[02:11:01] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: wisp: the body is drawn while the camera is on the wisp (1)
+[02:11:01] [IO-Worker-38/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot wisp_2_body_seen_from_wisp: Saved screenshot as wisp_2_body_seen_from_wisp.png
+[02:11:01] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: wisp: the Moon Ability key returns the camera to the body and removes the wisp
+[02:11:02] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: wisp: the menu lists observer 1 in range
+[02:11:02] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: wisp: Pilot Wisp is not offered during the cooldown
+[02:11:02] [IO-Worker-38/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot wisp_3_menu_observer: Saved screenshot as wisp_3_menu_observer.png
+[02:11:02] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: wisp: viewing switches the camera to the observer
+[02:11:02] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: wisp: the observer view only turns a limited amount (60 degrees)
+[02:11:02] [IO-Worker-38/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot wisp_4_observer_view: Saved screenshot as wisp_4_observer_view.png
+[02:11:02] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: wisp: damage returns the camera to the body at once
+[02:11:02] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons ability reset @p -> 1
+[02:11:03] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons end -> 1
+[02:11:04] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: wisp: when the moon ends the camera returns and no wisp or observer is left
+[02:11:04] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /fill -107 200 -203 -107 204 -197 air -> 35
+[02:11:04] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons ability reset @p -> 1
+[02:11:04] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons end -> 0
+[02:11:04] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /effect clear @a -> 0
+[02:11:04] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /gamerule doMobSpawning true -> 1
+[02:11:04] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /gamerule naturalRegeneration true -> 1
+[02:11:04] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /gamerule doMobLoot true -> 1
+[02:11:04] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /gamemode creative @a -> 1
+[02:11:04] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /fill -133 199 -215 -89 205 -185 air -> 1395
+[02:11:04] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /tp @a -193 150 -200 -> 1
+[02:11:04] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: field guide: Patchouli registered the book
+[02:11:04] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: field guide: 3 categories and 23 entries loaded (3, 23)
+[02:11:06] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: field guide: book screen open (vazkii.patchouli.client.book.gui.GuiBookLanding@7326f323)
+[02:11:06] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot guide_0_landing: Saved screenshot as guide_0_landing.png
+[02:11:07] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot guide_1_ability_key: Saved screenshot as guide_1_ability_key.png
+[02:11:08] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot guide_2_frame_step: Saved screenshot as guide_2_frame_step.png
+[02:11:09] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot guide_3_frame_step_rules: Saved screenshot as guide_3_frame_step_rules.png
+[02:11:10] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot guide_4_shell: Saved screenshot as guide_4_shell.png
+[02:11:11] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot guide_5_shell_rules: Saved screenshot as guide_5_shell_rules.png
+[02:11:12] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot guide_6_revealing: Saved screenshot as guide_6_revealing.png
+[02:11:13] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot guide_7_war: Saved screenshot as guide_7_war.png
+[02:11:14] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons end -> 0
+[02:11:14] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /gamemode creative @a -> 0
+[02:11:14] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /effect clear @a -> 0
+[02:11:14] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /time set 18000 -> 18000
+[02:11:14] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /weather clear -> 6000
+[02:11:14] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /tp @a -123.5 96 -200.5 -90 -12 -> 1
+[02:11:17] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /tp @a -123.5 96 -200.5 -90 -12 -> 1
+[02:11:18] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere: nothing active on an ordinary night (target=NONE quality=MEDIUM exposure=1.00 weights: particles=0/20)
+[02:11:18] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_00_ordinary_night: Saved screenshot as atmo_00_ordinary_night.png
+[02:11:19] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere: light-map grading hook is applied (22 updates)
+[02:11:19] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute as @p run ecmoons atmosphere preview blood -> 1
+[02:11:21] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere: 2 s into an 8 s transition the blend is partial (0.2624999)
+[02:11:30] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere blood: fully blended in
+[02:11:30] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere blood: sky colour moves towards the profile (0.226 -> 0.079)
+[02:11:30] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere blood: light grading active (0.22749999)
+[02:11:30] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere blood: particles within the MEDIUM cap (3/20)
+[02:11:30] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere blood: sky layer drawn (1)
+[02:11:30] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] blood target=BLOOD (preview) quality=MEDIUM exposure=1.00 weights: blood=1.00 particles=3/20
+[02:11:31] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_01_blood: Saved screenshot as atmo_01_blood.png
+[02:11:31] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute as @p run ecmoons atmosphere preview blue -> 1
+[02:11:42] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere blue: fully blended in
+[02:11:42] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere blue: sky colour moves towards the profile (0.422 -> 0.148)
+[02:11:42] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere blue: light grading active (0.22749999)
+[02:11:42] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere blue: particles within the MEDIUM cap (7/20)
+[02:11:42] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere blue: sky layer drawn (1)
+[02:11:42] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] blue target=BLUE (preview) quality=MEDIUM exposure=1.00 weights: blue=1.00 particles=7/20
+[02:11:42] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_02_blue: Saved screenshot as atmo_02_blue.png
+[02:11:42] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute as @p run ecmoons atmosphere preview harvest -> 1
+[02:11:53] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere harvest: fully blended in
+[02:11:53] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere harvest: sky colour moves towards the profile (0.411 -> 0.144)
+[02:11:53] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere harvest: light grading active (0.22749999)
+[02:11:53] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere harvest: particles within the MEDIUM cap (0/20)
+[02:11:53] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] harvest target=HARVEST (preview) quality=MEDIUM exposure=1.00 weights: harvest=1.00 particles=0/20
+[02:11:54] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_03_harvest: Saved screenshot as atmo_03_harvest.png
+[02:11:54] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute as @p run ecmoons atmosphere preview mist -> 1
+[02:12:05] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere mist: fully blended in
+[02:12:05] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere mist: sky colour moves towards the profile (0.257 -> 0.090)
+[02:12:05] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere mist: light grading active (0.1625)
+[02:12:05] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere mist: particles within the MEDIUM cap (7/20)
+[02:12:05] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] mist target=MIST (preview) quality=MEDIUM exposure=1.00 weights: mist=1.00 particles=7/20
+[02:12:05] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_04_mist: Saved screenshot as atmo_04_mist.png
+[02:12:05] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute as @p run ecmoons atmosphere preview frost -> 1
+[02:12:16] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere frost: fully blended in
+[02:12:16] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere frost: sky colour moves towards the profile (0.543 -> 0.190)
+[02:12:16] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere frost: light grading active (0.19500001)
+[02:12:16] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere frost: particles within the MEDIUM cap (19/20)
+[02:12:16] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere frost: ambient particles spawn outdoors (19)
+[02:12:16] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] frost target=FROST (preview) quality=MEDIUM exposure=1.00 weights: frost=1.00 particles=19/20
+[02:12:16] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_05_frost: Saved screenshot as atmo_05_frost.png
+[02:12:17] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_05_frost_sky: Saved screenshot as atmo_05_frost_sky.png
+[02:12:17] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute as @p run ecmoons atmosphere preview arcane -> 1
+[02:12:28] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere arcane: fully blended in
+[02:12:28] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere arcane: sky colour moves towards the profile (0.182 -> 0.064)
+[02:12:28] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere arcane: light grading active (0.19500001)
+[02:12:28] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere arcane: particles within the MEDIUM cap (15/20)
+[02:12:28] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere arcane: ambient particles spawn outdoors (15)
+[02:12:28] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere arcane: sky layer drawn (1)
+[02:12:28] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] arcane target=ARCANE (preview) quality=MEDIUM exposure=1.00 weights: arcane=1.00 particles=15/20
+[02:12:28] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_06_arcane: Saved screenshot as atmo_06_arcane.png
+[02:12:29] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_06_arcane_sky: Saved screenshot as atmo_06_arcane_sky.png
+[02:12:29] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute as @p run ecmoons atmosphere preview prospector -> 1
+[02:12:40] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere prospector: fully blended in
+[02:12:40] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere prospector: sky colour moves towards the profile (0.162 -> 0.057)
+[02:12:40] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere prospector: light grading active (0.19500001)
+[02:12:40] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere prospector: particles within the MEDIUM cap (20/20)
+[02:12:40] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] prospector target=PROSPECTOR (preview) quality=MEDIUM exposure=1.00 weights: prospector=1.00 particles=20/20
+[02:12:40] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_07_prospector: Saved screenshot as atmo_07_prospector.png
+[02:12:40] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute as @p run ecmoons atmosphere preview wisdom -> 1
+[02:12:51] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere wisdom: fully blended in
+[02:12:51] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere wisdom: sky colour moves towards the profile (0.136 -> 0.048)
+[02:12:51] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere wisdom: light grading active (0.13)
+[02:12:51] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere wisdom: particles within the MEDIUM cap (7/20)
+[02:12:51] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere wisdom: sky layer drawn (1)
+[02:12:51] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] wisdom target=WISDOM (preview) quality=MEDIUM exposure=1.00 weights: wisdom=1.00 particles=7/20
+[02:12:52] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_08_wisdom: Saved screenshot as atmo_08_wisdom.png
+[02:12:52] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_08_wisdom_sky: Saved screenshot as atmo_08_wisdom_sky.png
+[02:12:52] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute as @p run ecmoons atmosphere preview quiet -> 1
+[02:13:03] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere quiet: fully blended in
+[02:13:03] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere quiet: sky colour moves towards the profile (0.223 -> 0.078)
+[02:13:03] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere quiet: light grading active (0.1625)
+[02:13:03] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere quiet: particles within the MEDIUM cap (1/20)
+[02:13:03] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] quiet target=QUIET (preview) quality=MEDIUM exposure=1.00 weights: quiet=1.00 particles=1/20
+[02:13:03] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_09_quiet: Saved screenshot as atmo_09_quiet.png
+[02:13:04] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute as @p run ecmoons atmosphere preview drift -> 1
+[02:13:15] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere drift: fully blended in
+[02:13:15] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere drift: sky colour moves towards the profile (0.355 -> 0.124)
+[02:13:15] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere drift: light grading active (0.1625)
+[02:13:15] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere drift: particles within the MEDIUM cap (18/20)
+[02:13:15] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere drift: ambient particles spawn outdoors (18)
+[02:13:15] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere drift: sky layer drawn (1)
+[02:13:15] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] drift target=DRIFT (preview) quality=MEDIUM exposure=1.00 weights: drift=1.00 particles=18/20
+[02:13:15] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_10_drift: Saved screenshot as atmo_10_drift.png
+[02:13:15] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_10_drift_sky: Saved screenshot as atmo_10_drift_sky.png
+[02:13:15] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute as @p run ecmoons atmosphere preview revealing -> 1
+[02:13:26] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere revealing: fully blended in
+[02:13:26] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere revealing: sky colour moves towards the profile (0.177 -> 0.062)
+[02:13:26] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere revealing: light grading active (0.19500001)
+[02:13:26] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere revealing: particles within the MEDIUM cap (6/20)
+[02:13:26] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] revealing target=REVEALING (preview) quality=MEDIUM exposure=1.00 weights: revealing=1.00 particles=6/20
+[02:13:27] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_11_revealing: Saved screenshot as atmo_11_revealing.png
+[02:13:27] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_11_revealing_sky: Saved screenshot as atmo_11_revealing_sky.png
+[02:13:27] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute as @p run ecmoons atmosphere preview thread -> 1
+[02:13:33] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere thread: fully blended in
+[02:13:33] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere thread: sky colour moves towards the profile (0.244 -> 0.076)
+[02:13:33] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere thread: light grading active (0.24131219)
+[02:13:33] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere thread: particles within the MEDIUM cap (3/20)
+[02:13:33] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere thread: sky layer drawn (1)
+[02:13:33] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] thread target=THREAD (preview) quality=MEDIUM exposure=1.00 weights: revealing=0.24 thread=1.00 particles=3/20
+[02:13:34] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_12_thread: Saved screenshot as atmo_12_thread.png
+[02:13:34] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_12_thread_sky: Saved screenshot as atmo_12_thread_sky.png
+[02:13:34] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute as @p run ecmoons atmosphere preview war -> 1
+[02:13:45] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere war: fully blended in
+[02:13:45] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere war: sky colour moves towards the profile (0.217 -> 0.076)
+[02:13:45] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere war: light grading active (0.19500001)
+[02:13:45] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere war: particles within the MEDIUM cap (17/20)
+[02:13:45] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere war: ambient particles spawn outdoors (17)
+[02:13:45] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere war: sky layer drawn (1)
+[02:13:45] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] war target=WAR (preview) quality=MEDIUM exposure=1.00 weights: war=1.00 particles=17/20
+[02:13:46] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_13_war: Saved screenshot as atmo_13_war.png
+[02:13:46] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_13_war_sky: Saved screenshot as atmo_13_war_sky.png
+[02:13:46] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute as @p run ecmoons atmosphere preview gluttony -> 1
+[02:13:57] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere gluttony: fully blended in
+[02:13:57] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere gluttony: sky colour moves towards the profile (0.182 -> 0.064)
+[02:13:57] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere gluttony: light grading active (0.19500001)
+[02:13:57] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere gluttony: particles within the MEDIUM cap (8/20)
+[02:13:57] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] gluttony target=GLUTTONY (preview) quality=MEDIUM exposure=1.00 weights: gluttony=1.00 particles=8/20
+[02:13:57] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_14_gluttony: Saved screenshot as atmo_14_gluttony.png
+[02:13:57] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute as @p run ecmoons atmosphere preview afterimage -> 1
+[02:14:09] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere afterimage: fully blended in
+[02:14:09] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere afterimage: sky colour moves towards the profile (0.207 -> 0.072)
+[02:14:09] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere afterimage: light grading active (0.1625)
+[02:14:09] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere afterimage: particles within the MEDIUM cap (1/20)
+[02:14:09] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] afterimage target=AFTERIMAGE (preview) quality=MEDIUM exposure=1.00 weights: afterimage=1.00 particles=1/20
+[02:14:09] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_15_afterimage: Saved screenshot as atmo_15_afterimage.png
+[02:14:09] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute as @p run ecmoons atmosphere preview shell -> 1
+[02:14:20] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere shell: fully blended in
+[02:14:20] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere shell: sky colour moves towards the profile (0.181 -> 0.063)
+[02:14:20] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere shell: light grading active (0.1625)
+[02:14:20] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere shell: particles within the MEDIUM cap (0/20)
+[02:14:20] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] shell target=SHELL (preview) quality=MEDIUM exposure=1.00 weights: shell=1.00 particles=0/20
+[02:14:20] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_16_shell: Saved screenshot as atmo_16_shell.png
+[02:14:20] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute as @p run ecmoons atmosphere preview wisp -> 1
+[02:14:31] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere wisp: fully blended in
+[02:14:31] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere wisp: sky colour moves towards the profile (0.146 -> 0.051)
+[02:14:31] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere wisp: light grading active (0.19500001)
+[02:14:31] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere wisp: particles within the MEDIUM cap (0/20)
+[02:14:31] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] wisp target=WISP (preview) quality=MEDIUM exposure=1.00 weights: wisp=1.00 particles=0/20
+[02:14:32] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_17_wisp: Saved screenshot as atmo_17_wisp.png
+[02:14:32] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere wisdom: constellation lines appeared
+[02:14:32] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute as @p run ecmoons atmosphere preview off -> 1
+[02:14:34] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere: fading out after the event ends (target=NONE quality=MEDIUM exposure=1.00 weights: wisp=0.74 particles=0/20)
+[02:14:40] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere: nothing left after the fade-out (sky (0.0, 0.0, 0.0) vs (0.0, 0.0, 0.0), grade 0.0)
+[02:14:40] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute as @p run ecmoons atmosphere preview war -> 1
+[02:14:46] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere quality OFF: no atmosphere and no particles (target=NONE (preview) quality=OFF exposure=1.00 weights: particles=0/0)
+[02:15:06] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere quality LOW: at most 8 particles (max seen 8)
+[02:15:31] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere quality HIGH: more particles but at most 35 (max seen 30)
+[02:15:31] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_war_high: Saved screenshot as atmo_war_high.png
+[02:15:31] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons war start -> 1
+[02:15:41] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere war: the battle warning builds turbulence (0.08416667)
+[02:15:42] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons war cancel -> 1
+[02:15:43] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere war: cancelling ends the build-up
+[02:15:43] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute as @p run ecmoons atmosphere demo war -> 1
+[02:15:53] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere war: one brief summon pulse
+[02:15:53] [IO-Worker-41/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_war_summon_pulse: Saved screenshot as atmo_war_summon_pulse.png
+[02:15:56] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute as @p run ecmoons atmosphere preview frost -> 1
+[02:15:56] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /fill -126 94 -203 -120 100 -197 minecraft:stone hollow -> 218
+[02:15:56] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /tp @a -123.5 95 -200.5 -> 1
+[02:16:06] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere indoors: no frost crystals or breath inside a closed room (inside 0, exposure 1.1947843E-9)
+[02:16:06] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /fill -126 94 -203 -120 100 -197 minecraft:air -> 218
+[02:16:07] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute as @p run ecmoons atmosphere preview prospector -> 1
+[02:16:07] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /fill -119 95 -202 -117 99 -198 minecraft:stone -> 75
+[02:16:07] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /fill -119 96 -201 -119 98 -199 minecraft:iron_ore -> 9
+[02:16:07] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /fill -118 96 -201 -118 98 -199 minecraft:gold_ore -> 9
+[02:16:07] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /tp @a -123.5 96 -200.5 -90 0 -> 1
+[02:16:27] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere prospector: exposed ore faces in view glint (5)
+[02:16:27] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere prospector: ore hidden behind other blocks never glints (no x-ray)
+[02:16:27] [IO-Worker-82/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_prospector_ore: Saved screenshot as atmo_prospector_ore.png
+[02:16:27] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /fill -119 95 -202 -117 99 -198 minecraft:air -> 75
+[02:16:27] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute as @p run ecmoons atmosphere preview thread -> 1
+[02:16:27] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /summon minecraft:armor_stand -118.5 96 -200.5 {NoGravity:1b,Tags:["ecmtest"]} -> 1
+[02:16:31] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere thread: a thin thread is drawn between bonded teammates (1)
+[02:16:31] [IO-Worker-82/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] screenshot atmo_thread_line: Saved screenshot as atmo_thread_line.png
+[02:16:32] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere thread: the thread fades out gradually (still visible after 1.2 s)
+[02:16:35] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere thread: gone after the fade
+[02:16:35] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /kill @e[tag=ecmtest] -> 1
+[02:16:35] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute as @p run ecmoons atmosphere preview off -> 1
+[02:16:35] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons start enhancedcelestials-blood_moon -> 1
+[02:16:43] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere: follows the real Enhanced Celestials event (target=BLOOD quality=MEDIUM exposure=1.00 weights: blood=1.00 particles=2/20)
+[02:16:43] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute in minecraft:the_nether run tp @a 0 100 0 -> 1
+[02:16:44] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[ecmoons-clienttest]'/minecraft:the_nether
+[02:16:44] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[ecmoons-clienttest]'/minecraft:the_end
+[02:16:44] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[ecmoons-clienttest]'/ecmoons:war_arena
+[02:16:48] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere: no moon atmosphere in the Nether (target=NONE quality=MEDIUM exposure=0.00 weights: particles=0/20)
+[02:16:49] [Server thread/INFO] [minecraft/MinecraftServer]: Teleported Dev to -122.5, 96.0, -199.5
+[02:16:49] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /execute in minecraft:overworld run tp @a -123 96 -200 -> 1
+[02:16:49] [Server thread/INFO] [minecraft/IntegratedServer]: Saving and pausing game...
+[02:16:49] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[ecmoons-clienttest]'/minecraft:overworld
+[02:16:49] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Teleported Dev to -122.5, 96.0, -199.5]
+[02:16:49] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[ecmoons-clienttest]'/minecraft:the_nether
+[02:16:49] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[ecmoons-clienttest]'/minecraft:the_end
+[02:16:49] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[ecmoons-clienttest]'/ecmoons:war_arena
+[02:16:57] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere: fades back in after returning to the overworld
+[02:16:57] [Server thread/INFO] [minecraft/MinecraftServer]: Ended tonight's lunar event. Enhanced Celestials returns to the ordinary moon on the next tick, sends its set notification, and the add-on removes its modifiers and visuals.
+[02:16:57] [Server thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] /ecmoons end -> 1
+[02:16:57] [Server thread/INFO] [ecmoons/]: [minecraft:overworld] add-on moon effects: BLOOD -> NONE
+[02:16:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] [Server: Ended tonight's lunar event. Enhanced Celestials returns to the ordinary moon on the next tick, sends its set notification, and the add-on removes its modifiers and visuals.]
+[02:16:57] [Render thread/INFO] [minecraft/NewChatGui]: [CHAT] The "Blood Moon" sets... The undead begin to burn...
+[02:17:05] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] PASS: atmosphere: event end restores the normal night
+[02:17:06] [Render thread/INFO] [ecmoons/]: [ECMOONS-CLIENTTEST] CLIENTTEST COMPLETE passed=270 failed=0
+[02:17:06] [Render thread/INFO] [minecraft/Minecraft]: Stopping!
+[02:17:06] [Server thread/INFO] [minecraft/ServerPlayNetHandler]: Dev lost connection: Disconnected
+[02:17:06] [Server thread/INFO] [minecraft/MinecraftServer]: Dev left the game
+[02:17:06] [Server thread/INFO] [minecraft/ServerPlayNetHandler]: Stopping singleplayer server as player logged out
+[02:17:06] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping server
+[02:17:06] [Server thread/INFO] [minecraft/MinecraftServer]: Saving players
+[02:17:06] [Server thread/INFO] [minecraft/MinecraftServer]: Saving worlds
+[02:17:06] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[ecmoons-clienttest]'/minecraft:overworld
+[02:17:06] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (ecmoons-clienttest): All chunks are saved
+[02:17:06] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[ecmoons-clienttest]'/minecraft:the_nether
+[02:17:06] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[02:17:06] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[ecmoons-clienttest]'/minecraft:the_end
+[02:17:06] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[02:17:06] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[ecmoons-clienttest]'/ecmoons:war_arena
+[02:17:06] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (war_arena): All chunks are saved
+[02:17:06] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (ecmoons-clienttest): All chunks are saved
+[02:17:06] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[02:17:06] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[02:17:06] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (war_arena): All chunks are saved
+
+The message received from the daemon indicates that the daemon has disappeared.
+Build request sent: Build{id=02b81452-e2d5-484c-9c7b-df54e0e3aded, currentDir=/home/runner/work/celestial-moons/celestial-moons}
+Attempting to read last messages from the daemon log...
+Daemon pid: 2684
+  log file: /home/runner/.gradle/daemon/7.6.4/daemon-2684.out.log
+----- Last  20 lines from daemon log file - daemon-2684.out.log -----
+[02:17:06] [Render thread/INFO] [minecraft/Minecraft]: Stopping!
+[02:17:06] [Server thread/INFO] [minecraft/ServerPlayNetHandler]: Dev lost connection: Disconnected
+[02:17:06] [Server thread/INFO] [minecraft/MinecraftServer]: Dev left the game
+[02:17:06] [Server thread/INFO] [minecraft/ServerPlayNetHandler]: Stopping singleplayer server as player logged out
+[02:17:06] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping server
+[02:17:06] [Server thread/INFO] [minecraft/MinecraftServer]: Saving players
+[02:17:06] [Server thread/INFO] [minecraft/MinecraftServer]: Saving worlds
+[02:17:06] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[ecmoons-clienttest]'/minecraft:overworld
+[02:17:06] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (ecmoons-clienttest): All chunks are saved
+[02:17:06] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[ecmoons-clienttest]'/minecraft:the_nether
+[02:17:06] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[02:17:06] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[ecmoons-clienttest]'/minecraft:the_end
+[02:17:06] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[02:17:06] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[ecmoons-clienttest]'/ecmoons:war_arena
+[02:17:06] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (war_arena): All chunks are saved
+[02:17:06] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (ecmoons-clienttest): All chunks are saved
+[02:17:06] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[02:17:06] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[02:17:06] [Server thread/INFO] [minecraft/ChunkManager]: ThreadedAnvilChunkStorage (war_arena): All chunks are saved
+Daemon vm is shutting down... The daemon has exited normally or was terminated in response to a user interrupt.
+----- End of the daemon log -----
+
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Gradle build daemon disappeared unexpectedly (it may have been killed or may have crashed)
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+
+* Get more help at https://help.gradle.org

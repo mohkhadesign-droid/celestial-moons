@@ -1,0 +1,46 @@
+{
+  "validMoonPhases": [
+    0,
+    1,
+    2,
+    3,
+    5,
+    6,
+    7
+  ],
+  "textComponents": {
+    "name": {
+      "key": "ecmoons.name.wisdom_moon"
+    },
+    "startNotification": {
+      "component": {
+        "key": "ecmoons.notification.wisdom_moon.rise",
+        "style": {
+          "color": "5555ff"
+        }
+      },
+      "type": "CHAT"
+    },
+    "endNotification": {
+      "component": {
+        "key": "ecmoons.notification.wisdom_moon.set"
+      },
+      "type": "CHAT"
+    }
+  },
+  "blockSleeping": false,
+  "clientSettings": {
+    "colorSettings": {
+      "skyLightColor": "7070f0",
+      "skyLightBlendStrength": 0.4,
+      "moonTextureColor": "7070f0",
+      "moonTextureBlendStrength": 0.4
+    },
+    "moonSize": 20.0,
+    "moonTextureLocation": "ecmoons:textures/environment/wisdom_moon_phases.png",
+    "type": "enhancedcelestials:default"
+  },
+  "minNumberOfNightsBetween": 4,
+  "chance": 0.035,
+  "type": "ecmoons:wisdom_moon"
+}

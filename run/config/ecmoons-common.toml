@@ -1,0 +1,1591 @@
+
+#Settings shared by every moon.
+[general]
+	#Enhanced Celestials' Super Blood/Blue/Harvest Moons keep their own (stronger) Enhanced Celestials values
+	#(spawn cap, Luck level, crop drop multiplier, moon size). When this is true they ALSO get the add-on's
+	#custom features of their base moon at the SAME strength (they are never automatically doubled).
+	#When false, Super variants only have their original Enhanced Celestials behaviour.
+	superVariantsInheritCustomFeatures = true
+	#Extra Enhanced Celestials event keys (config file names without .json) to remove from the forecast.
+	#Applied when a world loads (restart required). Prefer the per-moon 'enabled' switches.
+	disabledEventKeys = []
+
+#Blood Moon - combat and rare drops. Keeps Enhanced Celestials' hostile cap x3 and blocked sleeping.
+[blood]
+	#Include this moon in the forecast (applied when a world loads; restart to change).
+	enabled = true
+	#Keep Enhanced Celestials' Super variant of this moon in the forecast.
+	superVariantEnabled = true
+	#Dimension ids where this moon's add-on effects apply. Empty = every dimension with an Enhanced Celestials
+	#lunar context (by default only overworld-like dimensions have one).
+	dimensions = []
+	#Multiplier applied to the chance of each configured rare drop rule (1.25 = +25% multiplicative: 4% -> 5%).
+	#Range: 1.0 ~ 10.0
+	rareDropMultiplier = 1.25
+	#Rare drop rules: entity|item[,item...]|baseChance|chancePerLootingLevel
+	#baseChance must match the mob's loot table (the vanilla defaults above are copied from 1.16.5 tables).
+	#When none of the listed items dropped, a second chance q = (m-1)p/(1-p) adds ONE of them, so the overall
+	#chance becomes exactly m*p. Ordinary drops are never re-rolled or duplicated.
+	#entity may be an entity id, #entity_type_tag, or * (any monster).
+	rareDropRules = ["minecraft:wither_skeleton|minecraft:wither_skeleton_skull|0.025|0.01", "minecraft:zombie|minecraft:iron_ingot,minecraft:carrot,minecraft:potato|0.025|0.01", "minecraft:husk|minecraft:iron_ingot,minecraft:carrot,minecraft:potato|0.025|0.01", "minecraft:zombie_villager|minecraft:iron_ingot,minecraft:carrot,minecraft:potato|0.025|0.01", "minecraft:drowned|minecraft:gold_ingot|0.11|0.02", "minecraft:zombified_piglin|minecraft:gold_ingot|0.025|0.01"]
+	#Only monsters killed by a real (non-fake) player qualify.
+	requirePlayerKill = true
+	#Spawn origins (vanilla SpawnReason names) that qualify. SPAWNER is excluded by default so mob-spawner farms
+	#get no rare-drop bonus. Origins are recorded when a mob spawns (see README).
+	eligibleSpawnOrigins = ["NATURAL", "CHUNK_GENERATION", "PATROL", "JOCKEY", "REINFORCEMENT", "EVENT", "STRUCTURE"]
+	#Mobs with no recorded origin (spawned before this add-on was installed, or by a mod that bypasses Forge's
+	#spawn events) qualify when true.
+	untrackedMobsEligible = true
+
+#Blue Moon - Luck, fishing and dungeon loot. Keeps Enhanced Celestials' Luck effect.
+[blue]
+	#Include this moon in the forecast (applied when a world loads; restart to change).
+	enabled = true
+	#Keep Enhanced Celestials' Super variant of this moon in the forecast.
+	superVariantEnabled = true
+	#Dimension ids where this moon's add-on effects apply. Empty = every dimension with an Enhanced Celestials
+	#lunar context (by default only overworld-like dimensions have one).
+	dimensions = []
+	#Multiplier for fishing bite waiting time (0.70 = 30% shorter).
+	#Range: 0.05 ~ 1.0
+	fishingWaitMultiplier = 0.7
+	#Path (inside the config folder) of the Luck-sensitive bonus loot definition for supported dungeon tables.
+	bonusLootFile = "ecmoons/blue_moon_bonus_loot.json"
+
+#Harvest Moon - farming and food. Keeps Enhanced Celestials' crop drop multiplier.
+[harvest]
+	#Include this moon in the forecast (applied when a world loads; restart to change).
+	enabled = true
+	#Keep Enhanced Celestials' Super variant of this moon in the forecast.
+	superVariantEnabled = true
+	#Dimension ids where this moon's add-on effects apply. Empty = every dimension with an Enhanced Celestials
+	#lunar context (by default only overworld-like dimensions have one).
+	dimensions = []
+	#Random-tick growth multiplier for the configured crops only (2.0 = every crop random tick happens twice).
+	#Range: 1.0 ~ 4.0
+	growthMultiplier = 2.0
+	#Blocks whose growth is accelerated: block ids or #block_tags. Add modded crops here.
+	growthBlocks = ["#minecraft:crops", "minecraft:nether_wart", "minecraft:cocoa", "minecraft:sweet_berry_bush", "minecraft:sugar_cane", "minecraft:cactus", "minecraft:bamboo"]
+	#Hunger exhaustion multiplier (0.75 = 25% less).
+	#Range: 0.0 ~ 1.0
+	exhaustionMultiplier = 0.75
+	#Only double crop drops (Enhanced Celestials' feature) when the broken crop is fully grown. Prevents the
+	#plant-and-break-immediately duplication loop (e.g. an age-0 carrot). Right-click harvesting that pops
+	#drops without breaking the block is unaffected.
+	requireMatureCrops = true
+
+#Mist Moon - visibility and stealth. Damage and capture speed are never changed.
+[mist]
+	#Include this moon in the forecast (applied when a world loads; restart to change).
+	enabled = true
+	#Dimension ids where this moon's add-on effects apply. Empty = every dimension with an Enhanced Celestials
+	#lunar context (by default only overworld-like dimensions have one).
+	dimensions = []
+	#Distance where the mist starts (blocks).
+	#Range: 0.0 ~ 64.0
+	fogStart = 6.0
+	#Distance where the mist is opaque (blocks). 24-32 gives the intended useful outdoor visibility.
+	#Range: 8.0 ~ 128.0
+	fogEnd = 30.0
+	#How strongly fog colour is pulled towards mist grey.
+	#Range: 0.0 ~ 1.0
+	fogColorBlend = 0.65
+	#Fade-in/fade-out time when the moon rises or sets.
+	#Range: 1 ~ 120
+	fadeSeconds = 10
+	#Other players' name tags are hidden beyond this distance while the mist is thick.
+	#Range: 4.0 ~ 64.0
+	nameplateMaxDistance = 22.0
+	#Footstep sound range multiplier (0.5 = heard at half the usual distance).
+	#Range: 0.1 ~ 1.0
+	footstepRangeMultiplier = 0.5
+
+#Frost Moon - exposure and preparation. Terrain, water and crops are never changed.
+[frost]
+	#Include this moon in the forecast (applied when a world loads; restart to change).
+	enabled = true
+	#Dimension ids where this moon's add-on effects apply. Empty = every dimension with an Enhanced Celestials
+	#lunar context (by default only overworld-like dimensions have one).
+	dimensions = []
+	#Seconds under open sky before the slowdown applies.
+	#Range: 1 ~ 600
+	exposureDelaySeconds = 20
+	#Movement slowdown while chilled (0.15 = 15%). Applied as its own attribute modifier.
+	#Range: 0.0 ~ 0.9
+	slowdown = 0.15
+	#Warmth after eating; eating again refreshes (does not stack) the timer.
+	#Range: 0 ~ 600
+	warmthSeconds = 45
+	#Radius (blocks) searched for heat sources.
+	#Range: 0 ~ 8
+	heatSourceRadius = 4
+	#Heat source blocks (ids or #tags).
+	heatSources = ["minecraft:campfire", "minecraft:soul_campfire", "minecraft:fire", "minecraft:soul_fire", "minecraft:lava", "minecraft:magma_block", "minecraft:furnace", "minecraft:blast_furnace", "minecraft:smoker"]
+	#Blocks with a 'lit' property (campfires, furnaces) only count when lit.
+	requireLitState = true
+	#Worn items that protect against the cold (ids or #item_tags). Add modded fur/wool armour here.
+	insulatingItems = ["minecraft:leather_helmet", "minecraft:leather_chestplate", "minecraft:leather_leggings", "minecraft:leather_boots"]
+	#Extra exposure seconds granted by each insulating piece worn.
+	#Range: 0 ~ 600
+	delayBonusPerPieceSeconds = 10
+	#Wearing four insulating pieces prevents the slowdown entirely.
+	fullSetImmune = true
+
+#Arcane Moon - enchanting and repairs. All costs are computed and charged on the server.
+[arcane]
+	#Include this moon in the forecast (applied when a world loads; restart to change).
+	enabled = true
+	#Dimension ids where this moon's add-on effects apply. Empty = every dimension with an Enhanced Celestials
+	#lunar context (by default only overworld-like dimensions have one).
+	dimensions = []
+	#XP level cost multiplier for enchanting and anvils (0.75 = 25% cheaper).
+	#Range: 0.1 ~ 1.0
+	levelCostMultiplier = 0.75
+	#A discounted cost never drops below this (unless the original cost was lower).
+	#Range: 0 ~ 10
+	minLevelCost = 1
+	#Durability restored per repair material in an anvil (1.25 = +25%).
+	#Range: 1.0 ~ 3.0
+	repairBonusMultiplier = 1.25
+	#Discount enchanting-table level consumption.
+	affectEnchanting = true
+	#Discount anvil level costs and boost material repairs.
+	affectAnvil = true
+
+#Prospector's Moon - mining. The only moon with ore bonuses.
+[prospector]
+	#Include this moon in the forecast (applied when a world loads; restart to change).
+	enabled = true
+	#Dimension ids where this moon's add-on effects apply. Empty = every dimension with an Enhanced Celestials
+	#lunar context (by default only overworld-like dimensions have one).
+	dimensions = []
+	#Chance that manually mining an eligible natural ore yields one additional resource.
+	#Range: 0.0 ~ 1.0
+	bonusChance = 0.25
+	#Mining speed multiplier for eligible natural stone and ores.
+	#Range: 1.0 ~ 4.0
+	miningSpeedMultiplier = 1.25
+	#Ore -> bonus resource mappings: block=item or block=item*count. Add modded ores here.
+	#The bonus is a flat +1 resource (or the configured count): it is NOT multiplied by Fortune and does not
+	#change Fortune's own result. Silk Touch disables it.
+	oreBonuses = ["minecraft:coal_ore=minecraft:coal", "minecraft:iron_ore=minecraft:iron_ore", "minecraft:gold_ore=minecraft:gold_ore", "minecraft:diamond_ore=minecraft:diamond", "minecraft:emerald_ore=minecraft:emerald", "minecraft:lapis_ore=minecraft:lapis_lazuli", "minecraft:redstone_ore=minecraft:redstone", "minecraft:nether_quartz_ore=minecraft:quartz", "minecraft:nether_gold_ore=minecraft:gold_nugget"]
+	#Natural stone/ore blocks that mine faster (ids or #tags). Player-placed blocks always break at normal speed.
+	speedBlocks = ["#forge:ores", "#forge:stone", "minecraft:netherrack", "minecraft:basalt", "minecraft:blackstone", "minecraft:end_stone"]
+	#Chunks saved before this add-on was installed have no placement history.
+	#ALLOW: treat their blocks as natural. DENY: no ore bonus/XP bonus/speed in those chunks.
+	legacyChunkPolicy = "ALLOW"
+
+#Wisdom Moon - experience.
+[wisdom]
+	#Include this moon in the forecast (applied when a world loads; restart to change).
+	enabled = true
+	#Dimension ids where this moon's add-on effects apply. Empty = every dimension with an Enhanced Celestials
+	#lunar context (by default only overworld-like dimensions have one).
+	dimensions = []
+	#XP multiplier for naturally spawned hostile monsters killed by players.
+	#Range: 1.0 ~ 10.0
+	mobXpMultiplier = 2.0
+	#XP multiplier for manually mined natural XP ores.
+	#Range: 1.0 ~ 10.0
+	oreXpMultiplier = 2.0
+	#XP-bearing ores that qualify (ids or #tags).
+	xpOreBlocks = ["minecraft:coal_ore", "minecraft:diamond_ore", "minecraft:emerald_ore", "minecraft:lapis_ore", "minecraft:redstone_ore", "minecraft:nether_quartz_ore", "minecraft:nether_gold_ore"]
+	#Spawn origins that count as natural. SPAWNER, SPAWN_EGG, COMMAND, BREEDING, CONVERSION etc. never qualify.
+	eligibleSpawnOrigins = ["NATURAL", "CHUNK_GENERATION", "PATROL", "JOCKEY", "REINFORCEMENT"]
+	#Mobs with no recorded origin qualify when true (default false: no XP farming loopholes).
+	untrackedMobsEligible = false
+
+#Quiet Moon - recovery. Never touches difficulty, PvP, claims or raid/capture rules.
+[quiet]
+	#Include this moon in the forecast (applied when a world loads; restart to change).
+	enabled = true
+	#Dimension ids where this moon's add-on effects apply. Empty = every dimension with an Enhanced Celestials
+	#lunar context (by default only overworld-like dimensions have one).
+	dimensions = []
+	#Natural hostile mob cap multiplier (0.35 = 65% fewer new monsters). Existing monsters stay.
+	#Range: 0.0 ~ 1.0
+	monsterCapMultiplier = 0.35
+	#Seconds without dealing/receiving combat damage before bonus regeneration starts.
+	#Range: 0 ~ 600
+	combatCooldownSeconds = 12
+	#Minimum food level (out of 20) to count as well fed.
+	#Range: 0 ~ 20
+	minFoodLevel = 18
+	#Ticks between bonus heals.
+	#Range: 5 ~ 1200
+	regenIntervalTicks = 40
+	#Health restored per bonus heal (1.0 = half a heart).
+	#Range: 0.0 ~ 20.0
+	regenAmount = 1.0
+
+#Drift Moon - movement. Sprint speed, attack speed and projectiles are never changed.
+[drift]
+	#Include this moon in the forecast (applied when a world loads; restart to change).
+	enabled = true
+	#Dimension ids where this moon's add-on effects apply. Empty = every dimension with an Enhanced Celestials
+	#lunar context (by default only overworld-like dimensions have one).
+	dimensions = []
+	#Extra upward jump velocity (vanilla jump is 0.42; Jump Boost I adds 0.1). 0.07 keeps 2-block walls unclimbable.
+	#Range: 0.0 ~ 0.3
+	jumpBoost = 0.07
+	#Gravity multiplier while falling (players only).
+	#Range: 0.1 ~ 1.0
+	gravityMultiplier = 0.6
+	#Fall damage multiplier (0.5 = 50% less).
+	#Range: 0.0 ~ 1.0
+	fallDamageMultiplier = 0.5
+	#Hunger exhaustion from jumping multiplier.
+	#Range: 0.0 ~ 1.0
+	jumpExhaustionMultiplier = 0.5
+
+#Revealing Moon - the eye searches and reveals where players were standing.
+[revealing]
+	#Include this moon in the forecast (applied when a world loads; restart to change).
+	enabled = true
+	#Dimension ids where this moon's add-on effects apply. Empty = every dimension with an Enhanced Celestials
+	#lunar context (by default only overworld-like dimensions have one).
+	dimensions = []
+	#Seconds between scans (one "The eye is searching" warning per interval, the scan follows after countdownSeconds).
+	#Range: 10 ~ 3600
+	scanIntervalSeconds = 60
+	#Warning countdown before each scan.
+	#Range: 1 ~ 60
+	countdownSeconds = 5
+	#How long the eye markers stay visible at the recorded positions.
+	#Range: 1 ~ 120
+	markerSeconds = 8
+	#Viewers only receive markers within this horizontal distance (blocks).
+	#Range: 16 ~ 2048
+	revealRadius = 256
+	#Reveal players in creative mode too (spectators are never revealed).
+	includeCreative = false
+	#Areas where players are never revealed: dimension|x1,z1|x2,z2 (e.g. minecraft:overworld|-100,-100|100,100).
+	#Claims are NOT automatically protected. Players with the scoreboard tag ecmoons_reveal_exempt are also skipped.
+	protectedAreas = []
+	#Ticks for the eyelids to close (and again to open) during a blink.
+	#Range: 2 ~ 40
+	blinkCloseTicks = 6
+	#Ticks the eye stays shut in an idle blink.
+	#Range: 0 ~ 40
+	blinkHoldTicks = 4
+	#Shortest gap between idle blinks.
+	#Range: 1 ~ 600
+	idleBlinkMinSeconds = 6
+	#Longest gap between idle blinks.
+	#Range: 1 ~ 600
+	idleBlinkMaxSeconds = 14
+	#The last part of each countdown during which the eye is fully open and actively scanning (Binding Gaze
+	#works only then). It is carved out of countdownSeconds, so the cadence and the moment of completion are
+	#unchanged; it is capped at countdownSeconds - 1 so the eye always has at least a second to open.
+	#Range: 0.0 ~ 60.0
+	activeScanSeconds = 3.0
+	#Each revealed player's own reveal timer (True Exposure, Read Your Enemy, amber edges and colour loss).
+	#0 = the same as markerSeconds.
+	#Range: 0 ~ 120
+	revealSeconds = 0
+	#How long the single golden sky ripple takes to cross the sky after each scan completion.
+	#Range: 0.5 ~ 10.0
+	rippleSeconds = 3.0
+
+#Revealing Moon - Binding Gaze: staring into the fully open eye roots you in place.
+[revealing_binding]
+	#Enable Binding Gaze.
+	enabled = true
+	#How close to the centre of the moon your view must be (degrees from its centre).
+	#Range: 0.5 ~ 30.0
+	coneDegrees = 5.0
+	#Uninterrupted staring (with open sky towards the moon) needed to be bound. Looking away resets it.
+	#Range: 0.25 ~ 10.0
+	stareSeconds = 2.0
+	#Shown once (action bar) when a bind begins.
+	message = "The eye holds you. Look away."
+
+#Revealing Moon - True Exposure: revealed players cannot hide with the Invisibility effect.
+[revealing_exposure]
+	#Enable True Exposure. The potion is never removed or shortened; invisibility resumes afterwards if it is still running.
+	enabled = true
+
+#Revealing Moon - Read Your Enemy: revealed players can read another player's health and effects.
+[revealing_inspect]
+	#Enable Read Your Enemy.
+	enabled = true
+	#Maximum distance to the inspected player (blocks).
+	#Range: 4.0 ~ 128.0
+	range = 32.0
+	#Uninterrupted aim with line of sight needed before the panel appears.
+	#Range: 0.1 ~ 10.0
+	aimSeconds = 1.0
+	#How often an acquired target's information is refreshed.
+	#Range: 1 ~ 10
+	updatesPerSecond = 4
+	#Effects listed on the panel (longest first); the rest are shown as "+N more".
+	#Range: 1 ~ 16
+	maxEffectsShown = 6
+	#Extra margin (blocks) around the target's hitbox for the server's aim check (network latency).
+	#Range: 0.0 ~ 2.0
+	aimTolerance = 0.5
+
+#Revealing Moon - The World Notices You: nearby hostiles investigate where a revealed player stood.
+[revealing_investigate]
+	#Enable investigations.
+	enabled = true
+	#Loaded hostile mobs within this distance of the revealed player's position may investigate.
+	#Range: 4.0 ~ 64.0
+	radius = 24.0
+	#Most investigators per revealed player per scan.
+	#Range: 0 ~ 32
+	maxPerPlayer = 6
+	#Processing budget: most investigators assigned per scan in one dimension.
+	#Range: 0 ~ 512
+	maxPerScan = 48
+	#Most revealed players processed per scan in one dimension (in a fixed order).
+	#Range: 0 ~ 512
+	maxPlayersPerScan = 32
+	#An investigation that finds nobody ends after this long.
+	#Range: 1.0 ~ 60.0
+	seconds = 10.0
+	#Time spent looking around after reaching the old spot (within the limit above).
+	#Range: 0.0 ~ 30.0
+	searchSeconds = 3.0
+	#Navigation speed multiplier (1.0 = the mob's normal walking speed).
+	#Range: 0.3 ~ 1.5
+	speed = 1.0
+	#Skip spots under spawn protection or where the revealed player could not build (claims, World Protector
+	#regions and other protection mods, asked through Forge's block-place event).
+	respectProtection = true
+	#Mob types that may investigate (entity ids). Only hostile, ground-walking, untamed mobs with no current target
+	#are ever used, even if listed. Add modded hostiles here; bosses, neutral mobs and special AI should stay out.
+	mobs = ["minecraft:zombie", "minecraft:husk", "minecraft:zombie_villager", "minecraft:skeleton", "minecraft:stray", "minecraft:wither_skeleton", "minecraft:spider", "minecraft:cave_spider", "minecraft:creeper", "minecraft:witch", "minecraft:pillager", "minecraft:vindicator"]
+
+#Thread Moon - teammates bound together share protection. Teams are /moonteams (admin-assigned).
+[thread]
+	#Include this moon in the forecast (applied when a world loads; restart to change).
+	enabled = true
+	#Dimension ids where this moon's add-on effects apply. Empty = every dimension with an Enhanced Celestials
+	#lunar context (by default only overworld-like dimensions have one).
+	dimensions = []
+	#Teammates within this distance (and with a clear line of sight) bond.
+	#Range: 2.0 ~ 64.0
+	bondRange = 12.0
+	#Damage reduction per bonded teammate (0.05 = 5%).
+	#Range: 0.0 ~ 0.5
+	reductionPerTeammate = 0.05
+	#Cap on the total reduction.
+	#Range: 0.0 ~ 0.9
+	maxReduction = 0.15
+	#After teammates separate, the bonus fades to zero over this many seconds.
+	#Range: 0 ~ 60
+	fadeSeconds = 3
+	#Bonding needs a clear line between the players' eyes (no walls or floors between them).
+	requireLineOfSight = true
+	#Damage source ids (DamageSource msgId) that are never reduced.
+	excludedDamageTypes = ["starve", "drown", "outOfWorld", "inWall", "cramming", "fall", "lava", "inFire", "onFire", "hotFloor", "magic", "wither"]
+	#How often bonds, guard links and the HUD are re-evaluated (4 ticks = five times a second).
+	#Range: 1 ~ 20
+	connectionIntervalTicks = 4
+
+#Thread Moon - Lifeline: crouch + hold the Moon Ability key on an injured connected teammate to give them health.
+[thread_lifeline]
+	#Enable Lifeline.
+	enabled = true
+	#Maximum distance to the recipient (blocks).
+	#Range: 1.0 ~ 12.0
+	range = 4.0
+	#Steady aim needed before the first transfer.
+	#Range: 0.0 ~ 5.0
+	aimSeconds = 1.0
+	#Transfers per second.
+	#Range: 0.1 ~ 10.0
+	pointsPerSecond = 1.0
+	#Health points per transfer (1 = half a heart).
+	#Range: 0.1 ~ 10.0
+	pointsPerTransfer = 1.0
+	#Most health points moved per activation (4 = two hearts).
+	#Range: 0.5 ~ 40.0
+	maxPerActivation = 4.0
+	#The donor never drops below this health (6 = three hearts).
+	#Range: 1.0 ~ 40.0
+	donorFloor = 6.0
+	#Donor cooldown after an activation that actually moved health (from its end).
+	#Range: 0.0 ~ 600.0
+	cooldownSeconds = 10.0
+
+#Thread Moon - Guard Thread: choose one connected teammate (Guard key) and take part of their combat damage.
+[thread_guard]
+	#Enable Guard Thread.
+	enabled = true
+	#Share of the target's real health loss (after defences and the passive reduction) the guardian pays.
+	#Range: 0.0 ~ 0.9
+	share = 0.2
+	#Most health the guardian pays per incoming hit (2 = one heart).
+	#Range: 0.0 ~ 40.0
+	maxPerHit = 2.0
+	#The guardian never drops below this health; anything they can't safely pay stays with the target.
+	#Range: 1.0 ~ 40.0
+	guardianFloor = 6.0
+	#Extra damage types never shared (thread.excludedDamageTypes are never shared either). Only damage with an attacker counts.
+	excludedDamageTypes = ["thorns", "explosion", "explosion.player"]
+
+#Thread Moon - Last Stitch: an established guard saves their target from one lethal combat hit per event.
+[thread_laststitch]
+	#Enable Last Stitch.
+	enabled = true
+	#The guard must have been continuously connected and active this long.
+	#Range: 0.0 ~ 60.0
+	establishSeconds = 3.0
+	#Health the guardian pays (4 = two hearts).
+	#Range: 0.5 ~ 20.0
+	guardianCost = 4.0
+	#The guardian must stay at or above this after paying.
+	#Range: 1.0 ~ 40.0
+	guardianFloor = 6.0
+	#Health the saved player is left with (1 = half a heart).
+	#Range: 0.5 ~ 10.0
+	saveHealth = 1.0
+	#Guard Thread cooldown for both players after a rescue.
+	#Range: 0.0 ~ 600.0
+	guardCooldownSeconds = 15.0
+	#Damage types Last Stitch never intercepts (void, starvation and other thread.excludedDamageTypes never qualify,
+	#and only damage with an attacker counts). Add a modded source here if it conflicts with another rescue mechanic.
+	excludedDamageTypes = []
+
+#Thread Moon - Knotbind: two yarn hits knot two enemies together for a few seconds.
+[thread_knotbind]
+	#Enable Knotbind.
+	enabled = true
+	#Player targets must be on a /moonteams team different from the caster's (false: anyone not on the caster's team).
+	requireTeams = true
+	#How far the yarn flies (blocks).
+	#Range: 4.0 ~ 48.0
+	range = 16.0
+	#Yarn speed in blocks per tick.
+	#Range: 0.5 ~ 4.0
+	projectileSpeed = 2.0
+	#Minimum time between throws (8 ticks = 0.4 s).
+	#Range: 1 ~ 100
+	shotIntervalTicks = 8
+	#Time to land the second hit after the first.
+	#Range: 0.5 ~ 20.0
+	markSeconds = 3.0
+	#The two targets must be at most this far apart when the pair is made.
+	#Range: 1.0 ~ 32.0
+	maxPairDistance = 6.0
+	#How long a knot holds.
+	#Range: 1.0 ~ 60.0
+	durationSeconds = 5.0
+	#Free length of the tether; it never shrinks.
+	#Range: 2.0 ~ 32.0
+	tetherLength = 6.0
+	#Caster cooldown, starting at the first valid mark (completed or not).
+	#Range: 0.0 ~ 600.0
+	cooldownSeconds = 25.0
+	#Velocity added per block of over-stretch per tick.
+	#Range: 0.0 ~ 1.0
+	pullStrength = 0.08
+	#Most velocity added per tick (blocks/tick).
+	#Range: 0.0 ~ 1.0
+	maxPull = 0.12
+	#The pull never makes a victim move towards the other faster than this (blocks/tick).
+	#Range: 0.05 ~ 2.0
+	maxPullSpeed = 0.45
+	#If they end up this far beyond the tether length, the knot breaks instead of pulling harder.
+	#Range: 0.5 ~ 16.0
+	breakStretch = 3.0
+	#Standing still holding the Moon Ability key this long unravels the knot.
+	#Range: 0.25 ~ 20.0
+	unravelSeconds = 1.5
+	#After any release, both can't be knotted again for this long.
+	#Range: 0.0 ~ 120.0
+	immunitySeconds = 8.0
+	#Players this close to a knot see it (victims and the caster always do).
+	#Range: 8.0 ~ 128.0
+	knotViewRange = 48.0
+	#Mobs that can be knotted (entity ids). Only hostile, untamed mobs are ever used, even if listed.
+	mobs = ["minecraft:zombie", "minecraft:husk", "minecraft:zombie_villager", "minecraft:skeleton", "minecraft:stray"]
+
+#Thread Moon - the moon cat's reactions (one shared stream per dimension; purely cosmetic).
+[thread_reactions]
+	#At most one Lifeline/Guard/Knotbind reaction per this many seconds in a dimension.
+	#Range: 0.0 ~ 120.0
+	ordinaryCooldownSeconds = 8.0
+	#A waiting reaction older than this is dropped (no stale replays).
+	#Range: 0.0 ~ 30.0
+	maxPendingSeconds = 2.0
+	#Large Last Stitch sky accents at most this often; simultaneous rescues merge.
+	#Range: 0.0 ~ 120.0
+	lastStitchCooldownSeconds = 6.0
+
+#War Moon - a temporary last-player-standing tournament in a separate arena dimension.
+[war]
+	#Include this moon in the forecast (applied when a world loads; restart to change).
+	enabled = true
+	#Dimension ids where this moon's add-on effects apply. Empty = every dimension with an Enhanced Celestials
+	#lunar context (by default only overworld-like dimensions have one).
+	dimensions = []
+	#Warning before the tournament (reminders at 60, 30 and 10 seconds).
+	#Range: 10 ~ 1800
+	warningSeconds = 120
+	#Fewer eligible players than this cancels the tournament for this night.
+	#Range: 1 ~ 64
+	minParticipants = 2
+	#At most this many players are enrolled (one per starting cell).
+	#Range: 2 ~ 16
+	maxParticipants = 16
+	#Countdown inside the cells before the gates open.
+	#Range: 3 ~ 120
+	prepSeconds = 10
+	#Time limit before sudden death starts.
+	#Range: 30 ~ 3600
+	matchSeconds = 360
+	#Sudden death: the safe square shrinks by 2 blocks every this many seconds.
+	#Range: 1 ~ 120
+	suddenDeathShrinkSeconds = 8
+	#Time between the winner announcement and everyone's return.
+	#Range: 0 ~ 120
+	celebrationSeconds = 10
+	#If a Flan Warfare flag capture is in progress, the tournament is postponed by this long.
+	#Range: 1 ~ 60
+	deferMinutes = 2
+	#After this many postponements the tournament is cancelled for this night.
+	#Range: 0 ~ 50
+	maxDeferrals = 5
+	#Player names or UUIDs never enrolled. The tag ecmoons_war_exempt does the same.
+	excludedPlayers = []
+	#Equal kit: slot=item or item*count (slots: head, chest, legs, feet, offhand; others go to the inventory).
+	kit = ["head=minecraft:iron_helmet", "chest=minecraft:iron_chestplate", "legs=minecraft:iron_leggings", "feet=minecraft:iron_boots", "offhand=minecraft:shield", "minecraft:iron_sword", "minecraft:bow", "minecraft:arrow*16", "minecraft:cooked_beef*16"]
+	#Player capabilities that hold equipment (accessory mods). Their items are saved, emptied for the match and restored.
+	#If such a capability cannot be saved, that player is not enrolled and told why.
+	accessoryCapabilities = ["curios:inventory"]
+	#Player capabilities that contain item data but are NOT usable equipment (left untouched during the match).
+	#Any other capability that holds items blocks that player from enrolling, so nothing can be lost or duplicated.
+	ignoredCapabilities = []
+	#Fighting floor size (blocks, square).
+	#Range: 24 ~ 96
+	arenaFloorSize = 48
+	#Outer wall height.
+	#Range: 6 ~ 32
+	arenaWallHeight = 12
+	#Optional structure template (namespace:path, e.g. from a structure block) to place instead of the
+	#built-in arena. When set, arenaCells must list 'x,y,z' start positions relative to the template origin,
+	#and arenaSpectatorPos the viewing position.
+	arenaTemplate = ""
+	#Start positions for a custom arenaTemplate (relative x,y,z).
+	arenaCells = []
+	#Viewing position for a custom arenaTemplate (relative x,y,z).
+	arenaSpectatorPos = ""
+	#War Champion reward duration (minutes of online time). Winning again refreshes it.
+	#Range: 1 ~ 1440
+	championMinutes = 30
+
+#Gluttony Moon - every different food eaten adds a temporary heart.
+[gluttony]
+	#Include this moon in the forecast (applied when a world loads; restart to change).
+	enabled = true
+	#Dimension ids where this moon's add-on effects apply. Empty = every dimension with an Enhanced Celestials
+	#lunar context (by default only overworld-like dimensions have one).
+	dimensions = []
+	#Maximum extra hearts.
+	#Range: 1 ~ 20
+	maxBonusHearts = 4
+	#Food categories: name=item,item,#tag. Items in one category count once together. Foods not listed count
+	#as their own category (so modded foods work without configuration).
+	foodCategories = ["beef=minecraft:beef,minecraft:cooked_beef", "pork=minecraft:porkchop,minecraft:cooked_porkchop", "chicken=minecraft:chicken,minecraft:cooked_chicken", "mutton=minecraft:mutton,minecraft:cooked_mutton", "rabbit=minecraft:rabbit,minecraft:cooked_rabbit,minecraft:rabbit_stew", "fish=minecraft:cod,minecraft:cooked_cod,minecraft:salmon,minecraft:cooked_salmon,minecraft:tropical_fish", "potato=minecraft:potato,minecraft:baked_potato", "carrot=minecraft:carrot,minecraft:golden_carrot", "apple=minecraft:apple", "golden_apple=minecraft:golden_apple,minecraft:enchanted_golden_apple", "stew=minecraft:mushroom_stew,minecraft:suspicious_stew,minecraft:beetroot_soup", "beetroot=minecraft:beetroot", "bread=minecraft:bread", "cookie=minecraft:cookie", "pie=minecraft:pumpkin_pie", "berries=minecraft:sweet_berries", "melon=minecraft:melon_slice", "kelp=minecraft:dried_kelp", "honey=minecraft:honey_bottle", "chorus=minecraft:chorus_fruit"]
+	#Foods that never count (ids or #tags).
+	excludedFoods = ["minecraft:rotten_flesh", "minecraft:spider_eye", "minecraft:poisonous_potato", "minecraft:pufferfish"]
+
+#Afterimage Moon - Frame Step: a timed three-step dash with afterimages (Moon Ability key).
+[afterimage]
+	#Include this moon in the forecast (applied when a world loads; restart to change).
+	enabled = true
+	#Dimension ids where this moon's add-on effects apply. Empty = every dimension with an Enhanced Celestials
+	#lunar context (by default only overworld-like dimensions have one).
+	dimensions = []
+	#Distance of the first step (blocks).
+	#Range: 0.5 ~ 8.0
+	step1Distance = 2.0
+	#Distance of the second step.
+	#Range: 0.5 ~ 8.0
+	step2Distance = 3.0
+	#Distance of the third step.
+	#Range: 0.5 ~ 8.0
+	step3Distance = 4.0
+	#Ticks each step takes (20 ticks = 1 second).
+	#Range: 1 ~ 10
+	stepTicks = 3
+	#After a step ends, the next press must come within this many ticks (5 = 0.25 s).
+	#Range: 2 ~ 20
+	inputWindowTicks = 5
+	#How far the direction may turn between steps (it never turns during a step).
+	#Range: 0.0 ~ 180.0
+	maxSteerDegrees = 45.0
+	#Cooldown, starting when the sequence ends or is interrupted.
+	#Range: 0 ~ 600
+	cooldownSeconds = 8
+	#Mistimed press: ticks of reduced movement (10 = 0.5 s).
+	#Range: 0 ~ 100
+	penaltyTicks = 10
+	#Mistimed press: movement reduction (0.4 = 40% slower; never a full freeze).
+	#Range: 0.0 ~ 0.9
+	penaltySlowdown = 0.4
+	#After a successful third step, the next valid melee hit within this many ticks gets the knockback bonus.
+	#Range: 0 ~ 100
+	finalWindowTicks = 20
+	#Extra knockback for that hit (0.6 = +60%). Damage, reach and attack cooldown are unchanged.
+	#Range: 0.0 ~ 3.0
+	knockbackBonus = 0.6
+	#How long the visual afterimages last.
+	#Range: 2 ~ 60
+	afterimageTicks = 12
+
+#Shell Moon - deploy a temporary projectile barrier by crouching and holding the Moon Ability key.
+[shell]
+	#Include this moon in the forecast (applied when a world loads; restart to change).
+	enabled = true
+	#Dimension ids where this moon's add-on effects apply. Empty = every dimension with an Enhanced Celestials
+	#lunar context (by default only overworld-like dimensions have one).
+	dimensions = []
+	#How long to crouch and hold the key before the shell appears (40 = 2 s).
+	#Range: 5 ~ 200
+	chargeTicks = 40
+	#Shell radius (blocks).
+	#Range: 1.0 ~ 8.0
+	radius = 3.0
+	#Maximum duration (120 = 6 s). Releasing the key, standing up or moving collapses it earlier.
+	#Range: 20 ~ 1200
+	durationTicks = 120
+	#Cooldown, starting when the shell ends.
+	#Range: 0 ~ 600
+	cooldownSeconds = 20
+	#How far the caster may drift from the deployment position before the shell collapses.
+	#Range: 0.1 ~ 3.0
+	moveTolerance = 0.6
+	#Shared durability. The hit that exhausts it is still stopped; then the shell collapses.
+	#Range: 1 ~ 10000
+	durability = 100
+	#Durability used by an ordinary projectile.
+	#Range: 0 ~ 1000
+	projectileCost = 10
+	#Durability used by an explosive projectile (fireballs, wither skulls, fireworks...).
+	#Range: 0 ~ 1000
+	explosiveCost = 30
+	#Explosion damage reduction for players inside an active shell (applied once, even where shells overlap).
+	#Range: 0.0 ~ 1.0
+	explosionReduction = 0.75
+	#Entity ids or #tags that are also treated as projectiles (for modded attacks that are not ordinary projectile entities).
+	extraProjectileEntities = []
+	#Only allow a shell where the caster could place a block (claims, protected areas).
+	respectProtection = true
+
+#Wisp Moon - pilot a small scouting wisp and place up to three soul observers (Moon Ability key).
+[wisp]
+	#Include this moon in the forecast (applied when a world loads; restart to change).
+	enabled = true
+	#Dimension ids where this moon's add-on effects apply. Empty = every dimension with an Enhanced Celestials
+	#lunar context (by default only overworld-like dimensions have one).
+	dimensions = []
+	#Wisp flight speed in blocks per tick (0.35 = 7 blocks/s).
+	#Range: 0.05 ~ 1.5
+	pilotSpeed = 0.35
+	#The wisp can't go further than this from your body (blocks).
+	#Range: 4.0 ~ 128.0
+	pilotRange = 48.0
+	#Piloting ends after this long.
+	#Range: 5 ~ 600
+	maxPilotSeconds = 90
+	#Cooldown after piloting ends.
+	#Range: 0 ~ 600
+	pilotCooldownSeconds = 10
+	#Observers per player. At the limit, dismiss one before placing another.
+	#Range: 1 ~ 8
+	maxObservers = 3
+	#How far from the wisp an observer can be placed (on a block face the wisp looks at).
+	#Range: 1.0 ~ 8.0
+	placeReach = 4.5
+	#Observers further than this from your body can't be viewed.
+	#Range: 4.0 ~ 128.0
+	viewRange = 48.0
+	#While viewing, how far you can turn left/right from the observer's direction (degrees).
+	#Range: 0.0 ~ 180.0
+	viewYawRange = 60.0
+	#While viewing, how far you can look up/down from the observer's direction (degrees).
+	#Range: 0.0 ~ 90.0
+	viewPitchRange = 45.0
+	#If your body is moved further than this while piloting or viewing, you return to it.
+	#Range: 0.1 ~ 3.0
+	bodyMoveTolerance = 0.5
+	#Only allow observers where the owner could place a block (claims, protected areas).
+	respectProtection = true
+
+#Atmosphere: how the world looks while each moon is up. Purely visual and rendered on each player's
+#client (clients need this add-on installed). Turning anything here off never changes a moon's gameplay.
+[atmosphere]
+	#Master switch for all atmosphere rendering.
+	enabled = true
+	#Fade between the normal night and a moon's atmosphere (both ways).
+	#Range: 1 ~ 60
+	transitionSeconds = 8
+	#Multiplies every moon's atmosphere intensity.
+	#Range: 0.0 ~ 2.0
+	masterIntensity = 1.0
+	#Sky and horizon colours.
+	enableSkyTint = true
+	#Coloured distance haze (Mist Moon's gameplay fog is separate and always applies).
+	enableFog = true
+	#Environmental colour grading through the light map (outdoor light only; caves and torchlight keep their colour).
+	enableLightTint = true
+	#Ambient atmosphere particles (crystals, embers, motes, runes, steam...).
+	enableParticles = true
+	#Sky layers: ribbons, constellations, cloud streaks, smoke bands, threads, scan ring, moon halos.
+	enableSkyAnimations = true
+	#Occasional quiet ambient sounds (vanilla sounds only).
+	enableAmbientSounds = true
+	#Only show a moon's atmosphere where its add-on effects apply (the moon's 'dimensions' list).
+	respectDimensions = true
+	#Most atmosphere particles alive at once per player on LOW quality (shared by all effects).
+	#Range: 0 ~ 64
+	maxParticlesLow = 8
+	#... on MEDIUM quality.
+	#Range: 0 ~ 64
+	maxParticlesMedium = 20
+	#... on HIGH quality.
+	#Range: 0 ~ 64
+	maxParticlesHigh = 35
+	#Particles further than this from the player are removed (distance culling).
+	#Range: 8.0 ~ 64.0
+	particleRange = 24.0
+
+#Atmosphere profile for the blood moon (colours are hex RRGGBB).
+[atmosphere_blood]
+	#Show this moon's atmosphere (the moon itself and its gameplay are unaffected).
+	enabled = true
+	#Night sky colour.
+	skyColor = "590d17"
+	#Horizon / distance haze colour.
+	horizonColor = "7d2028"
+	#Moonlight colour used for environmental tinting.
+	lightColor = "a81722"
+	#Moon halo / glow colour.
+	glowColor = "e63236"
+	#Particle and sky-animation accent colour.
+	accentColor = "e63236"
+	#Overall strength of this atmosphere.
+	#Range: 0.0 ~ 1.0
+	intensity = 0.65
+	#Environmental tint strength (light map, outdoor light only).
+	#Range: 0.0 ~ 1.0
+	tintStrength = 0.35
+	#Coloured distance haze (0 = none).
+	#Range: 0.0 ~ 1.0
+	fogStrength = 0.25
+	#Outdoor light brightness multiplier at full strength.
+	#Range: 0.7 ~ 1.3
+	brightness = 0.9
+	#Pull outdoor light towards grey.
+	#Range: 0.0 ~ 1.0
+	desaturate = 0.0
+	#Halo strength around the moon.
+	#Range: 0.0 ~ 1.0
+	moonGlow = 0.5
+	#Spawn rate multiplier for this moon's particles (always within the shared cap).
+	#Range: 0.0 ~ 2.0
+	particleDensity = 1.0
+	#Strength / speed of this moon's sky animation.
+	#Range: 0.0 ~ 2.0
+	animationIntensity = 1.0
+	#Volume of this moon's occasional ambient sounds (0 = none).
+	#Range: 0.0 ~ 1.0
+	soundVolume = 0.35
+	#This moon's particles.
+	particles = true
+	#This moon's sky animation.
+	skyAnimation = true
+
+#Atmosphere profile for the blue moon (colours are hex RRGGBB).
+[atmosphere_blue]
+	#Show this moon's atmosphere (the moon itself and its gameplay are unaffected).
+	enabled = true
+	#Night sky colour.
+	skyColor = "174b9b"
+	#Horizon / distance haze colour.
+	horizonColor = "132c58"
+	#Moonlight colour used for environmental tinting.
+	lightColor = "8fc8ff"
+	#Moon halo / glow colour.
+	glowColor = "236ce0"
+	#Particle and sky-animation accent colour.
+	accentColor = "8fc8ff"
+	#Overall strength of this atmosphere.
+	#Range: 0.0 ~ 1.0
+	intensity = 0.65
+	#Environmental tint strength (light map, outdoor light only).
+	#Range: 0.0 ~ 1.0
+	tintStrength = 0.35
+	#Coloured distance haze (0 = none).
+	#Range: 0.0 ~ 1.0
+	fogStrength = 0.1
+	#Outdoor light brightness multiplier at full strength.
+	#Range: 0.7 ~ 1.3
+	brightness = 1.05
+	#Pull outdoor light towards grey.
+	#Range: 0.0 ~ 1.0
+	desaturate = 0.0
+	#Halo strength around the moon.
+	#Range: 0.0 ~ 1.0
+	moonGlow = 0.5
+	#Spawn rate multiplier for this moon's particles (always within the shared cap).
+	#Range: 0.0 ~ 2.0
+	particleDensity = 1.0
+	#Strength / speed of this moon's sky animation.
+	#Range: 0.0 ~ 2.0
+	animationIntensity = 1.0
+	#Volume of this moon's occasional ambient sounds (0 = none).
+	#Range: 0.0 ~ 1.0
+	soundVolume = 0.35
+	#This moon's particles.
+	particles = true
+	#This moon's sky animation.
+	skyAnimation = true
+
+#Atmosphere profile for the harvest moon (colours are hex RRGGBB).
+[atmosphere_harvest]
+	#Show this moon's atmosphere (the moon itself and its gameplay are unaffected).
+	enabled = true
+	#Night sky colour.
+	skyColor = "8a5a26"
+	#Horizon / distance haze colour.
+	horizonColor = "9b542d"
+	#Moonlight colour used for environmental tinting.
+	lightColor = "ffe0a0"
+	#Moon halo / glow colour.
+	glowColor = "ffc15a"
+	#Particle and sky-animation accent colour.
+	accentColor = "ffc15a"
+	#Overall strength of this atmosphere.
+	#Range: 0.0 ~ 1.0
+	intensity = 0.65
+	#Environmental tint strength (light map, outdoor light only).
+	#Range: 0.0 ~ 1.0
+	tintStrength = 0.35
+	#Coloured distance haze (0 = none).
+	#Range: 0.0 ~ 1.0
+	fogStrength = 0.15
+	#Outdoor light brightness multiplier at full strength.
+	#Range: 0.7 ~ 1.3
+	brightness = 1.04
+	#Pull outdoor light towards grey.
+	#Range: 0.0 ~ 1.0
+	desaturate = 0.0
+	#Halo strength around the moon.
+	#Range: 0.0 ~ 1.0
+	moonGlow = 0.5
+	#Spawn rate multiplier for this moon's particles (always within the shared cap).
+	#Range: 0.0 ~ 2.0
+	particleDensity = 1.0
+	#Strength / speed of this moon's sky animation.
+	#Range: 0.0 ~ 2.0
+	animationIntensity = 1.0
+	#Volume of this moon's occasional ambient sounds (0 = none).
+	#Range: 0.0 ~ 1.0
+	soundVolume = 0.35
+	#This moon's particles.
+	particles = true
+	#This moon's sky animation.
+	skyAnimation = true
+	#Floating pollen-like motes near open vegetation.
+	pollen = true
+
+#Atmosphere profile for the mist moon (colours are hex RRGGBB).
+[atmosphere_mist]
+	#Show this moon's atmosphere (the moon itself and its gameplay are unaffected).
+	enabled = true
+	#Night sky colour.
+	skyColor = "343948"
+	#Horizon / distance haze colour.
+	horizonColor = "999da8"
+	#Moonlight colour used for environmental tinting.
+	lightColor = "d1d3db"
+	#Moon halo / glow colour.
+	glowColor = "d1d3db"
+	#Particle and sky-animation accent colour.
+	accentColor = "a4a8b3"
+	#Overall strength of this atmosphere.
+	#Range: 0.0 ~ 1.0
+	intensity = 0.65
+	#Environmental tint strength (light map, outdoor light only).
+	#Range: 0.0 ~ 1.0
+	tintStrength = 0.25
+	#Coloured distance haze (0 = none).
+	#Range: 0.0 ~ 1.0
+	fogStrength = 0.15
+	#Outdoor light brightness multiplier at full strength.
+	#Range: 0.7 ~ 1.3
+	brightness = 0.97
+	#Pull outdoor light towards grey.
+	#Range: 0.0 ~ 1.0
+	desaturate = 0.35
+	#Halo strength around the moon.
+	#Range: 0.0 ~ 1.0
+	moonGlow = 0.5
+	#Spawn rate multiplier for this moon's particles (always within the shared cap).
+	#Range: 0.0 ~ 2.0
+	particleDensity = 1.0
+	#Strength / speed of this moon's sky animation.
+	#Range: 0.0 ~ 2.0
+	animationIntensity = 1.0
+	#Volume of this moon's occasional ambient sounds (0 = none).
+	#Range: 0.0 ~ 1.0
+	soundVolume = 0.35
+	#This moon's particles.
+	particles = true
+	#This moon's sky animation.
+	skyAnimation = true
+
+#Atmosphere profile for the frost moon (colours are hex RRGGBB).
+[atmosphere_frost]
+	#Show this moon's atmosphere (the moon itself and its gameplay are unaffected).
+	enabled = true
+	#Night sky colour.
+	skyColor = "617f9c"
+	#Horizon / distance haze colour.
+	horizonColor = "b6ccd6"
+	#Moonlight colour used for environmental tinting.
+	lightColor = "e9f7ff"
+	#Moon halo / glow colour.
+	glowColor = "a7dbed"
+	#Particle and sky-animation accent colour.
+	accentColor = "ddf4ff"
+	#Overall strength of this atmosphere.
+	#Range: 0.0 ~ 1.0
+	intensity = 0.65
+	#Environmental tint strength (light map, outdoor light only).
+	#Range: 0.0 ~ 1.0
+	tintStrength = 0.3
+	#Coloured distance haze (0 = none).
+	#Range: 0.0 ~ 1.0
+	fogStrength = 0.2
+	#Outdoor light brightness multiplier at full strength.
+	#Range: 0.7 ~ 1.3
+	brightness = 1.02
+	#Pull outdoor light towards grey.
+	#Range: 0.0 ~ 1.0
+	desaturate = 0.25
+	#Halo strength around the moon.
+	#Range: 0.0 ~ 1.0
+	moonGlow = 0.5
+	#Spawn rate multiplier for this moon's particles (always within the shared cap).
+	#Range: 0.0 ~ 2.0
+	particleDensity = 1.0
+	#Strength / speed of this moon's sky animation.
+	#Range: 0.0 ~ 2.0
+	animationIntensity = 1.0
+	#Volume of this moon's occasional ambient sounds (0 = none).
+	#Range: 0.0 ~ 1.0
+	soundVolume = 0.35
+	#This moon's particles.
+	particles = true
+	#This moon's sky animation.
+	skyAnimation = true
+	#Intermittent cold-breath vapour in front of the player outdoors (MEDIUM and HIGH quality).
+	coldBreath = true
+	#Shimmering frost halo around the moon.
+	moonHalo = true
+
+#Atmosphere profile for the arcane moon (colours are hex RRGGBB).
+[atmosphere_arcane]
+	#Show this moon's atmosphere (the moon itself and its gameplay are unaffected).
+	enabled = true
+	#Night sky colour.
+	skyColor = "24123f"
+	#Horizon / distance haze colour.
+	horizonColor = "7023b8"
+	#Moonlight colour used for environmental tinting.
+	lightColor = "d8a5ff"
+	#Moon halo / glow colour.
+	glowColor = "b346e5"
+	#Particle and sky-animation accent colour.
+	accentColor = "ec77ff"
+	#Overall strength of this atmosphere.
+	#Range: 0.0 ~ 1.0
+	intensity = 0.65
+	#Environmental tint strength (light map, outdoor light only).
+	#Range: 0.0 ~ 1.0
+	tintStrength = 0.3
+	#Coloured distance haze (0 = none).
+	#Range: 0.0 ~ 1.0
+	fogStrength = 0.1
+	#Outdoor light brightness multiplier at full strength.
+	#Range: 0.7 ~ 1.3
+	brightness = 1.0
+	#Pull outdoor light towards grey.
+	#Range: 0.0 ~ 1.0
+	desaturate = 0.0
+	#Halo strength around the moon.
+	#Range: 0.0 ~ 1.0
+	moonGlow = 0.5
+	#Spawn rate multiplier for this moon's particles (always within the shared cap).
+	#Range: 0.0 ~ 2.0
+	particleDensity = 1.0
+	#Strength / speed of this moon's sky animation.
+	#Range: 0.0 ~ 2.0
+	animationIntensity = 1.0
+	#Volume of this moon's occasional ambient sounds (0 = none).
+	#Range: 0.0 ~ 1.0
+	soundVolume = 0.35
+	#This moon's particles.
+	particles = true
+	#This moon's sky animation.
+	skyAnimation = true
+	#Rune symbols that briefly appear and dissolve.
+	runes = true
+	#Tiny sparkles near enchanting tables and bookshelves (bounded sampling, no area scans).
+	magicBlockSparkles = true
+
+#Atmosphere profile for the prospector moon (colours are hex RRGGBB).
+[atmosphere_prospector]
+	#Show this moon's atmosphere (the moon itself and its gameplay are unaffected).
+	enabled = true
+	#Night sky colour.
+	skyColor = "30221f"
+	#Horizon / distance haze colour.
+	horizonColor = "8c512e"
+	#Moonlight colour used for environmental tinting.
+	lightColor = "d9a064"
+	#Moon halo / glow colour.
+	glowColor = "b86632"
+	#Particle and sky-animation accent colour.
+	accentColor = "e7b46d"
+	#Overall strength of this atmosphere.
+	#Range: 0.0 ~ 1.0
+	intensity = 0.65
+	#Environmental tint strength (light map, outdoor light only).
+	#Range: 0.0 ~ 1.0
+	tintStrength = 0.3
+	#Coloured distance haze (0 = none).
+	#Range: 0.0 ~ 1.0
+	fogStrength = 0.2
+	#Outdoor light brightness multiplier at full strength.
+	#Range: 0.7 ~ 1.3
+	brightness = 0.98
+	#Pull outdoor light towards grey.
+	#Range: 0.0 ~ 1.0
+	desaturate = 0.0
+	#Halo strength around the moon.
+	#Range: 0.0 ~ 1.0
+	moonGlow = 0.5
+	#Spawn rate multiplier for this moon's particles (always within the shared cap).
+	#Range: 0.0 ~ 2.0
+	particleDensity = 1.0
+	#Strength / speed of this moon's sky animation.
+	#Range: 0.0 ~ 2.0
+	animationIntensity = 1.0
+	#Volume of this moon's occasional ambient sounds (0 = none).
+	#Range: 0.0 ~ 1.0
+	soundVolume = 0.35
+	#This moon's particles.
+	particles = true
+	#This moon's sky animation.
+	skyAnimation = true
+	#Short sparkles on ore faces that are exposed to air and in the player's direct line of sight (never through walls).
+	oreGlints = true
+
+#Atmosphere profile for the wisdom moon (colours are hex RRGGBB).
+[atmosphere_wisdom]
+	#Show this moon's atmosphere (the moon itself and its gameplay are unaffected).
+	enabled = true
+	#Night sky colour.
+	skyColor = "0c1433"
+	#Horizon / distance haze colour.
+	horizonColor = "232c67"
+	#Moonlight colour used for environmental tinting.
+	lightColor = "e0e8ff"
+	#Moon halo / glow colour.
+	glowColor = "cfd9ff"
+	#Particle and sky-animation accent colour.
+	accentColor = "cfd9ff"
+	#Overall strength of this atmosphere.
+	#Range: 0.0 ~ 1.0
+	intensity = 0.65
+	#Environmental tint strength (light map, outdoor light only).
+	#Range: 0.0 ~ 1.0
+	tintStrength = 0.2
+	#Coloured distance haze (0 = none).
+	#Range: 0.0 ~ 1.0
+	fogStrength = 0.0
+	#Outdoor light brightness multiplier at full strength.
+	#Range: 0.7 ~ 1.3
+	brightness = 1.06
+	#Pull outdoor light towards grey.
+	#Range: 0.0 ~ 1.0
+	desaturate = 0.0
+	#Halo strength around the moon.
+	#Range: 0.0 ~ 1.0
+	moonGlow = 0.5
+	#Spawn rate multiplier for this moon's particles (always within the shared cap).
+	#Range: 0.0 ~ 2.0
+	particleDensity = 1.0
+	#Strength / speed of this moon's sky animation.
+	#Range: 0.0 ~ 2.0
+	animationIntensity = 1.0
+	#Volume of this moon's occasional ambient sounds (0 = none).
+	#Range: 0.0 ~ 1.0
+	soundVolume = 0.35
+	#This moon's particles.
+	particles = true
+	#This moon's sky animation.
+	skyAnimation = true
+	#Constellation lines that slowly appear, hold, fade and return at long intervals.
+	constellations = true
+
+#Atmosphere profile for the quiet moon (colours are hex RRGGBB).
+[atmosphere_quiet]
+	#Show this moon's atmosphere (the moon itself and its gameplay are unaffected).
+	enabled = true
+	#Night sky colour.
+	skyColor = "263c3a"
+	#Horizon / distance haze colour.
+	horizonColor = "567b70"
+	#Moonlight colour used for environmental tinting.
+	lightColor = "d5f0e2"
+	#Moon halo / glow colour.
+	glowColor = "91bdaa"
+	#Particle and sky-animation accent colour.
+	accentColor = "91bdaa"
+	#Overall strength of this atmosphere.
+	#Range: 0.0 ~ 1.0
+	intensity = 0.65
+	#Environmental tint strength (light map, outdoor light only).
+	#Range: 0.0 ~ 1.0
+	tintStrength = 0.25
+	#Coloured distance haze (0 = none).
+	#Range: 0.0 ~ 1.0
+	fogStrength = 0.0
+	#Outdoor light brightness multiplier at full strength.
+	#Range: 0.7 ~ 1.3
+	brightness = 1.0
+	#Pull outdoor light towards grey.
+	#Range: 0.0 ~ 1.0
+	desaturate = 0.3
+	#Halo strength around the moon.
+	#Range: 0.0 ~ 1.0
+	moonGlow = 0.5
+	#Spawn rate multiplier for this moon's particles (always within the shared cap).
+	#Range: 0.0 ~ 2.0
+	particleDensity = 1.0
+	#Strength / speed of this moon's sky animation.
+	#Range: 0.0 ~ 2.0
+	animationIntensity = 1.0
+	#Volume of this moon's occasional ambient sounds (0 = none).
+	#Range: 0.0 ~ 1.0
+	soundVolume = 0.35
+	#This moon's particles.
+	particles = true
+	#This moon's sky animation.
+	skyAnimation = true
+	#Quieter ambient and weather sounds (0 = unchanged, 1 = silent). Players, mobs, combat, blocks and UI are never touched.
+	#Range: 0.0 ~ 1.0
+	ambientSoundReduction = 0.6
+
+#Atmosphere profile for the drift moon (colours are hex RRGGBB).
+[atmosphere_drift]
+	#Show this moon's atmosphere (the moon itself and its gameplay are unaffected).
+	enabled = true
+	#Night sky colour.
+	skyColor = "45446d"
+	#Horizon / distance haze colour.
+	horizonColor = "8d86cb"
+	#Moonlight colour used for environmental tinting.
+	lightColor = "d4caff"
+	#Moon halo / glow colour.
+	glowColor = "b0a1e8"
+	#Particle and sky-animation accent colour.
+	accentColor = "e4dffc"
+	#Overall strength of this atmosphere.
+	#Range: 0.0 ~ 1.0
+	intensity = 0.65
+	#Environmental tint strength (light map, outdoor light only).
+	#Range: 0.0 ~ 1.0
+	tintStrength = 0.25
+	#Coloured distance haze (0 = none).
+	#Range: 0.0 ~ 1.0
+	fogStrength = 0.15
+	#Outdoor light brightness multiplier at full strength.
+	#Range: 0.7 ~ 1.3
+	brightness = 1.02
+	#Pull outdoor light towards grey.
+	#Range: 0.0 ~ 1.0
+	desaturate = 0.0
+	#Halo strength around the moon.
+	#Range: 0.0 ~ 1.0
+	moonGlow = 0.5
+	#Spawn rate multiplier for this moon's particles (always within the shared cap).
+	#Range: 0.0 ~ 2.0
+	particleDensity = 1.0
+	#Strength / speed of this moon's sky animation.
+	#Range: 0.0 ~ 2.0
+	animationIntensity = 1.0
+	#Volume of this moon's occasional ambient sounds (0 = none).
+	#Range: 0.0 ~ 1.0
+	soundVolume = 0.35
+	#This moon's particles.
+	particles = true
+	#This moon's sky animation.
+	skyAnimation = true
+	#Nearby drift motes are lifted when the player jumps.
+	reactToJumps = true
+
+#Atmosphere profile for the revealing moon (colours are hex RRGGBB).
+[atmosphere_revealing]
+	#Show this moon's atmosphere (the moon itself and its gameplay are unaffected).
+	enabled = true
+	#Night sky colour.
+	skyColor = "29282d"
+	#Horizon / distance haze colour.
+	horizonColor = "77716e"
+	#Moonlight colour used for environmental tinting.
+	lightColor = "e8dcc2"
+	#Moon halo / glow colour.
+	glowColor = "d9ab54"
+	#Particle and sky-animation accent colour.
+	accentColor = "d9ab54"
+	#Overall strength of this atmosphere.
+	#Range: 0.0 ~ 1.0
+	intensity = 0.65
+	#Environmental tint strength (light map, outdoor light only).
+	#Range: 0.0 ~ 1.0
+	tintStrength = 0.3
+	#Coloured distance haze (0 = none).
+	#Range: 0.0 ~ 1.0
+	fogStrength = 0.2
+	#Outdoor light brightness multiplier at full strength.
+	#Range: 0.7 ~ 1.3
+	brightness = 0.96
+	#Pull outdoor light towards grey.
+	#Range: 0.0 ~ 1.0
+	desaturate = 0.3
+	#Halo strength around the moon.
+	#Range: 0.0 ~ 1.0
+	moonGlow = 0.5
+	#Spawn rate multiplier for this moon's particles (always within the shared cap).
+	#Range: 0.0 ~ 2.0
+	particleDensity = 1.0
+	#Strength / speed of this moon's sky animation.
+	#Range: 0.0 ~ 2.0
+	animationIntensity = 1.0
+	#Volume of this moon's occasional ambient sounds (0 = none).
+	#Range: 0.0 ~ 1.0
+	soundVolume = 0.35
+	#This moon's particles.
+	particles = true
+	#This moon's sky animation.
+	skyAnimation = true
+	#One thin golden ripple crosses the whole sky at each scan completion, with a brief light pulse.
+	scanRing = true
+
+#Atmosphere profile for the thread moon (colours are hex RRGGBB).
+[atmosphere_thread]
+	#Show this moon's atmosphere (the moon itself and its gameplay are unaffected).
+	enabled = true
+	#Night sky colour.
+	skyColor = "393043"
+	#Horizon / distance haze colour.
+	horizonColor = "a66e91"
+	#Moonlight colour used for environmental tinting.
+	lightColor = "e7bfd4"
+	#Moon halo / glow colour.
+	glowColor = "c88ba7"
+	#Particle and sky-animation accent colour.
+	accentColor = "f1c8da"
+	#Overall strength of this atmosphere.
+	#Range: 0.0 ~ 1.0
+	intensity = 0.65
+	#Environmental tint strength (light map, outdoor light only).
+	#Range: 0.0 ~ 1.0
+	tintStrength = 0.3
+	#Coloured distance haze (0 = none).
+	#Range: 0.0 ~ 1.0
+	fogStrength = 0.15
+	#Outdoor light brightness multiplier at full strength.
+	#Range: 0.7 ~ 1.3
+	brightness = 1.0
+	#Pull outdoor light towards grey.
+	#Range: 0.0 ~ 1.0
+	desaturate = 0.0
+	#Halo strength around the moon.
+	#Range: 0.0 ~ 1.0
+	moonGlow = 0.5
+	#Spawn rate multiplier for this moon's particles (always within the shared cap).
+	#Range: 0.0 ~ 2.0
+	particleDensity = 1.0
+	#Strength / speed of this moon's sky animation.
+	#Range: 0.0 ~ 2.0
+	animationIntensity = 1.0
+	#Volume of this moon's occasional ambient sounds (0 = none).
+	#Range: 0.0 ~ 1.0
+	soundVolume = 0.35
+	#This moon's particles.
+	particles = true
+	#This moon's sky animation.
+	skyAnimation = true
+	#Thin glowing strands across the sky.
+	skyStrands = true
+	#Brightness and thickness of the sky strands (1.0 = the original look; 1.6 = amplified).
+	#Range: 0.0 ~ 3.0
+	strandIntensity = 1.6
+	#How many sky strands drift across the sky at once (the original had 5).
+	#Range: 0 ~ 24
+	strandCount = 12
+	#Every so often a few interwoven strands unwind from the moon and drift outwards.
+	moonStrands = true
+	#Time between those woven sequences.
+	#Range: 5.0 ~ 600.0
+	moonStrandIntervalSeconds = 30.0
+	#Length of one woven sequence.
+	#Range: 1.0 ~ 10.0
+	moonStrandSeconds = 3.5
+	#The black cat on the yarn moon (idle loop and reactions to Lifeline, Guard Thread, Knotbind and Last Stitch).
+	moonCat = true
+	#Fade in/out time of this moon's atmosphere (overrides atmosphere.transitionSeconds).
+	#Range: 0.5 ~ 60.0
+	transitionSeconds = 3.0
+	#Thin threads between bonded teammates (only members of that team see them).
+	teamLines = true
+
+#Atmosphere profile for the war moon (colours are hex RRGGBB).
+[atmosphere_war]
+	#Show this moon's atmosphere (the moon itself and its gameplay are unaffected).
+	enabled = true
+	#Night sky colour.
+	skyColor = "30303a"
+	#Horizon / distance haze colour.
+	horizonColor = "53545d"
+	#Moonlight colour used for environmental tinting.
+	lightColor = "b5adb0"
+	#Moon halo / glow colour.
+	glowColor = "e76a38"
+	#Particle and sky-animation accent colour.
+	accentColor = "e76a38"
+	#Overall strength of this atmosphere.
+	#Range: 0.0 ~ 1.0
+	intensity = 0.65
+	#Environmental tint strength (light map, outdoor light only).
+	#Range: 0.0 ~ 1.0
+	tintStrength = 0.3
+	#Coloured distance haze (0 = none).
+	#Range: 0.0 ~ 1.0
+	fogStrength = 0.3
+	#Outdoor light brightness multiplier at full strength.
+	#Range: 0.7 ~ 1.3
+	brightness = 0.88
+	#Pull outdoor light towards grey.
+	#Range: 0.0 ~ 1.0
+	desaturate = 0.2
+	#Halo strength around the moon.
+	#Range: 0.0 ~ 1.0
+	moonGlow = 0.5
+	#Spawn rate multiplier for this moon's particles (always within the shared cap).
+	#Range: 0.0 ~ 2.0
+	particleDensity = 1.0
+	#Strength / speed of this moon's sky animation.
+	#Range: 0.0 ~ 2.0
+	animationIntensity = 1.0
+	#Volume of this moon's occasional ambient sounds (0 = none).
+	#Range: 0.0 ~ 1.0
+	soundVolume = 0.35
+	#This moon's particles.
+	particles = true
+	#This moon's sky animation.
+	skyAnimation = true
+	#Atmosphere strength inside the War Moon arena (visibility for combat is always kept).
+	#Range: 1.0 ~ 2.0
+	arenaBoost = 1.3
+	#Turbulence and orange flashes build up during the battle warning, with one pulse when players are summoned.
+	preBattleBuildup = true
+
+#Atmosphere profile for the afterimage moon (colours are hex RRGGBB).
+[atmosphere_afterimage]
+	#Show this moon's atmosphere (the moon itself and its gameplay are unaffected).
+	enabled = true
+	#Night sky colour.
+	skyColor = "2a2540"
+	#Horizon / distance haze colour.
+	horizonColor = "6f6699"
+	#Moonlight colour used for environmental tinting.
+	lightColor = "d8ccf5"
+	#Moon halo / glow colour.
+	glowColor = "c8b8f0"
+	#Particle and sky-animation accent colour.
+	accentColor = "e0d8ff"
+	#Overall strength of this atmosphere.
+	#Range: 0.0 ~ 1.0
+	intensity = 0.65
+	#Environmental tint strength (light map, outdoor light only).
+	#Range: 0.0 ~ 1.0
+	tintStrength = 0.25
+	#Coloured distance haze (0 = none).
+	#Range: 0.0 ~ 1.0
+	fogStrength = 0.1
+	#Outdoor light brightness multiplier at full strength.
+	#Range: 0.7 ~ 1.3
+	brightness = 1.0
+	#Pull outdoor light towards grey.
+	#Range: 0.0 ~ 1.0
+	desaturate = 0.15
+	#Halo strength around the moon.
+	#Range: 0.0 ~ 1.0
+	moonGlow = 0.5
+	#Spawn rate multiplier for this moon's particles (always within the shared cap).
+	#Range: 0.0 ~ 2.0
+	particleDensity = 1.0
+	#Strength / speed of this moon's sky animation.
+	#Range: 0.0 ~ 2.0
+	animationIntensity = 1.0
+	#Volume of this moon's occasional ambient sounds (0 = none).
+	#Range: 0.0 ~ 1.0
+	soundVolume = 0.35
+	#This moon's particles.
+	particles = true
+	#This moon's sky animation.
+	skyAnimation = true
+
+#Atmosphere profile for the shell moon (colours are hex RRGGBB).
+[atmosphere_shell]
+	#Show this moon's atmosphere (the moon itself and its gameplay are unaffected).
+	enabled = true
+	#Night sky colour.
+	skyColor = "26302a"
+	#Horizon / distance haze colour.
+	horizonColor = "7d8a72"
+	#Moonlight colour used for environmental tinting.
+	lightColor = "e6eedc"
+	#Moon halo / glow colour.
+	glowColor = "bfe3cf"
+	#Particle and sky-animation accent colour.
+	accentColor = "d8e8d0"
+	#Overall strength of this atmosphere.
+	#Range: 0.0 ~ 1.0
+	intensity = 0.65
+	#Environmental tint strength (light map, outdoor light only).
+	#Range: 0.0 ~ 1.0
+	tintStrength = 0.25
+	#Coloured distance haze (0 = none).
+	#Range: 0.0 ~ 1.0
+	fogStrength = 0.1
+	#Outdoor light brightness multiplier at full strength.
+	#Range: 0.7 ~ 1.3
+	brightness = 1.0
+	#Pull outdoor light towards grey.
+	#Range: 0.0 ~ 1.0
+	desaturate = 0.1
+	#Halo strength around the moon.
+	#Range: 0.0 ~ 1.0
+	moonGlow = 0.5
+	#Spawn rate multiplier for this moon's particles (always within the shared cap).
+	#Range: 0.0 ~ 2.0
+	particleDensity = 1.0
+	#Strength / speed of this moon's sky animation.
+	#Range: 0.0 ~ 2.0
+	animationIntensity = 1.0
+	#Volume of this moon's occasional ambient sounds (0 = none).
+	#Range: 0.0 ~ 1.0
+	soundVolume = 0.35
+	#This moon's particles.
+	particles = true
+	#This moon's sky animation.
+	skyAnimation = true
+
+	#Atmosphere profile for the wisp moon (colours are hex RRGGBB).
+	[atmosphere_shell.atmosphere_wisp]
+		#Show this moon's atmosphere (the moon itself and its gameplay are unaffected).
+		enabled = true
+		#Night sky colour.
+		skyColor = "141e30"
+		#Horizon / distance haze colour.
+		horizonColor = "3a5878"
+		#Moonlight colour used for environmental tinting.
+		lightColor = "b8e4ff"
+		#Moon halo / glow colour.
+		glowColor = "8fe0ff"
+		#Particle and sky-animation accent colour.
+		accentColor = "c8f4ff"
+		#Overall strength of this atmosphere.
+		#Range: 0.0 ~ 1.0
+		intensity = 0.65
+		#Environmental tint strength (light map, outdoor light only).
+		#Range: 0.0 ~ 1.0
+		tintStrength = 0.3
+		#Coloured distance haze (0 = none).
+		#Range: 0.0 ~ 1.0
+		fogStrength = 0.12
+		#Outdoor light brightness multiplier at full strength.
+		#Range: 0.7 ~ 1.3
+		brightness = 0.95
+		#Pull outdoor light towards grey.
+		#Range: 0.0 ~ 1.0
+		desaturate = 0.15
+		#Halo strength around the moon.
+		#Range: 0.0 ~ 1.0
+		moonGlow = 0.5
+		#Spawn rate multiplier for this moon's particles (always within the shared cap).
+		#Range: 0.0 ~ 2.0
+		particleDensity = 1.0
+		#Strength / speed of this moon's sky animation.
+		#Range: 0.0 ~ 2.0
+		animationIntensity = 1.0
+		#Volume of this moon's occasional ambient sounds (0 = none).
+		#Range: 0.0 ~ 1.0
+		soundVolume = 0.35
+		#This moon's particles.
+		particles = true
+		#This moon's sky animation.
+		skyAnimation = true
+
+	#Atmosphere profile for the gluttony moon (colours are hex RRGGBB).
+	[atmosphere_shell.atmosphere_gluttony]
+		#Show this moon's atmosphere (the moon itself and its gameplay are unaffected).
+		enabled = true
+		#Night sky colour.
+		skyColor = "30242d"
+		#Horizon / distance haze colour.
+		horizonColor = "742f42"
+		#Moonlight colour used for environmental tinting.
+		lightColor = "f3d6a0"
+		#Moon halo / glow colour.
+		glowColor = "e8b65f"
+		#Particle and sky-animation accent colour.
+		accentColor = "e8b65f"
+		#Overall strength of this atmosphere.
+		#Range: 0.0 ~ 1.0
+		intensity = 0.65
+		#Environmental tint strength (light map, outdoor light only).
+		#Range: 0.0 ~ 1.0
+		tintStrength = 0.3
+		#Coloured distance haze (0 = none).
+		#Range: 0.0 ~ 1.0
+		fogStrength = 0.15
+		#Outdoor light brightness multiplier at full strength.
+		#Range: 0.7 ~ 1.3
+		brightness = 1.0
+		#Pull outdoor light towards grey.
+		#Range: 0.0 ~ 1.0
+		desaturate = 0.0
+		#Halo strength around the moon.
+		#Range: 0.0 ~ 1.0
+		moonGlow = 0.5
+		#Spawn rate multiplier for this moon's particles (always within the shared cap).
+		#Range: 0.0 ~ 2.0
+		particleDensity = 1.0
+		#Strength / speed of this moon's sky animation.
+		#Range: 0.0 ~ 2.0
+		animationIntensity = 1.0
+		#Volume of this moon's occasional ambient sounds (0 = none).
+		#Range: 0.0 ~ 1.0
+		soundVolume = 0.35
+		#This moon's particles.
+		particles = true
+		#This moon's sky animation.
+		skyAnimation = true
+		#Sparse steam above lit furnaces, smokers and campfires near the player (bounded sampling).
+		steam = true
+		#Honey-gold burst when a player eats a new food (stronger ring for a new heart).
+		foodBursts = true
+

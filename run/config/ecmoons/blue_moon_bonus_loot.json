@@ -1,0 +1,75 @@
+{
+  "_comment": "Blue Moon Luck-sensitive bonus loot. 'tables' maps a loot table id to a pool preset name (from 'presets') or to an inline {\"entries\": [...]} object. Bonus pool k rolls once when Blue Moon is active and the opener's Luck >= k * luckPerBonusRoll, up to maxBonusRolls. Original pools are untouched. Ores and ingots are deliberately absent: ore bonuses belong to Prospector's Moon. Changes apply on /reload or restart.",
+  "enabled": true,
+  "maxBonusRolls": 2,
+  "luckPerBonusRoll": 1.0,
+  "tables": {
+    "idas:chests/pillager_fortress/pillager_basic": "dungeon",
+    "minecraft:chests/simple_dungeon": "dungeon",
+    "minecraft:chests/abandoned_mineshaft": "dungeon",
+    "minecraft:chests/desert_pyramid": "dungeon",
+    "minecraft:chests/jungle_temple": "dungeon",
+    "minecraft:chests/stronghold_corridor": "dungeon",
+    "minecraft:chests/stronghold_crossing": "dungeon",
+    "minecraft:chests/stronghold_library": "dungeon",
+    "minecraft:chests/pillager_outpost": "dungeon",
+    "minecraft:chests/woodland_mansion": "dungeon",
+    "minecraft:chests/nether_bridge": "dungeon",
+    "minecraft:chests/bastion_other": "dungeon"
+  },
+  "presets": {
+    "dungeon": {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:book",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:golden_apple",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:name_tag",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:saddle",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:experience_bottle",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 2.0,
+                "max": 5.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:enchanted_golden_apple",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 15
+        }
+      ]
+    }
+  }
+}

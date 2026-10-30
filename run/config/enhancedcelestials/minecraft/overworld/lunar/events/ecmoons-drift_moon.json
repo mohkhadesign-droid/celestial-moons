@@ -1,0 +1,46 @@
+{
+  "validMoonPhases": [
+    0,
+    1,
+    2,
+    3,
+    5,
+    6,
+    7
+  ],
+  "textComponents": {
+    "name": {
+      "key": "ecmoons.name.drift_moon"
+    },
+    "startNotification": {
+      "component": {
+        "key": "ecmoons.notification.drift_moon.rise",
+        "style": {
+          "color": "aaaa"
+        }
+      },
+      "type": "CHAT"
+    },
+    "endNotification": {
+      "component": {
+        "key": "ecmoons.notification.drift_moon.set"
+      },
+      "type": "CHAT"
+    }
+  },
+  "blockSleeping": false,
+  "clientSettings": {
+    "colorSettings": {
+      "skyLightColor": "c8c0f5",
+      "skyLightBlendStrength": 0.35,
+      "moonTextureColor": "c8c0f5",
+      "moonTextureBlendStrength": 0.35
+    },
+    "moonSize": 20.0,
+    "moonTextureLocation": "ecmoons:textures/environment/drift_moon_phases.png",
+    "type": "enhancedcelestials:default"
+  },
+  "minNumberOfNightsBetween": 4,
+  "chance": 0.03,
+  "type": "ecmoons:drift_moon"
+}

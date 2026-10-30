@@ -1,0 +1,46 @@
+{
+  "validMoonPhases": [
+    0,
+    1,
+    2,
+    3,
+    5,
+    6,
+    7
+  ],
+  "textComponents": {
+    "name": {
+      "key": "ecmoons.name.frost_moon"
+    },
+    "startNotification": {
+      "component": {
+        "key": "ecmoons.notification.frost_moon.rise",
+        "style": {
+          "color": "55ffff"
+        }
+      },
+      "type": "CHAT"
+    },
+    "endNotification": {
+      "component": {
+        "key": "ecmoons.notification.frost_moon.set"
+      },
+      "type": "CHAT"
+    }
+  },
+  "blockSleeping": false,
+  "clientSettings": {
+    "colorSettings": {
+      "skyLightColor": "a8d8ff",
+      "skyLightBlendStrength": 0.4,
+      "moonTextureColor": "a8d8ff",
+      "moonTextureBlendStrength": 0.4
+    },
+    "moonSize": 20.0,
+    "moonTextureLocation": "ecmoons:textures/environment/frost_moon_phases.png",
+    "type": "enhancedcelestials:default"
+  },
+  "minNumberOfNightsBetween": 4,
+  "chance": 0.035,
+  "type": "ecmoons:frost_moon"
+}

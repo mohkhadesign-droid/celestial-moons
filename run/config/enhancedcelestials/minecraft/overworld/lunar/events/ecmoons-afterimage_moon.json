@@ -1,0 +1,46 @@
+{
+  "validMoonPhases": [
+    0,
+    1,
+    2,
+    3,
+    5,
+    6,
+    7
+  ],
+  "textComponents": {
+    "name": {
+      "key": "ecmoons.name.afterimage_moon"
+    },
+    "startNotification": {
+      "component": {
+        "key": "ecmoons.notification.afterimage_moon.rise",
+        "style": {
+          "color": "ff55ff"
+        }
+      },
+      "type": "CHAT"
+    },
+    "endNotification": {
+      "component": {
+        "key": "ecmoons.notification.afterimage_moon.set"
+      },
+      "type": "CHAT"
+    }
+  },
+  "blockSleeping": false,
+  "clientSettings": {
+    "colorSettings": {
+      "skyLightColor": "c8b8f0",
+      "skyLightBlendStrength": 0.3,
+      "moonTextureColor": "c8b8f0",
+      "moonTextureBlendStrength": 0.3
+    },
+    "moonSize": 20.0,
+    "moonTextureLocation": "ecmoons:textures/environment/afterimage_moon_phases.png",
+    "type": "enhancedcelestials:default"
+  },
+  "minNumberOfNightsBetween": 4,
+  "chance": 0.02,
+  "type": "ecmoons:afterimage_moon"
+}

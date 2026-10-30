@@ -443,7 +443,7 @@ public final class MoonConfig {
         atmo("thread", "393043", "a66e91", "e7bfd4", "c88ba7", "f1c8da", 0.30, 0.15, 1.0, 0.0);
         bool("skyStrands", true, "Thin glowing strands across the sky.");
         dbl("strandIntensity", 1.6, 0.0, 3.0, "Brightness and thickness of the sky strands (1.0 = the original look; 1.6 = amplified).");
-        intv("strandCount", 9, 0, 16, "How many sky strands drift across the sky at once (the original had 5).");
+        intv("strandCount", 12, 0, 24, "How many sky strands drift across the sky at once (the original had 5).");
         bool("moonStrands", true, "Every so often a few interwoven strands unwind from the moon and drift outwards.");
         dbl("moonStrandIntervalSeconds", 30.0, 5.0, 600.0, "Time between those woven sequences.");
         dbl("moonStrandSeconds", 3.5, 1.0, 10.0, "Length of one woven sequence.");

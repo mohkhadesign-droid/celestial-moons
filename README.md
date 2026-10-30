@@ -190,7 +190,7 @@ Main values (defaults shown):
 | | `unravelSeconds` / `immunitySeconds` / `knotViewRange` | 1.5 / 8 / 48 | |
 | | `mobs` | zombie, husk, zombie villager, skeleton, stray | Hostile, untamed mobs only. |
 | `thread_reactions` | `ordinaryCooldownSeconds` / `maxPendingSeconds` / `lastStitchCooldownSeconds` | 8 / 2 / 6 | The moon cat's shared reaction stream. |
-| `atmosphere_thread` | `strandIntensity` / `strandCount` | 1.6 / 9 | Amplified sky strands (1.0 / 5 = the previous look). |
+| `atmosphere_thread` | `strandIntensity` / `strandCount` | 1.6 / 12 | Amplified sky strands (1.0 / 5 = the previous look). |
 | | `moonStrands` / `moonStrandIntervalSeconds` / `moonStrandSeconds` | true / 30 / 3.5 | Woven threads unwinding from the moon. |
 | | `moonCat` / `transitionSeconds` | true / 3 | The cat; the Thread atmosphere fades in/out over 3 s. |
 | War | `warningSeconds` | 120 | Reminders at 1:00, 0:30 and 0:10. |

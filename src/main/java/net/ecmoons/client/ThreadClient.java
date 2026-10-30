@@ -521,6 +521,7 @@ public final class ThreadClient {
         for (Object[] l : lines) widest = Math.max(widest, 6 + font.width((String) l[0]));
         ms.pushPose();
         float x0 = Math.min(w / 2f + 98, w - widest * scale - 4), y0 = h - 14; // never off the screen edge
+        if (x0 < w / 2f + 94) y0 = h - 64; // a narrow window: above the hotbar and hearts instead of over them
         ms.translate(x0, y0, 0);
         ms.scale(scale, scale, 1);
         int y = 0;

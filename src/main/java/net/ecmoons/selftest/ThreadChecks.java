@@ -192,7 +192,7 @@ final class ThreadChecks {
         b.moveTo(x + 3.5, y, z + 0.5, 0, 0);
         c.moveTo(x + 6.5, y, z + 0.5, 0, 0);
         d.moveTo(x + 3.5, y, z + 3.5, 0, 0);
-        long g0 = ThreadMoon.now() - 1000; // real time is past g0 + 60, so the death hook sees an established guard
+        long g0 = Math.max(0, ThreadMoon.now() - 1000); // real time is past g0 + 60, so the death hook sees an established guard (and g0 is never negative)
         String sel = GuardThread.toggle(a, b.getId(), g0);
         check.accept("guard: A chooses to guard B (" + sel + ")", sel == null && GuardThread.guarding(a, b));
         check.accept("guard: a guarded player can't guard (no chains)", GuardThread.toggle(b, c.getId(), g0) != null);

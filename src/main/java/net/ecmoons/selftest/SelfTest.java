@@ -147,6 +147,15 @@ public final class SelfTest {
                 NewMoonChecks.gluttony(w, type, SelfTest::check);
             });
         }
+        step("thread start", 2, w -> {
+            ThreadChecks.register();
+            check("start thread for the Thread Moon checks", cmd("ecmoons start ecmoons-thread_moon") == 1);
+        });
+        step("thread checks", 5, w -> ThreadChecks.checks(w, SelfTest::check));
+        step("thread yarn", 1, w -> ThreadChecks.yarnSetup(w, SelfTest::check));
+        step("thread yarn second", 12, w -> ThreadChecks.yarnSecond(w, SelfTest::check));
+        step("thread yarn done", 12, w -> ThreadChecks.yarnDone(w, SelfTest::check));
+        step("thread end", 1, w -> check("/ecmoons end (thread)", cmd("ecmoons end") == 1));
         step("revealing cycle start", 2, w -> check("start revealing for the cycle test", cmd("ecmoons start ecmoons-revealing_moon") == 1));
         step("revealing cycle warn", 5, w -> {
             RevealChecks.cycleWarn(w, SelfTest::check);

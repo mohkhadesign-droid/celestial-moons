@@ -80,7 +80,7 @@ public final class Lifeline {
         UUID other = RECIPIENTS.get(r.getUUID());
         if (other != null && !other.equals(donor.getUUID())) return "Someone is already giving " + r.getScoreboardName() + " health";
         stop(donor, now, "restart");
-        CHANNELS.put(donor.getUUID(), new Channel(r, now, donor.position()));
+        CHANNELS.put(donor.getUUID(), new Channel(r, now, ThreadLinks.pos(donor)));
         RECIPIENTS.put(r.getUUID(), donor.getUUID());
         return null;
     }
@@ -118,7 +118,7 @@ public final class Lifeline {
         double range = s().d("thread_lifeline.range");
         if (d.distanceToSqr(r) > (range + 0.5) * (range + 0.5)) return "out of range";
         if (!ThreadLinks.aimingAt(d, r, range + 0.5, 0.5)) return "looked away";
-        Vector3d pos = d.position();
+        Vector3d pos = ThreadLinks.pos(d);
         if (pos.distanceToSqr(c.lastPos) > 1.5 * 1.5) return "teleported";
         c.lastPos = pos;
         int aim = (int) Math.round(s().d("thread_lifeline.aimSeconds") * 20);

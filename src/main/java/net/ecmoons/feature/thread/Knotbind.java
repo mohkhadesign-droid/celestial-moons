@@ -68,12 +68,16 @@ public final class Knotbind {
             this.b = b;
             this.start = start;
             this.end = end;
-            lastA = a.position();
-            lastB = b.position();
+            lastA = ThreadLinks.pos(a);
+            lastB = ThreadLinks.pos(b);
         }
 
         boolean has(Entity e) {
             return e == a || e == b;
+        }
+
+        public boolean has2(Entity x, Entity y) {
+            return (a == x && b == y) || (a == y && b == x);
         }
 
         public float progress(Entity e, long now) {
@@ -261,7 +265,7 @@ public final class Knotbind {
         if (now >= k.end) return "expired";
         if (!k.a.isAlive() || !k.b.isAlive() || k.a.removed || k.b.removed) return "gone";
         if (k.a.level != w || k.b.level != w) return "dimension";
-        if (k.a.position().distanceToSqr(k.lastA) > 25 || k.b.position().distanceToSqr(k.lastB) > 25) return "teleported";
+        if (ThreadLinks.pos(k.a).distanceToSqr(k.lastA) > 25 || ThreadLinks.pos(k.b).distanceToSqr(k.lastB) > 25) return "teleported";
         for (LivingEntity e : new LivingEntity[]{k.a, k.b}) {
             if (e instanceof ServerPlayerEntity) {
                 ServerPlayerEntity p = (ServerPlayerEntity) e;
@@ -279,12 +283,12 @@ public final class Knotbind {
         }
         if (!ThreadLinks.lineOfSight(k.a, k.b)) return "obstructed";
         double len = s().d("thread_knotbind.tetherLength");
-        Vector3d pa = k.a.position(), pb = k.b.position();
+        Vector3d pa = ThreadLinks.pos(k.a), pb = ThreadLinks.pos(k.b);
         double d = pa.distanceTo(pb);
         if (d > len + s().d("thread_knotbind.breakStretch")) return "stretched";
         if (d > len) pull(k, pa, pb, d - len);
-        k.lastA = k.a.position();
-        k.lastB = k.b.position();
+        k.lastA = ThreadLinks.pos(k.a);
+        k.lastB = ThreadLinks.pos(k.b);
         for (LivingEntity e : new LivingEntity[]{k.a, k.b}) {
             if (k.progress(e, now) >= 1f) return "unravelled";
         }

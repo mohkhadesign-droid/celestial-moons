@@ -166,7 +166,7 @@ public final class GuardThread {
         if (g == null) return false;
         Guard gd = GUARDS.get(g.getUUID());
         if (gd == null || gd.since < 0 || now - gd.since < s().d("thread_laststitch.establishSeconds") * 20) return false;
-        if (!ThreadLinks.direct(g, t)) return false;
+        if (!ThreadLinks.direct(g, t, true)) return false;
         ThreadEvent ev = ThreadEvent.get(t.getLevel());
         if (ev.spent(t.getUUID()) || ev.spent(g.getUUID())) return false;
         float cost = (float) s().d("thread_laststitch.guardianCost");

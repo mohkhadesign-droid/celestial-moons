@@ -61,7 +61,14 @@ public final class ThreadLinks {
 
     /** A current, direct connection (the same rule as the passive bond, evaluated now). */
     public static boolean direct(ServerPlayerEntity a, ServerPlayerEntity b) {
-        if (!eligible(a) || !eligible(b) || a.level != b.level || !teammates(a, b) || !moonUp(a)) return false;
+        return direct(a, b, false);
+    }
+
+    /** As above; dyingB lets b be at zero health (Last Stitch is decided while the hit is killing b). */
+    public static boolean direct(ServerPlayerEntity a, ServerPlayerEntity b, boolean dyingB) {
+        boolean bOk = dyingB ? b != null && !b.removed && !b.isSpectator() && !WarFeatures.isInvolved(b)
+                && !b.level.dimension().equals(WarArena.DIMENSION) : eligible(b);
+        if (!eligible(a) || !bOk || a.level != b.level || !teammates(a, b) || !moonUp(a)) return false;
         double r = Settings.server().d("thread.bondRange");
         if (a.distanceToSqr(b) > r * r) return false;
         return !Settings.server().b("thread.requireLineOfSight") || lineOfSight(a, b);
@@ -74,6 +81,11 @@ public final class ThreadLinks {
         if (box.contains(eye)) return true;
         Vector3d end = eye.add(a.getViewVector(1f).scale(range + 1));
         return box.clip(eye, end).isPresent() && box.getCenter().distanceTo(eye) <= range + 1.5;
+    }
+
+    /** Entity position from its coordinates (never Entity.position(): fake players report 0,0,0 there). */
+    public static Vector3d pos(Entity e) {
+        return new Vector3d(e.getX(), e.getY(), e.getZ());
     }
 
     /** Flag for health moved by the Thread Moon itself: no Thread rule (or retaliation) reacts to it. */

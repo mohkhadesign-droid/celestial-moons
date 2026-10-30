@@ -11,15 +11,35 @@
       ],
       "title": "Thread Moon",
       "border": true,
-      "text": "A moon wound with rose-coloured thread."
+      "text": "A yarn moon. A black cat plays with its threads."
     },
     {
       "type": "patchouli:text",
-      "text": "Teammates (teams are set by the server with $(o)/moonteams$()) within 12 blocks with a clear line of sight are $(l)bonded$(). Each bonded teammate gives 5% damage reduction, up to 15%. A thin thread links you, and \"Thread bond\" shows by the hotbar."
+      "text": "Teammates (teams are set by the server with $(o)/moonteams$()) within 12 blocks with a clear line of sight are $(l)bonded$(). Each bonded teammate gives 5% damage reduction, up to 15%. A thin rose thread links you; only your team sees it."
     },
     {
       "type": "patchouli:text",
-      "text": "Separate and the bonus fades over 3 seconds.$(br2)$(l)Not reduced:$() fall, fire, lava, drowning, starvation, magic, wither and the void. Only your team sees your threads; pets and mobs never bond."
+      "text": "Separate and the bonus fades over 3 seconds.$(br2)$(l)Not reduced:$() fall, fire, lava, drowning, starvation, magic, wither and the void.$(br2)Abilities below need a bond $(l)right now$(): a wall or distance ends them at once."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Lifeline$() (crouch + hold the Moon Ability key on an injured teammate within 4 blocks): after a second of aim, you give half a heart each second, up to 2 hearts. You lose exactly what they gain and never drop below 3 hearts. Taking damage, attacking or looking away stops it. 10 s cooldown."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Guard Thread$() (Guard key, default G, on a bonded teammate; again to clear): you take 20% of the real health they lose to attacks, at most one heart per hit, never going below 3 hearts. One guardian each; no chains."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Last Stitch$(): after 3 s of active guard, a lethal attack leaves your teammate at half a heart and costs you 2 hearts. Once per player per moon. A totem in hand is used instead."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Knotbind$() (Moon Ability key): throw yarn at an enemy, then at a second enemy within 6 blocks of the first, both within 3 s. They're tied for 5 s: free to fight, but pulled back if they go past 6 blocks. Hold the key while standing still for 1.5 s to $(l)unravel$(). 25 s cooldown."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Watch the moon:$() the cat reacts when someone gives a Lifeline, a guard first takes a hit, a knot ties, or a Last Stitch saves a life."
     }
   ]
 }

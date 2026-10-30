@@ -366,6 +366,7 @@ public final class ClientSelfTest {
         });
 
         newMoons();
+        threadMoon();
         abilities();
         fieldGuide();
         atmosphere();
@@ -626,6 +627,158 @@ public final class ClientSelfTest {
         float k = net.ecmoons.client.atmo.Atmosphere.SKY_SCALE;
         double dx = v.x - c[0] * k, dy = v.y - c[1] * k, dz = v.z - c[2] * k;
         return Math.sqrt(dx * dx + dy * dy + dz * dz);
+    }
+
+    private static int reactionsBefore, tStand;
+    private static double zoomFov;
+
+    /** Thread Moon: the cat on the yarn moon (idle and the four reactions), sky strands, tether, HUD and keys. */
+    private static void threadMoon() {
+        then(5, () -> {
+            cmd("effect clear @a");
+            cmd("gamemode creative @a");
+            cmd("tp @a " + px + " 220 " + pz);
+            cmd("ecmoons start ecmoons-thread_moon");
+            Minecraft.getInstance().options.hideGui = true;
+        });
+        waitFor(200, () -> Moons.is(Minecraft.getInstance().level, MoonType.THREAD));
+        then(80, () -> { // the atmosphere fades in over 3 s
+            player().abilities.flying = true;
+            player().onUpdateAbilities();
+            zoomFov = Minecraft.getInstance().options.fov;
+            Minecraft.getInstance().options.fov = 22; // zoomed in on the moon for the screenshots
+            lookUp();
+            reactionsBefore = ThreadMoonSky.reactionsPlayed;
+        });
+        then(10, () -> {
+            lookUp();
+            check("thread moon: the cat is drawn on the yarn moon, idling (frame " + ThreadMoonSky.lastFrame + ", draws " + ThreadMoonSky.catDrawn + ")",
+                    ThreadMoonSky.catDrawn > 0 && ThreadMoonSky.lastFrame >= 0 && ThreadMoonSky.lastFrame <= 15 && ThreadMoonSky.current(0) == 0);
+            shot("thread_1_cat_idle");
+            // a real reaction from the server's shared stream
+            onServer(s -> net.ecmoons.feature.thread.ThreadReactions.request(s.overworld(), net.ecmoons.feature.thread.ThreadReactions.KNOT));
+        });
+        waitFor(40, () -> ThreadMoonSky.current(0) == ThreadMoonSky.KNOT);
+        then(14, () -> {
+            lookUp();
+            check("thread moon: the server's Knotbind reaction plays on the moon (frame " + ThreadMoonSky.lastFrame + ")",
+                    ThreadMoonSky.current(0) == ThreadMoonSky.KNOT && ThreadMoonSky.reactionsPlayed == reactionsBefore + 1);
+            shot("thread_2_knot_reaction");
+        });
+        waitFor(60, () -> ThreadMoonSky.current(0) == 0);
+        then(2, () -> {
+            check("thread moon: after the reaction the cat returns to its idle loop", ThreadMoonSky.current(0) == 0
+                    && ThreadMoonSky.lastFrame >= 0 && ThreadMoonSky.lastFrame <= 15);
+            long gt = Minecraft.getInstance().level.getGameTime();
+            ThreadMoonSky.onReaction(ThreadMoonSky.KNOT, 0, 1, gt); // an old sequence number: ignored
+            check("thread moon: an old reaction packet never restarts", ThreadMoonSky.current(0) == 0);
+            ThreadMoonSky.onReaction(ThreadMoonSky.LIFELINE, 0, 1000, gt - 200); // already over: never replayed
+            check("thread moon: an expired reaction is not replayed after a late join", ThreadMoonSky.current(0) == 0);
+            ThreadMoonSky.onReaction(ThreadMoonSky.LIFELINE, 0, 1001, gt);
+        });
+        then(10, () -> {
+            lookUp();
+            shot("thread_3_lifeline_reaction");
+            check("thread moon: Lifeline kneading plays", ThreadMoonSky.current(0) == ThreadMoonSky.LIFELINE);
+        });
+        waitFor(40, () -> ThreadMoonSky.current(0) == 0);
+        then(1, () -> ThreadMoonSky.onReaction(ThreadMoonSky.GUARD, 0, 1002, Minecraft.getInstance().level.getGameTime()));
+        then(9, () -> {
+            lookUp();
+            shot("thread_4_guard_reaction");
+            check("thread moon: Guard bracing plays", ThreadMoonSky.current(0) == ThreadMoonSky.GUARD);
+        });
+        waitFor(40, () -> ThreadMoonSky.current(0) == 0);
+        then(1, () -> ThreadMoonSky.onReaction(ThreadMoonSky.LAST_STITCH, 0, 1003, Minecraft.getInstance().level.getGameTime()));
+        then(8, () -> {
+            lookUp();
+            shot("thread_5_last_stitch_flare");
+            check("thread moon: Last Stitch gives the moon one soft rose-gold pulse (" + ThreadMoonSky.lastPulse + ")", ThreadMoonSky.lastPulse > 0.3f);
+        });
+        then(14, () -> {
+            lookUp();
+            shot("thread_6_last_stitch_tumble");
+            check("thread moon: cosmetic fibres stay within the cap of 12 (" + ThreadMoonSky.liveFibres() + ")",
+                    ThreadMoonSky.liveFibres() > 0 && ThreadMoonSky.liveFibres() <= 12);
+        });
+        waitFor(80, () -> ThreadMoonSky.current(0) == 0 && ThreadMoonSky.liveFibres() == 0);
+        then(1, () -> check("thread moon: the fibres fade out completely and the cat idles again",
+                ThreadMoonSky.liveFibres() == 0 && ThreadMoonSky.current(0) == 0));
+        // the sky strands (amplified), looking across the sky
+        then(1, () -> {
+            Minecraft.getInstance().options.fov = zoomFov;
+            lookHorizon();
+            player().xRot = -35F;
+            player().xRotO = -35F;
+        });
+        then(30, () -> shot("thread_7_sky_strands"));
+        // HUD, a friendly braided guard link and a Knotbind tether to a stand-in (one test player has no partner)
+        then(1, () -> {
+            cmd("summon minecraft:armor_stand " + (px + 4) + ".5 220 " + pz + ".5 {NoGravity:1b,Tags:[\"ecmtest\"]}");
+            Minecraft.getInstance().options.hideGui = false;
+        });
+        then(15, () -> {
+            for (net.minecraft.entity.Entity e : Minecraft.getInstance().level.entitiesForRendering()) {
+                if (e instanceof net.minecraft.entity.item.ArmorStandEntity) tStand = e.getId();
+            }
+            net.ecmoons.net.ThreadPacket st = new net.ecmoons.net.ThreadPacket();
+            st.reduction = 0.10f;
+            st.links = new int[]{player().getId(), tStand};
+            st.guards = new int[]{player().getId(), tStand, 1};
+            st.guardTarget = "Stand-in";
+            st.guardActive = true;
+            st.guardEstablished = true;
+            st.lastStitch = 1;
+            st.knotCooldown = 400;
+            ThreadClient.update(st);
+            ThreadClient.onFx((byte) 1, player().getId(), tStand, 1f);
+            ClientPlayerEntity p = player();
+            p.yRot = -90F; // face the stand (east)
+            p.yRotO = -90F;
+            p.xRot = 25F;
+            p.xRotO = 25F;
+            Minecraft.getInstance().options.setCameraType(net.minecraft.client.settings.PointOfView.THIRD_PERSON_BACK);
+        });
+        then(30, () -> {
+            check("thread: the guard link is drawn braided (" + ThreadClient.lastDrawnGuards + ") and the HUD shows its lines ("
+                    + ThreadClient.hudLines + ")", ThreadClient.lastDrawnGuards == 1 && ThreadClient.hudLines >= 3);
+            shot("thread_8_guard_hud");
+            ThreadClient.onKnots(new int[]{7, player().getId(), tStand, 80, 45, 0});
+            net.ecmoons.net.ThreadPacket st = new net.ecmoons.net.ThreadPacket();
+            st.unravel = 0.45f;
+            st.knotTicks = 80;
+            ThreadClient.update(st);
+        });
+        then(5, () -> {
+            check("thread: a Knotbind tether with its knot is drawn (" + ThreadClient.lastDrawnKnots + ") with the unravel prompt",
+                    ThreadClient.lastDrawnKnots == 1 && ThreadClient.hudLines >= 1);
+            shot("thread_9_knot_tether");
+            ThreadClient.onKnots(new int[0]);
+            ThreadClient.onFx((byte) 4, player().getId(), tStand, 0f);
+            ThreadClient.update(new net.ecmoons.net.ThreadPacket());
+        });
+        then(4, () -> shot("thread_10_knot_fibres"));
+        // keys: a press of the Moon Ability key (not crouching, nobody aimed) throws Knotbind yarn
+        then(5, () -> {
+            Minecraft.getInstance().options.setCameraType(net.minecraft.client.settings.PointOfView.FIRST_PERSON);
+            cmd("gamemode survival @a");
+            cmd("kill @e[tag=ecmtest]");
+            ThreadClient.lastAction = "";
+            net.ecmoons.client.ability.AbilityClient.testKey(true);
+        });
+        then(2, () -> {
+            net.ecmoons.client.ability.AbilityClient.testKey(false);
+            check("thread: the Moon Ability key throws Knotbind yarn on the Thread Moon (" + ThreadClient.lastAction + ")",
+                    ThreadClient.lastAction.startsWith(net.ecmoons.net.ThreadInputPacket.KNOT_FIRE + ":"));
+        });
+        then(2, () -> {
+            ThreadClient.testGuard();
+            check("thread: the Guard key asks the server (nobody aimed -> clear)", ThreadClient.lastAction.equals(net.ecmoons.net.ThreadInputPacket.GUARD_TOGGLE + ":-1"));
+            cmd("ecmoons end");
+            cmd("gamemode creative @a");
+        });
+        waitFor(200, () -> Moons.reported(Minecraft.getInstance().level) == MoonType.NONE);
+        then(5, () -> check("thread: the moon ending clears the Thread state on the client", ThreadClient.state().empty() || ThreadClient.reduction() == 0f));
     }
 
     /** Revealing eye and markers, Thread HUD, Gluttony hearts and a solo War Moon match with a real player. */

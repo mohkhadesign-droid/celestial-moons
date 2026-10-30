@@ -152,6 +152,29 @@ public final class GuardThread {
         return loss - paid;
     }
 
+    /** Diagnostics: why the last Last Stitch check did or didn't save. */
+    public static String lastStitchWhy = "";
+
+    @Nullable
+    static String lastStitchBlocked(ServerPlayerEntity t, DamageSource src, long now) {
+        if (!s().b("thread_laststitch.enabled")) return "disabled";
+        if (ThreadLinks.internal()) return "internal";
+        if (!combat(src)) return "not combat";
+        if (holdsTotem(t)) return "totem";
+        if (s().list("thread_laststitch.excludedDamageTypes").contains(src.getMsgId())) return "excluded";
+        ServerPlayerEntity g = guardianOf(t);
+        if (g == null) return "no guardian";
+        Guard gd = GUARDS.get(g.getUUID());
+        if (gd == null || gd.since < 0) return "guard inactive";
+        if (now - gd.since < s().d("thread_laststitch.establishSeconds") * 20) return "not established (" + (now - gd.since) + ")";
+        if (!ThreadLinks.direct(g, t, true)) return "not connected";
+        ThreadEvent ev = ThreadEvent.get(t.getLevel());
+        if (ev.spent(t.getUUID()) || ev.spent(g.getUUID())) return "spent";
+        float cost = (float) s().d("thread_laststitch.guardianCost");
+        if (g.getHealth() - cost < s().d("thread_laststitch.guardianFloor") - 1e-4) return "guardian too hurt";
+        return null;
+    }
+
     /** True when the player holds a Totem of Undying (vanilla checks it before any death event; never consume both). */
     static boolean holdsTotem(ServerPlayerEntity p) {
         for (Hand h : Hand.values()) if (p.getItemInHand(h).getItem() == Items.TOTEM_OF_UNDYING) return true;
@@ -160,17 +183,12 @@ public final class GuardThread {
 
     /** Last Stitch. Returns true when the death is prevented (the caller cancels the death event). */
     public static boolean lastStitch(ServerPlayerEntity t, DamageSource src, long now) {
-        if (!s().b("thread_laststitch.enabled") || ThreadLinks.internal() || !combat(src) || holdsTotem(t)) return false;
-        if (s().list("thread_laststitch.excludedDamageTypes").contains(src.getMsgId())) return false;
+        String why = lastStitchBlocked(t, src, now);
+        lastStitchWhy = why == null ? "ok" : why;
+        if (why != null) return false;
         ServerPlayerEntity g = guardianOf(t);
-        if (g == null) return false;
-        Guard gd = GUARDS.get(g.getUUID());
-        if (gd == null || gd.since < 0 || now - gd.since < s().d("thread_laststitch.establishSeconds") * 20) return false;
-        if (!ThreadLinks.direct(g, t, true)) return false;
         ThreadEvent ev = ThreadEvent.get(t.getLevel());
-        if (ev.spent(t.getUUID()) || ev.spent(g.getUUID())) return false;
         float cost = (float) s().d("thread_laststitch.guardianCost");
-        if (g.getHealth() - cost < s().d("thread_laststitch.guardianFloor") - 1e-4) return false;
         // commit both or neither
         float before = g.getHealth();
         float paid = ThreadLinks.pay(g, cost);

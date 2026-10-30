@@ -123,7 +123,20 @@ C. **Disconnect and restart recovery with real players:** log out mid-match, log
 D. **Curios and other equipment mods:** with Curios accessories equipped, enrol and return (accessories back exactly). If a player has items in any other item-holding capability, they are refused with a message naming it (expected); add it to `accessoryCapabilities` or `ignoredCapabilities` as appropriate.
 E. **Flan Warfare deferral:** start a flag capture, then `/ecmoons war start`: the battle must be postponed ("A claim raid is in progress…"). The integration is by reflection on `net.flanwarfare.core.WarCore.get().capture().activeCount()`, checked against your repository's source but not run.
 F. **Grave/corpse mods and Lootr** in the arena: a knockout never fires a death, so graves shouldn't trigger; confirm no grave appears.
-G. **Thread Moon with two or more real teammates:** the bond percentage on the HUD, the rose threads (visible to the team only, not to other players), the 3 s fade, and actual damage taken.
+G. **Thread Moon with two or more real teammates and an enemy team** (none of this was run with real players):
+  1. 5%/15% passive reduction with 1-3 bonded teammates, 12-block/line-of-sight rule, excluded damage, 3 s fade.
+  2. Lifeline: 1 s aim, half a heart a second, two hearts max, donor never below 3 hearts, stops on release/look away/damage/attack/item use; a second donor on the same teammate is refused.
+  3. Guard: G on a teammate shows "Guarding X"; no chains/cycles; a mob or enemy hit moves 20% (max one heart) to the guardian; health totals add up.
+  4. Guard never double-applies armour, never drops the guardian below 3 hearts; a hit cancelled by a claim moves nothing.
+  5. Knotbind on two enemies within 3 s and 6 blocks; 5 s; tether pull feels small; a wall or teleport breaks it; unravel with 1.5 s standing still; 8 s immunity; refused inside Flan claims / World Protector regions that forbid PvP; 25 s cooldown.
+  6. Last Stitch: an established guard saves a lethal hit once per player per moon; a held totem is used instead; with another death-prevention mod installed, check which one acts.
+  7. Relog, die, change team or dimension, restart the server mid-moon: a spent Last Stitch stays spent.
+  8. Walking out of range or behind a wall ends Lifeline/guard effects at once while the thread fades.
+  9. An enemy client never sees your team's threads or HUD; knot victims see their tether and the unravel prompt; first person stays readable.
+  10. `/ecmoons end` and the natural moon end remove tethers, marks, yarn, guards and channels.
+  11. Claims, spawn protection, the arena, other moons and keybinds (G and V conflicts with other mods) behave as before.
+  12. The moon cat reacts once per real event; several players acting at once don't make it flicker or replay old reactions; it's the same on two clients.
+  13. Fibres fade fully; ordinary reactions don't flash the world.
 H. **Revealing Moon with other players** (two or more real clients; nothing below was tested with a second player):
   1. Warnings, markers (other players within 256 blocks, never your own), eye glow and exclusions (spectators, exempt tag, protected areas, arena players) unchanged; no coordinates in chat.
   2. One golden ripple starts at completion (not when the eye opens), crosses the whole sky, stays fixed to the sky while you turn, and never repeats per detected player.

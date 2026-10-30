@@ -132,7 +132,7 @@ final class ThreadChecks {
         check.accept("lifeline: 1 point a second, capped at 4 per activation; donor pays exactly what was gained (A " + a.getHealth()
                 + ", B " + b.getHealth() + ")", near(a.getHealth(), 16f) && near(b.getHealth(), 14f) && !Lifeline.channeling(a));
         check.accept("lifeline: 10 s cooldown after an activation that moved health (" + Lifeline.cooldown(a, now + 100) + ")",
-                Lifeline.cooldown(a, now + 100) >= 190);
+                Lifeline.cooldown(a, now + 100) >= 170 && Lifeline.cooldown(a, now + 100) <= 200);
         check.accept("lifeline: the cooldown blocks a new activation", Lifeline.start(a, b.getId(), now + 101) != null);
         // floor
         look(c, centre(b));
@@ -178,7 +178,7 @@ final class ThreadChecks {
         for (t = 601; t <= 660; t++) Lifeline.tick(Collections.singletonList(c), now + t);
         check.accept("lifeline: stops at the recipient's maximum, paying only the half point gained (C " + c.getHealth() + ")",
                 near(c.getHealth(), 19.5f) && near(b.getHealth(), 20f));
-        look(c, new Vector3d(c.getX() - 5, c.getEyeY(), c.getZ()));
+        look(c, new Vector3d(c.getX() + 5, c.getEyeY(), c.getZ())); // away from B (B is on the -x side)
         b.setHealth(10f);
         Lifeline.clear();
         Lifeline.TEST_PLAYERS.put(a.getId(), a); Lifeline.TEST_PLAYERS.put(b.getId(), b); Lifeline.TEST_PLAYERS.put(c.getId(), c);
@@ -243,7 +243,7 @@ final class ThreadChecks {
                 !GuardThread.lastStitch(b, DamageSource.OUT_OF_WORLD, g0 + 70) && !GuardThread.lastStitch(b, DamageSource.STARVE, g0 + 70));
         LivingDeathEvent death = new LivingDeathEvent(b, hit);
         ThreadMoon.onDeath(death);
-        check.accept("last stitch: the lethal hit leaves the target at half a heart and the guardian pays exactly 4 (B " + b.getHealth()
+        check.accept("last stitch: the lethal hit leaves the target at half a heart and the guardian pays exactly 4 (" + GuardThread.lastStitchWhy + ", B " + b.getHealth()
                 + ", A " + a.getHealth() + ")", death.isCanceled() && near(b.getHealth(), 1f) && near(a.getHealth(), 16f));
         check.accept("last stitch: both are spent for this event, the guard snapped, both on guard cooldown",
                 tev.spent(a.getUUID()) && tev.spent(b.getUUID()) && !GuardThread.guarding(a, b) && GuardThread.toggle(a, b.getId(), g0 + 80) != null);

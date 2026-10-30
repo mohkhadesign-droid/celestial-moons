@@ -23,7 +23,7 @@ public class ThreadPacket {
     public byte lastStitch;                 // 0 = not in a team, 1 = available, 2 = spent
     public int markTarget = -1, markTicks;  // your first Knotbind mark
     public int taggedTicks;                 // you are someone's first mark
-    public float unravel;                   // your own unravel progress while knotted (-1 = not knotted)
+    public float unravel = -1f;             // your own unravel progress while knotted (-1 = not knotted)
     public int knotTicks;                   // time left of the knot you're in
 
     public static void encode(ThreadPacket p, PacketBuffer buf) {

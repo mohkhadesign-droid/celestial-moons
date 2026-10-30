@@ -517,8 +517,10 @@ public final class ThreadClient {
         if (s.taggedTicks - age > 0) lines.add(new Object[]{"Tagged by yarn!", 0xFF9ACB, 0xFFFF6FB0});
         if (s.lastStitch == 1 && !s.guardTarget.isEmpty()) lines.add(new Object[]{"Last Stitch ready", 0xFFD9A0, 0xFFFFC870});
         if (s.lastStitch == 2) lines.add(new Object[]{"Last Stitch spent", 0x9A8A80, 0xFF7A6A60});
+        int widest = 0;
+        for (Object[] l : lines) widest = Math.max(widest, 6 + font.width((String) l[0]));
         ms.pushPose();
-        float x0 = w / 2f + 98, y0 = h - 14;
+        float x0 = Math.min(w / 2f + 98, w - widest * scale - 4), y0 = h - 14; // never off the screen edge
         ms.translate(x0, y0, 0);
         ms.scale(scale, scale, 1);
         int y = 0;

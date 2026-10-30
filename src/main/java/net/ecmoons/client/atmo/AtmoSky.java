@@ -181,7 +181,8 @@ public final class AtmoSky {
                 float az1 = r.nextFloat() * 6.28f, az2 = az1 + 0.9f + r.nextFloat() * 1.6f;
                 float el1 = (float) Math.toRadians(20 + r.nextFloat() * 55), el2 = (float) Math.toRadians(20 + r.nextFloat() * 55);
                 float a = Math.min(1f, 0.85f * k * fade * amp * (0.7f + 0.3f * (float) Math.sin(t * 1.3 + i)));
-                float w = 0.45f * (0.75f + 0.25f * amp);
+                float w = 0.45f * (0.6f + 0.4f * amp);
+                if (amp > 1.05f) strand(m, az1, el1, az2, el2, w * 3.2f, p.glow, a * 0.16f * (amp - 1f)); // soft glow around it
                 if (i % 2 == 1) {
                     float tw = 0.022f + 0.006f * (float) Math.sin(t * 0.6 + i);
                     wovenStrand(m, az1, el1, az2, el2, w * 0.8f, p.accent, a, tw, t * 0.35f + i, 0f);

@@ -30,8 +30,6 @@ import net.minecraft.world.GameType;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
@@ -51,8 +49,13 @@ import java.util.function.BiConsumer;
 final class ThreadChecks {
     private ThreadChecks() {}
 
-    private static FakePlayer fake(ServerWorld w, String name) {
-        FakePlayer p = FakePlayerFactory.get(w, new GameProfile(UUID.randomUUID(), name));
+    /**
+     * A real ServerPlayerEntity that is not in the world (ServerPlayerEntity refuses PvP and reports 0,0,0 as its position,
+     * which would hide exactly the rules tested here), with a detached connection.
+     */
+    private static ServerPlayerEntity fake(ServerWorld w, String name) {
+        ServerPlayerEntity p = new ServerPlayerEntity(w.getServer(), w, new GameProfile(UUID.randomUUID(), name),
+                new net.minecraft.server.management.PlayerInteractionManager(w));
         new net.minecraft.network.play.ServerPlayNetHandler(w.getServer(),
                 new net.minecraft.network.NetworkManager(net.minecraft.network.PacketDirection.SERVERBOUND), p);
         p.gameMode.setGameModeForPlayer(GameType.SURVIVAL);
@@ -97,10 +100,10 @@ final class ThreadChecks {
         int x = sp.getX() + 30, z = sp.getZ() + 30;
         w.getChunk(x >> 4, z >> 4);
         int y = w.getHeight(Heightmap.Type.MOTION_BLOCKING, x, z) + 40; // open air: clear lines between everyone
-        FakePlayer a = fake(w, "ecm_t_a"), b = fake(w, "ecm_t_b"), c = fake(w, "ecm_t_c"), d = fake(w, "ecm_t_d");
-        FakePlayer e = fake(w, "ecm_t_e"), f = fake(w, "ecm_t_f");
-        for (FakePlayer p : Arrays.asList(a, b, c, d)) teams.assign(p.getUUID(), p.getScoreboardName(), "ecm_red");
-        for (FakePlayer p : Arrays.asList(e, f)) teams.assign(p.getUUID(), p.getScoreboardName(), "ecm_blue");
+        ServerPlayerEntity a = fake(w, "ecm_t_a"), b = fake(w, "ecm_t_b"), c = fake(w, "ecm_t_c"), d = fake(w, "ecm_t_d");
+        ServerPlayerEntity e = fake(w, "ecm_t_e"), f = fake(w, "ecm_t_f");
+        for (ServerPlayerEntity p : Arrays.asList(a, b, c, d)) teams.assign(p.getUUID(), p.getScoreboardName(), "ecm_red");
+        for (ServerPlayerEntity p : Arrays.asList(e, f)) teams.assign(p.getUUID(), p.getScoreboardName(), "ecm_blue");
         a.moveTo(x + 0.5, y, z + 0.5, 0, 0);
         b.moveTo(x + 3.5, y, z + 0.5, 0, 0);
         c.moveTo(x + 11.5, y, z + 0.5, 0, 0);
@@ -361,7 +364,7 @@ final class ThreadChecks {
         GuardThread.clearAll();
 
         // cleanup of the test teams
-        for (FakePlayer p : Arrays.asList(a, b, c, d, e, f)) teams.remove(p.getUUID());
+        for (ServerPlayerEntity p : Arrays.asList(a, b, c, d, e, f)) teams.remove(p.getUUID());
         teams.delete("ecm_red");
         teams.delete("ecm_blue");
         EcMoons.LOGGER.info("[ECMOONS-SELFTEST] thread checks done; mate packet guards " + mate.guards.length);
@@ -378,7 +381,7 @@ final class ThreadChecks {
     // ---- Knotbind with the real projectile on real mobs ----------------------------------------------------------
 
     private static final List<MobEntity> MOBS = new ArrayList<>();
-    private static FakePlayer thrower;
+    private static ServerPlayerEntity thrower;
     private static int fx, fz;
 
     static void yarnSetup(ServerWorld w, BiConsumer<String, Boolean> check) {

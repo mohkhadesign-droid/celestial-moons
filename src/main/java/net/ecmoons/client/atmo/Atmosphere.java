@@ -109,9 +109,14 @@ public final class Atmosphere {
         if (mc.isPaused()) return;
         ticks++;
         target = computeTarget(level);
-        float step = 1f / Math.max(1, Settings.client().i("atmosphere.transitionSeconds") * 20);
+        float globalStep = 1f / Math.max(1, Settings.client().i("atmosphere.transitionSeconds") * 20);
         for (int i = 0; i < weight.length; i++) {
             prevWeight[i] = weight[i];
+            float step = globalStep;
+            if (TYPES[i] != MoonType.NONE) { // a moon may set its own fade time (Thread Moon: 3 s)
+                double own = AtmoProfile.of(TYPES[i]).value("transitionSeconds", -1);
+                if (own > 0) step = 1f / (float) Math.max(1, own * 20);
+            }
             float goal = TYPES[i] == target && target != MoonType.NONE ? 1f : 0f;
             weight[i] = goal > weight[i] ? Math.min(goal, weight[i] + step) : Math.max(goal, weight[i] - step);
         }

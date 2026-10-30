@@ -52,6 +52,10 @@ public final class AbilityClient {
         forced = down;
     }
 
+    public static boolean forced() {
+        return forced;
+    }
+
     @SubscribeEvent
     public static void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END) return;
@@ -63,6 +67,10 @@ public final class AbilityClient {
             return;
         }
         boolean down = (KEY.isDown() && mc.screen == null) || forced;
+        if (Moons.active(mc.level) == MoonType.THREAD && !WispClient.away()) { // Thread Moon: ThreadClient owns the key
+            wasDown = down;
+            return;
+        }
         if (down && !wasDown) {
             MoonType m = Moons.active(mc.level);
             if (m == MoonType.AFTERIMAGE || m == MoonType.SHELL || m == MoonType.WISP || WispClient.away()) {

@@ -26,5 +26,12 @@ public final class ModEntities {
                     .setCustomClientFactory((spawn, world) -> new ObserverEntity(ModEntities.OBSERVER.get(), world))
                     .build(EcMoons.MOD_ID + ":soul_observer"));
 
+    /** Thread Moon: Knotbind's yarn projectile. */
+    public static final RegistryObject<EntityType<net.ecmoons.feature.thread.YarnEntity>> YARN = ENTITIES.register("knot_yarn",
+            () -> EntityType.Builder.<net.ecmoons.feature.thread.YarnEntity>of(net.ecmoons.feature.thread.YarnEntity::new, EntityClassification.MISC)
+                    .sized(0.25F, 0.25F).noSave().fireImmune().clientTrackingRange(4).updateInterval(1)
+                    .setCustomClientFactory((spawn, world) -> new net.ecmoons.feature.thread.YarnEntity(ModEntities.YARN.get(), world))
+                    .build(EcMoons.MOD_ID + ":knot_yarn"));
+
     private ModEntities() {}
 }

@@ -165,18 +165,30 @@ public final class AtmoSky {
             lastLayers++;
         }
         if ((k = layer(MoonType.THREAD, pt) * night) > 0 && AtmoProfile.of(MoonType.THREAD).flag("skyStrands")) {
+            // Thread Moon: drifting strands across the sky - amplified (more of them, brighter, and every other one is a
+            // pair of rose and lilac threads woven around each other)
             AtmoProfile p = AtmoProfile.of(MoonType.THREAD);
+            float amp = (float) p.value("strandIntensity", 1.0) * net.ecmoons.config.ClientConfig.THREAD_SKY.get().floatValue();
+            int count = (int) p.value("strandCount", 5);
             additive();
-            for (int i = 0; i < 5; i++) {
-                float period = 26f + i * 3f;
+            for (int i = 0; i < count; i++) {
+                float period = 26f + (i % 6) * 3f + i * 0.7f;
                 float cyc = (t + i * 9f) / period;
                 long seed = (long) Math.floor(cyc) * 97 + i;
                 float f = cyc - (float) Math.floor(cyc);
                 float fade = Math.min(1f, Math.min(f * 5f, (1f - f) * 5f));
                 Random r = new Random(seed);
                 float az1 = r.nextFloat() * 6.28f, az2 = az1 + 0.9f + r.nextFloat() * 1.6f;
-                float el1 = (float) Math.toRadians(25 + r.nextFloat() * 50), el2 = (float) Math.toRadians(25 + r.nextFloat() * 50);
-                strand(m, az1, el1, az2, el2, 0.45f, p.accent, 0.85f * k * fade * (0.7f + 0.3f * (float) Math.sin(t * 1.3 + i)));
+                float el1 = (float) Math.toRadians(20 + r.nextFloat() * 55), el2 = (float) Math.toRadians(20 + r.nextFloat() * 55);
+                float a = Math.min(1f, 0.85f * k * fade * amp * (0.7f + 0.3f * (float) Math.sin(t * 1.3 + i)));
+                float w = 0.45f * (0.75f + 0.25f * amp);
+                if (i % 2 == 1) {
+                    float tw = 0.022f + 0.006f * (float) Math.sin(t * 0.6 + i);
+                    wovenStrand(m, az1, el1, az2, el2, w * 0.8f, p.accent, a, tw, t * 0.35f + i, 0f);
+                    wovenStrand(m, az1, el1, az2, el2, w * 0.8f, p.glow, a * 0.85f, tw, t * 0.35f + i, (float) Math.PI);
+                } else {
+                    strand(m, az1, el1, az2, el2, w, p.accent, a);
+                }
             }
             lastLayers++;
         }
@@ -238,6 +250,34 @@ public final class AtmoSky {
             float e0 = el1 + (el2 - el1) * u0 - (float) Math.sin(Math.PI * u0) * 0.1f, e1 = el1 + (el2 - el1) * u1 - (float) Math.sin(Math.PI * u1) * 0.1f;
             float z0 = az1 + (az2 - az1) * u0, z1 = az1 + (az2 - az1) * u1;
             float a0 = alpha * (float) Math.sin(Math.PI * u0), a1 = alpha * (float) Math.sin(Math.PI * u1);
+            dir(z0, e0 - w, a); dir(z0, e0 + w, b);
+            buf.vertex(m, a[0], a[1], a[2]).color(c[0], c[1], c[2], a0).endVertex();
+            buf.vertex(m, b[0], b[1], b[2]).color(c[0], c[1], c[2], a0).endVertex();
+            dir(z1, e1 + w, b); dir(z1, e1 - w, a);
+            buf.vertex(m, b[0], b[1], b[2]).color(c[0], c[1], c[2], a1).endVertex();
+            buf.vertex(m, a[0], a[1], a[2]).color(c[0], c[1], c[2], a1).endVertex();
+        }
+        buf.end();
+        WorldVertexBufferUploader.end(buf);
+    }
+
+    /** One of two threads woven around each other: the strand's elevation is offset by a sine that the twin mirrors. */
+    private static void wovenStrand(Matrix4f m, float az1, float el1, float az2, float el2, float widthDeg, float[] c, float alpha,
+                                    float twist, float phase, float side) {
+        if (alpha <= 0.003f) return;
+        int n = segments();
+        BufferBuilder buf = Tessellator.getInstance().getBuilder();
+        buf.begin(7, DefaultVertexFormats.POSITION_COLOR);
+        float[] a = new float[3], b = new float[3];
+        float w = (float) Math.toRadians(widthDeg);
+        for (int s = 0; s < n; s++) {
+            float u0 = s / (float) n, u1 = (s + 1) / (float) n;
+            float o0 = twist * (float) Math.sin(u0 * Math.PI * 5 + phase + side), o1 = twist * (float) Math.sin(u1 * Math.PI * 5 + phase + side);
+            float e0 = el1 + (el2 - el1) * u0 - (float) Math.sin(Math.PI * u0) * 0.1f + o0, e1 = el1 + (el2 - el1) * u1 - (float) Math.sin(Math.PI * u1) * 0.1f + o1;
+            float z0 = az1 + (az2 - az1) * u0, z1 = az1 + (az2 - az1) * u1;
+            // the thread passing "in front" at a crossing is a little brighter: woven, not just parallel
+            float d0 = 0.75f + 0.25f * (float) Math.cos(u0 * Math.PI * 5 + phase + side), d1 = 0.75f + 0.25f * (float) Math.cos(u1 * Math.PI * 5 + phase + side);
+            float a0 = alpha * (float) Math.sin(Math.PI * u0) * d0, a1 = alpha * (float) Math.sin(Math.PI * u1) * d1;
             dir(z0, e0 - w, a); dir(z0, e0 + w, b);
             buf.vertex(m, a[0], a[1], a[2]).color(c[0], c[1], c[2], a0).endVertex();
             buf.vertex(m, b[0], b[1], b[2]).color(c[0], c[1], c[2], a0).endVertex();

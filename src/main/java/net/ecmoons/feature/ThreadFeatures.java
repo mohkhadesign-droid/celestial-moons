@@ -3,9 +3,6 @@ package net.ecmoons.feature;
 import net.ecmoons.MoonType;
 import net.ecmoons.Moons;
 import net.ecmoons.config.Settings;
-import net.ecmoons.feature.war.WarFeatures;
-import net.ecmoons.net.Network;
-import net.ecmoons.net.ThreadPacket;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -18,14 +15,13 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 /**
- * Thread Moon. Every 10 ticks, per world with the moon up, players of the same /moonteams team within bondRange and
+ * Thread Moon. Five times a second (connectionIntervalTicks), per world with the moon up, players of the same /moonteams team within bondRange and
  * with a clear line of sight between their eyes are bonded. Each bonded teammate gives reductionPerTeammate damage
  * reduction, capped at maxReduction. When teammates separate, the reduction fades over fadeSeconds.
  * <p>
@@ -36,7 +32,6 @@ import java.util.UUID;
  */
 public final class ThreadFeatures {
     private static final Map<UUID, Float> CURRENT = new HashMap<>();
-    private static final Map<UUID, Integer> SENT = new HashMap<>(); // hash of the last packet per player
 
     private ThreadFeatures() {}
 
@@ -45,7 +40,7 @@ public final class ThreadFeatures {
     }
 
     private static boolean canBond(ServerPlayerEntity p) {
-        return p.isAlive() && !p.isSpectator() && !WarFeatures.isInvolved(p);
+        return net.ecmoons.feature.thread.ThreadLinks.eligible(p);
     }
 
     static boolean lineOfSight(ServerWorld w, ServerPlayerEntity a, ServerPlayerEntity b) {
@@ -58,9 +53,16 @@ public final class ThreadFeatures {
         return lineOfSight(w, a, b);
     }
 
-    /** Every 10 ticks per world. */
-    public static void tick(ServerWorld world, MoonType active) {
-        if (active != MoonType.THREAD && CURRENT.isEmpty() && SENT.isEmpty()) return;
+    /** Team id -> bonded link pairs (entity ids) from the last evaluation, per world (sent only to that team). */
+    private static final Map<String, int[]> LINKS = new HashMap<>();
+    private static final Map<UUID, Integer> COUNTS = new HashMap<>();
+
+    /**
+     * Every connectionIntervalTicks (4 = five times a second) per world: bonds, the passive reduction (rising at once,
+     * fading over fadeSeconds) and the team link lists. Packets are built by ThreadNet.
+     */
+    public static void tick(ServerWorld world, MoonType active, int interval) {
+        if (active != MoonType.THREAD && CURRENT.isEmpty() && LINKS.isEmpty()) return;
         MoonTeams teams = MoonTeams.get(world.getServer());
         Settings s = Settings.server();
         boolean on = active == MoonType.THREAD;
@@ -68,7 +70,7 @@ public final class ThreadFeatures {
         float per = (float) s.d("thread.reductionPerTeammate");
         float max = (float) s.d("thread.maxReduction");
         int fade = s.i("thread.fadeSeconds");
-        float step = fade <= 0 ? 1f : max / (fade * 2f); // two updates per second
+        float step = fade <= 0 ? 1f : max * interval / (fade * 20f); // the same fade time at any interval
         boolean los = s.b("thread.requireLineOfSight");
 
         // team -> eligible members in this world
@@ -77,32 +79,36 @@ public final class ThreadFeatures {
             String team = teams.teamOf(p.getUUID());
             if (on && team != null && canBond(p)) byTeam.computeIfAbsent(team, k -> new ArrayList<>()).add(p);
         }
-        Map<String, List<Integer>> linksByTeam = new HashMap<>();
         Map<UUID, Integer> counts = new HashMap<>();
         for (Map.Entry<String, List<ServerPlayerEntity>> e : byTeam.entrySet()) {
             List<Integer> links = new ArrayList<>();
             bond(world, e.getValue(), range, los, counts, links);
-            linksByTeam.put(e.getKey(), links);
+            LINKS.put(world.dimension().location() + "|" + e.getKey(), links.stream().mapToInt(Integer::intValue).toArray());
         }
+        String prefix = world.dimension().location() + "|";
+        LINKS.keySet().removeIf(k -> k.startsWith(prefix) && !byTeam.containsKey(k.substring(prefix.length())));
         for (ServerPlayerEntity p : world.players()) {
-            float target = Math.min(max, counts.getOrDefault(p.getUUID(), 0) * per);
+            int n = counts.getOrDefault(p.getUUID(), 0);
+            if (n > 0) COUNTS.put(p.getUUID(), n);
+            else COUNTS.remove(p.getUUID());
+            float target = Math.min(max, n * per);
             float cur = CURRENT.getOrDefault(p.getUUID(), 0f);
             float next = target >= cur ? target : Math.max(target, cur - step);
             if (!on || !canBond(p)) next = 0f;
             if (next > 0f) CURRENT.put(p.getUUID(), next);
             else CURRENT.remove(p.getUUID());
-
-            String team = teams.teamOf(p.getUUID());
-            List<Integer> links = team == null || !on ? null : linksByTeam.get(team);
-            int[] arr = links == null ? new int[0] : links.stream().mapToInt(Integer::intValue).toArray();
-            int hash = Float.floatToIntBits(next) * 31 + Arrays.hashCode(arr);
-            Integer last = SENT.get(p.getUUID());
-            if (last == null ? (next > 0f || arr.length > 0) : last != hash) {
-                Network.send(p, new ThreadPacket(next, arr));
-                if (next == 0f && arr.length == 0) SENT.remove(p.getUUID());
-                else SENT.put(p.getUUID(), hash);
-            }
         }
+    }
+
+    /** The bonded links of this team (entity id pairs), for its own members only. */
+    public static int[] links(ServerWorld world, String team) {
+        int[] l = team == null ? null : LINKS.get(world.dimension().location() + "|" + team);
+        return l == null ? new int[0] : l;
+    }
+
+    /** Teammates this player is directly bonded with at the last evaluation. */
+    public static int linked(ServerPlayerEntity p) {
+        return COUNTS.getOrDefault(p.getUUID(), 0);
     }
 
     /**
@@ -143,7 +149,7 @@ public final class ThreadFeatures {
     /** Applied once per damage event; the reduction is never redistributed. */
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onHurt(LivingHurtEvent event) {
-        if (!(event.getEntityLiving() instanceof ServerPlayerEntity)) return;
+        if (!(event.getEntityLiving() instanceof ServerPlayerEntity) || net.ecmoons.feature.thread.ThreadLinks.internal()) return;
         ServerPlayerEntity p = (ServerPlayerEntity) event.getEntityLiving();
         float r = reduction(p);
         if (r <= 0f || !Moons.is(p.level, MoonType.THREAD) || !canBond(p)) return;
@@ -152,12 +158,13 @@ public final class ThreadFeatures {
 
     public static void forget(UUID id) {
         CURRENT.remove(id);
-        SENT.remove(id);
+        COUNTS.remove(id);
     }
 
     public static void clear() {
         CURRENT.clear();
-        SENT.clear();
+        COUNTS.clear();
+        LINKS.clear();
     }
 
     public static String describe(ServerPlayerEntity p) {

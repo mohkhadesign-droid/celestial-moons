@@ -232,6 +232,67 @@ public final class MoonConfig {
         bool("requireLineOfSight", true, "Bonding needs a clear line between the players' eyes (no walls or floors between them).");
         list("excludedDamageTypes", ImmutableList.of("starve", "drown", "outOfWorld", "inWall", "cramming", "fall", "lava", "inFire", "onFire", "hotFloor", "magic", "wither"),
                 "Damage source ids (DamageSource msgId) that are never reduced.");
+        intv("connectionIntervalTicks", 4, 1, 20, "How often bonds, guard links and the HUD are re-evaluated (4 ticks = five times a second).");
+        pop();
+
+        push("thread_lifeline", "Thread Moon - Lifeline: crouch + hold the Moon Ability key on an injured connected teammate to give them health.");
+        bool("enabled", true, "Enable Lifeline.");
+        dbl("range", 4.0, 1.0, 12.0, "Maximum distance to the recipient (blocks).");
+        dbl("aimSeconds", 1.0, 0.0, 5.0, "Steady aim needed before the first transfer.");
+        dbl("pointsPerSecond", 1.0, 0.1, 10.0, "Transfers per second.");
+        dbl("pointsPerTransfer", 1.0, 0.1, 10.0, "Health points per transfer (1 = half a heart).");
+        dbl("maxPerActivation", 4.0, 0.5, 40.0, "Most health points moved per activation (4 = two hearts).");
+        dbl("donorFloor", 6.0, 1.0, 40.0, "The donor never drops below this health (6 = three hearts).");
+        dbl("cooldownSeconds", 10.0, 0.0, 600.0, "Donor cooldown after an activation that actually moved health (from its end).");
+        pop();
+
+        push("thread_guard", "Thread Moon - Guard Thread: choose one connected teammate (Guard key) and take part of their combat damage.");
+        bool("enabled", true, "Enable Guard Thread.");
+        dbl("share", 0.20, 0.0, 0.9, "Share of the target's real health loss (after defences and the passive reduction) the guardian pays.");
+        dbl("maxPerHit", 2.0, 0.0, 40.0, "Most health the guardian pays per incoming hit (2 = one heart).");
+        dbl("guardianFloor", 6.0, 1.0, 40.0, "The guardian never drops below this health; anything they can't safely pay stays with the target.");
+        list("excludedDamageTypes", ImmutableList.of("thorns", "explosion", "explosion.player"),
+                "Extra damage types never shared (thread.excludedDamageTypes are never shared either). Only damage with an attacker counts.");
+        pop();
+
+        push("thread_laststitch", "Thread Moon - Last Stitch: an established guard saves their target from one lethal combat hit per event.");
+        bool("enabled", true, "Enable Last Stitch.");
+        dbl("establishSeconds", 3.0, 0.0, 60.0, "The guard must have been continuously connected and active this long.");
+        dbl("guardianCost", 4.0, 0.5, 20.0, "Health the guardian pays (4 = two hearts).");
+        dbl("guardianFloor", 6.0, 1.0, 40.0, "The guardian must stay at or above this after paying.");
+        dbl("saveHealth", 1.0, 0.5, 10.0, "Health the saved player is left with (1 = half a heart).");
+        dbl("guardCooldownSeconds", 15.0, 0.0, 600.0, "Guard Thread cooldown for both players after a rescue.");
+        list("excludedDamageTypes", ImmutableList.of(),
+                "Damage types Last Stitch never intercepts (void, starvation and other thread.excludedDamageTypes never qualify,",
+                "and only damage with an attacker counts). Add a modded source here if it conflicts with another rescue mechanic.");
+        pop();
+
+        push("thread_knotbind", "Thread Moon - Knotbind: two yarn hits knot two enemies together for a few seconds.");
+        bool("enabled", true, "Enable Knotbind.");
+        bool("requireTeams", true, "Player targets must be on a /moonteams team different from the caster's (false: anyone not on the caster's team).");
+        dbl("range", 16.0, 4.0, 48.0, "How far the yarn flies (blocks).");
+        dbl("projectileSpeed", 2.0, 0.5, 4.0, "Yarn speed in blocks per tick.");
+        intv("shotIntervalTicks", 8, 1, 100, "Minimum time between throws (8 ticks = 0.4 s).");
+        dbl("markSeconds", 3.0, 0.5, 20.0, "Time to land the second hit after the first.");
+        dbl("maxPairDistance", 6.0, 1.0, 32.0, "The two targets must be at most this far apart when the pair is made.");
+        dbl("durationSeconds", 5.0, 1.0, 60.0, "How long a knot holds.");
+        dbl("tetherLength", 6.0, 2.0, 32.0, "Free length of the tether; it never shrinks.");
+        dbl("cooldownSeconds", 25.0, 0.0, 600.0, "Caster cooldown, starting at the first valid mark (completed or not).");
+        dbl("pullStrength", 0.08, 0.0, 1.0, "Velocity added per block of over-stretch per tick.");
+        dbl("maxPull", 0.12, 0.0, 1.0, "Most velocity added per tick (blocks/tick).");
+        dbl("maxPullSpeed", 0.45, 0.05, 2.0, "The pull never makes a victim move towards the other faster than this (blocks/tick).");
+        dbl("breakStretch", 3.0, 0.5, 16.0, "If they end up this far beyond the tether length, the knot breaks instead of pulling harder.");
+        dbl("unravelSeconds", 1.5, 0.25, 20.0, "Standing still holding the Moon Ability key this long unravels the knot.");
+        dbl("immunitySeconds", 8.0, 0.0, 120.0, "After any release, both can't be knotted again for this long.");
+        dbl("knotViewRange", 48.0, 8.0, 128.0, "Players this close to a knot see it (victims and the caster always do).");
+        list("mobs", ImmutableList.of("minecraft:zombie", "minecraft:husk", "minecraft:zombie_villager", "minecraft:skeleton", "minecraft:stray"),
+                "Mobs that can be knotted (entity ids). Only hostile, untamed mobs are ever used, even if listed.");
+        pop();
+
+        push("thread_reactions", "Thread Moon - the moon cat's reactions (one shared stream per dimension; purely cosmetic).");
+        dbl("ordinaryCooldownSeconds", 8.0, 0.0, 120.0, "At most one Lifeline/Guard/Knotbind reaction per this many seconds in a dimension.");
+        dbl("maxPendingSeconds", 2.0, 0.0, 30.0, "A waiting reaction older than this is dropped (no stale replays).");
+        dbl("lastStitchCooldownSeconds", 6.0, 0.0, 120.0, "Large Last Stitch sky accents at most this often; simultaneous rescues merge.");
         pop();
 
         moon("war", "War Moon - a temporary last-player-standing tournament in a separate arena dimension.", false);
@@ -381,6 +442,13 @@ public final class MoonConfig {
         pop();
         atmo("thread", "393043", "a66e91", "e7bfd4", "c88ba7", "f1c8da", 0.30, 0.15, 1.0, 0.0);
         bool("skyStrands", true, "Thin glowing strands across the sky.");
+        dbl("strandIntensity", 1.6, 0.0, 3.0, "Brightness and thickness of the sky strands (1.0 = the original look; 1.6 = amplified).");
+        intv("strandCount", 9, 0, 16, "How many sky strands drift across the sky at once (the original had 5).");
+        bool("moonStrands", true, "Every so often a few interwoven strands unwind from the moon and drift outwards.");
+        dbl("moonStrandIntervalSeconds", 30.0, 5.0, 600.0, "Time between those woven sequences.");
+        dbl("moonStrandSeconds", 3.5, 1.0, 10.0, "Length of one woven sequence.");
+        bool("moonCat", true, "The black cat on the yarn moon (idle loop and reactions to Lifeline, Guard Thread, Knotbind and Last Stitch).");
+        dbl("transitionSeconds", 3.0, 0.5, 60.0, "Fade in/out time of this moon's atmosphere (overrides atmosphere.transitionSeconds).");
         bool("teamLines", true, "Thin threads between bonded teammates (only members of that team see them).");
         pop();
         atmo("war", "30303a", "53545d", "b5adb0", "e76a38", "e76a38", 0.30, 0.30, 0.88, 0.20);

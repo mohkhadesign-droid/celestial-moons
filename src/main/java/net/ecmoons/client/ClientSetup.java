@@ -19,6 +19,10 @@ public final class ClientSetup {
         net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext.get().getModEventBus().addListener(
                 (net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent e) -> {
                     net.ecmoons.client.ability.AbilityClient.register();
+                    ThreadClient.register();
+                    net.minecraftforge.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(
+                            net.ecmoons.feature.ability.wisp.ModEntities.YARN.get(),
+                            m -> new net.ecmoons.client.ability.SoulSpriteRenderer<>(m, "knot_yarn", 0.3F));
                     net.minecraftforge.fml.client.registry.RenderingRegistry.registerEntityRenderingHandler(
                             net.ecmoons.feature.ability.wisp.ModEntities.WISP.get(),
                             m -> new net.ecmoons.client.ability.SoulSpriteRenderer<>(m, "wisp", 0.6F));

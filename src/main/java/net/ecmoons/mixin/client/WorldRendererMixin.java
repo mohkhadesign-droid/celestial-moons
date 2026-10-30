@@ -35,6 +35,7 @@ public abstract class WorldRendererMixin {
             require = 0)
     private void ecmoons$moonDetails(MatrixStack matrixStack, float partialTicks, CallbackInfo ci) {
         MoonSkyRenderer.renderDetails(matrixStack, textureManager, level, partialTicks);
+        net.ecmoons.client.ThreadMoonSky.render(matrixStack, level, partialTicks, MoonSkyRenderer.moonSize(level));
         net.ecmoons.client.atmo.AtmoSky.renderCelestial(matrixStack, level, partialTicks, MoonSkyRenderer.moonSize(level));
     }
 

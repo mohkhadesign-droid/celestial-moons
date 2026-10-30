@@ -43,6 +43,8 @@
   "ecmoons.notification.wisp_moon.set": "The \"Wisp Moon\" sets... The soul lights gutter out.",
   "entity.ecmoons.wisp": "Scouting Wisp",
   "entity.ecmoons.soul_observer": "Soul Observer",
-  "key.ecmoons.moon_ability": "Moon Ability",
+  "key.ecmoons.moon_ability": "Moon Ability (Thread Moon: Lifeline / Knotbind / Unravel)",
+  "key.ecmoons.thread_guard": "Thread Moon: Guard",
+  "entity.ecmoons.knot_yarn": "Knotbind Yarn",
   "key.categories.ecmoons": "Enhanced Celestials Moons"
 }

@@ -67,6 +67,7 @@ public class EcMoons {
         forge.register(net.ecmoons.feature.ability.ShellAbility.class);
         forge.register(net.ecmoons.feature.ability.WispAbility.class);
         forge.register(net.ecmoons.feature.ThreadFeatures.class);
+        forge.register(net.ecmoons.feature.thread.ThreadMoon.class);
         forge.register(net.ecmoons.feature.war.WarFeatures.class);
         forge.addListener(net.ecmoons.feature.war.WarFeatures::onServerStarted);
         forge.addGenericListener(Chunk.class, PlacedBlocks::attach);

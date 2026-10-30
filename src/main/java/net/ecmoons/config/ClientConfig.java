@@ -19,6 +19,9 @@ public final class ClientConfig {
     public static final ForgeConfigSpec.DoubleValue REVEAL_AMBER_EDGES;
     public static final ForgeConfigSpec.DoubleValue REVEAL_COLOR;
     public static final ForgeConfigSpec.EnumValue<ColorMode> REVEAL_COLOR_MODE;
+    public static final ForgeConfigSpec.BooleanValue THREAD_LINES;
+    public static final ForgeConfigSpec.DoubleValue THREAD_SKY, THREAD_PULSES, THREAD_HUD_SCALE;
+    public static final ForgeConfigSpec.BooleanValue THREAD_HUD;
 
     static {
         ForgeConfigSpec.Builder b = new ForgeConfigSpec.Builder();
@@ -52,6 +55,16 @@ public final class ClientConfig {
                         "WASH = lighter approximation through the light map (pale-gold wash of sky-lit surfaces), for setups where",
                         "post-processing is unavailable. DESATURATE falls back to WASH automatically if the pass cannot load.")
                 .defineEnum("colorMode", ColorMode.DESATURATE);
+        b.pop();
+        b.comment("Thread Moon visuals. Purely cosmetic: they never change the abilities or the damage rules.").push("thread");
+        THREAD_LINES = b.comment("Draw the threads between players (your team's support threads and nearby Knotbind tethers).")
+                .define("threads", true);
+        THREAD_SKY = b.comment("Strength of the Thread Moon sky: strands, the moon's woven threads, its fibres and the cat's reactions (0 = off).")
+                .defineInRange("skyIntensity", 1.0, 0.0, 2.0);
+        THREAD_PULSES = b.comment("Strength of Lifeline / Guard / Last Stitch pulses on the threads (0 = off).")
+                .defineInRange("pulseIntensity", 1.0, 0.0, 1.0);
+        THREAD_HUD = b.comment("Show the small Thread Moon indicators near the crosshair and hotbar.").define("hud", true);
+        THREAD_HUD_SCALE = b.comment("Size of those indicators.").defineInRange("hudScale", 1.0, 0.5, 2.0);
         b.pop();
         SPEC = b.build();
     }

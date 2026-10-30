@@ -43,7 +43,7 @@ public final class MoonLifecycle {
         MoonType before = LAST.put(world.dimension(), now);
         if (before != null && before != now) onTransition(world, before, now);
         RevealingFeatures.tick(world, now);
-        if (world.getServer().getTickCount() % 10 == 0) ThreadFeatures.tick(world, now);
+        net.ecmoons.feature.thread.ThreadMoon.tick(world, now);
     }
 
     private static void onTransition(ServerWorld world, MoonType from, MoonType to) {
@@ -85,7 +85,10 @@ public final class MoonLifecycle {
         if (event.getEntityLiving() instanceof ServerPlayerEntity) {
             ServerPlayerEntity player = (ServerPlayerEntity) event.getEntityLiving();
             GluttonyFeatures.onDeath(player);
-            if (!event.isCanceled()) RevealState.end(player, RevealState.EndReason.DEATH);
+            if (!event.isCanceled()) {
+                RevealState.end(player, RevealState.EndReason.DEATH);
+                net.ecmoons.feature.thread.ThreadMoon.forget(player);
+            }
         }
     }
 
@@ -107,6 +110,7 @@ public final class MoonLifecycle {
         if (!(event.getPlayer() instanceof ServerPlayerEntity)) return;
         ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
         RevealState.end(player, RevealState.EndReason.DIMENSION);
+        net.ecmoons.feature.thread.ThreadMoon.forget(player);
         refresh(player);
     }
 
@@ -117,6 +121,7 @@ public final class MoonLifecycle {
         MistFeatures.updateNametag(player, Moons.is(player.level, MoonType.MIST));
         GluttonyFeatures.tick(player);
         RevealingFeatures.sync(player); // current Revealing cycle only: no stale reveal, bind or ripple replay
+        net.ecmoons.feature.thread.ThreadMoon.sync(player);
     }
 
     @SubscribeEvent
@@ -126,6 +131,7 @@ public final class MoonLifecycle {
         QuietFeatures.forget(player.getUUID());
         DriftFeatures.forget(player.getUUID());
         ThreadFeatures.forget(player.getUUID());
+        if (player instanceof ServerPlayerEntity) net.ecmoons.feature.thread.ThreadMoon.forget((ServerPlayerEntity) player);
         if (player instanceof ServerPlayerEntity) RevealState.forget((ServerPlayerEntity) player);
         BindingGaze.forget(player.getUUID());
         ReadYourEnemy.forget(player.getUUID());
@@ -140,6 +146,7 @@ public final class MoonLifecycle {
         LAST.clear();
         RevealingFeatures.clear();
         ThreadFeatures.clear();
+        net.ecmoons.feature.thread.ThreadMoon.clear();
         net.ecmoons.feature.ability.MoonAbilities.onServerStopped();
     }
 

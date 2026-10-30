@@ -106,6 +106,8 @@ final class ThreadChecks {
         c.moveTo(x + 11.5, y, z + 0.5, 0, 0);
         d.moveTo(x + 19.5, y, z + 0.5, 0, 0);
         long now = ThreadMoon.now();
+        EcMoons.LOGGER.info("[ECMOONS-SELFTEST] thread diag a-b: " + ThreadLinks.explain(a, b) + " | restrain a->e: " + Knotbind.explainRestrain(a, e)
+                + " | a@" + a.getX() + "," + a.getY() + "," + a.getZ() + " b@" + b.getX() + "," + b.getY() + "," + b.getZ() + " level " + a.level.dimension().location());
 
         // ---- connections: direct only, never transitive -----------------------------------------------------------
         check.accept("thread: teammates 3 blocks apart are directly connected", ThreadLinks.direct(a, b));

@@ -233,6 +233,20 @@ public final class Knotbind {
         }
     }
 
+    /** Diagnostics for the hostile-permission probes. */
+    public static String explainRestrain(ServerPlayerEntity caster, LivingEntity t) {
+        String r = "pvp=" + caster.server.isPvpAllowed();
+        if (t instanceof ServerPlayerEntity) r += " canHarm=" + caster.canHarmPlayer((ServerPlayerEntity) t);
+        ThreadMoon.probing = true;
+        try {
+            r += " attackEvt=" + !MinecraftForge.EVENT_BUS.post(new AttackEntityEvent(caster, t));
+            r += " livingAttack=" + !MinecraftForge.EVENT_BUS.post(new LivingAttackEvent(t, DamageSource.playerAttack(caster), 1f));
+        } finally {
+            ThreadMoon.probing = false;
+        }
+        return r;
+    }
+
     @Nullable
     static String pairInvalid(ServerPlayerEntity caster, LivingEntity a, LivingEntity b, long now) {
         if (invalid(caster, a, now) != null) return "The first target is no longer valid";

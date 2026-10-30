@@ -74,6 +74,14 @@ public final class ThreadLinks {
         return !Settings.server().b("thread.requireLineOfSight") || lineOfSight(a, b);
     }
 
+    /** Diagnostics: which part of the direct-connection rule holds. */
+    public static String explain(ServerPlayerEntity a, ServerPlayerEntity b) {
+        double r = Settings.server().d("thread.bondRange");
+        return "eligA=" + eligible(a) + " eligB=" + eligible(b) + " sameLevel=" + (a.level == b.level) + " teams=" + team(a) + "/" + team(b)
+                + " moon=" + moonUp(a) + " dist2=" + a.distanceToSqr(b) + "/" + r * r + " los=" + lineOfSight(a, b)
+                + " alive=" + a.isAlive() + "/" + b.isAlive() + " spec=" + a.isSpectator() + " war=" + WarFeatures.isInvolved(a);
+    }
+
     /** Does a's look ray pass through b's hitbox (with a small tolerance) within range? */
     public static boolean aimingAt(ServerPlayerEntity a, Entity b, double range, double tolerance) {
         Vector3d eye = a.getEyePosition(1f);
